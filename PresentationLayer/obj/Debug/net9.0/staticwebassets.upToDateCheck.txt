@@ -1,110 +1,110 @@
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\fonts\flaticon\font\flaticon.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\js\bootstrap.min.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\js\jquery.sticky.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\js\slick.min.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\css\owl.carousel.min.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\fonts\flaticon\backup.txt
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\jquery\dist\jquery.min.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\css\bootstrap\bootstrap-grid.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\jquery-validation\dist\additional-methods.min.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.min.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\fonts\icomoon\selection.json
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\fonts\icomoon\demo-files\demo.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\css\bootstrap.min.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\fonts\flaticon\font\flaticon.html
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\js\aos.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\jquery\dist\jquery.slim.min.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\css\jquery.mb.YTPlayer.min.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\jquery\dist\jquery.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\js\typed.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\fonts\icomoon\fonts\icomoon.svg
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\jquery-validation\dist\jquery.validate.min.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\fonts\icomoon\demo.html
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\css\jquery.fancybox.min.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\css\magnific-popup.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\favicon.ico
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\js\popper.min.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\js\jquery.easing.1.3.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\fonts\icomoon\demo-files\demo.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap.css.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\css\bootstrap-datepicker.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\css\mediaelementplayer.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\jquery-validation\LICENSE.md
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\fonts\flaticon\font\Flaticon.svg
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\js\site.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\fonts\icomoon\Read Me.txt
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\js\bootstrap.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\jquery\dist\jquery.slim.min.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\jquery-validation\dist\additional-methods.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\css\site.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\jquery-validation\dist\jquery.validate.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\js\bootstrap.js.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\css\bootstrap\bootstrap.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\fonts\icomoon\style.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\js\jquery.stellar.min.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\js\jquery.magnific-popup.min.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\js\jquery.countdown.min.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\css\bootstrap.min.css.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\js\jquery-migrate-3.0.1.min.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\css\bootstrap\bootstrap-reboot.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\js\bootstrap-datepicker.min.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\css\owl.theme.default.min.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\js\jquery-3.3.1.min.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\js\jquery-ui.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\js\main.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\js\jquery.mb.YTPlayer.min.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\css\aos.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\css\jquery-ui.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\jquery\dist\jquery.slim.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\js\mediaelement-and-player.min.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\js\owl.carousel.min.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\jquery\dist\jquery.min.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js.map
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\js\jquery.fancybox.min.js
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\lib\jquery\LICENSE.txt
-E:\C#\ErraSoft\SportEvent\PresentationLayer\wwwroot\Customer\css\style.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\fonts\flaticon\font\flaticon.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\js\bootstrap.min.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\js\jquery.sticky.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\js\slick.min.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\css\owl.carousel.min.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\fonts\flaticon\backup.txt
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\jquery\dist\jquery.min.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\css\bootstrap\bootstrap-grid.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\jquery-validation\dist\additional-methods.min.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.min.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\fonts\icomoon\selection.json
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\fonts\icomoon\demo-files\demo.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\css\bootstrap.min.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\fonts\flaticon\font\flaticon.html
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\js\aos.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\jquery\dist\jquery.slim.min.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\css\jquery.mb.YTPlayer.min.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\jquery\dist\jquery.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\js\typed.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\fonts\icomoon\fonts\icomoon.svg
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\jquery-validation\dist\jquery.validate.min.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\fonts\icomoon\demo.html
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\css\jquery.fancybox.min.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\css\magnific-popup.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\favicon.ico
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\js\popper.min.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\js\jquery.easing.1.3.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\fonts\icomoon\demo-files\demo.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap.css.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\css\bootstrap-datepicker.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\css\mediaelementplayer.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\jquery-validation\LICENSE.md
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\fonts\flaticon\font\Flaticon.svg
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\js\site.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\fonts\icomoon\Read Me.txt
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\js\bootstrap.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\jquery\dist\jquery.slim.min.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\jquery-validation\dist\additional-methods.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\css\site.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\jquery-validation\dist\jquery.validate.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\js\bootstrap.js.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\css\bootstrap\bootstrap.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\fonts\icomoon\style.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\js\jquery.stellar.min.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\js\jquery.magnific-popup.min.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\js\jquery.countdown.min.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\css\bootstrap.min.css.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\js\jquery-migrate-3.0.1.min.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\css\bootstrap\bootstrap-reboot.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\js\bootstrap-datepicker.min.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\css\owl.theme.default.min.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\js\jquery-3.3.1.min.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\js\jquery-ui.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\js\main.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\js\jquery.mb.YTPlayer.min.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\css\aos.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\css\jquery-ui.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\jquery\dist\jquery.slim.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\js\mediaelement-and-player.min.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\js\owl.carousel.min.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\jquery\dist\jquery.min.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js.map
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\js\jquery.fancybox.min.js
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\lib\jquery\LICENSE.txt
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\PresentationLayer\wwwroot\Customer\css\style.css
 wwwroot\css\site.css
 wwwroot\Customer\css\aos.css
 wwwroot\Customer\css\bootstrap.min.css
