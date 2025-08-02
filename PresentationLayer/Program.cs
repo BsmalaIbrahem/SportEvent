@@ -21,7 +21,6 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(MainRepository<>));
 builder.Services.AddScoped<ICoachRepository, CoachRepository>();
-builder.Services.AddScoped<IBaseModelRepository, BaseModelRepository>();
 builder.Services.AddScoped<IContactRepository, ContactRepository>();
 builder.Services.AddScoped<IMatchPlayerRepository, MatchPlayerRepository>();
 builder.Services.AddScoped<IMatchRepository, MatchRepository>();
