@@ -10,3 +10,16 @@ E:\C#\ErraSoft\SportEvent\CoreLayer\obj\Debug\net9.0\CoreLayer.dll
 E:\C#\ErraSoft\SportEvent\CoreLayer\obj\Debug\net9.0\refint\CoreLayer.dll
 E:\C#\ErraSoft\SportEvent\CoreLayer\obj\Debug\net9.0\CoreLayer.pdb
 E:\C#\ErraSoft\SportEvent\CoreLayer\obj\Debug\net9.0\ref\CoreLayer.dll
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\CoreLayer\bin\Debug\net9.0\CoreLayer.deps.json
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\CoreLayer\bin\Debug\net9.0\CoreLayer.dll
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\CoreLayer\bin\Debug\net9.0\CoreLayer.pdb
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\CoreLayer\obj\Debug\net9.0\CoreLayer.csproj.AssemblyReference.cache
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\CoreLayer\obj\Debug\net9.0\CoreLayer.GeneratedMSBuildEditorConfig.editorconfig
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\CoreLayer\obj\Debug\net9.0\CoreLayer.AssemblyInfoInputs.cache
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\CoreLayer\obj\Debug\net9.0\CoreLayer.AssemblyInfo.cs
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\CoreLayer\obj\Debug\net9.0\CoreLayer.csproj.CoreCompileInputs.cache
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\CoreLayer\obj\Debug\net9.0\CoreLayer.sourcelink.json
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\CoreLayer\obj\Debug\net9.0\CoreLayer.dll
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\CoreLayer\obj\Debug\net9.0\refint\CoreLayer.dll
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\CoreLayer\obj\Debug\net9.0\CoreLayer.pdb
+D:\Microsoft Visual Studio\data\All Projects\Final Project-SportEvent\CoreLayer\obj\Debug\net9.0\ref\CoreLayer.dll
