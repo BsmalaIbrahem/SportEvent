@@ -1,0 +1,14 @@
+E:\C#\ErraSoft\SportEvent\ServiceLayer\bin\Debug\net9.0\ServiceLayer.deps.json
+E:\C#\ErraSoft\SportEvent\ServiceLayer\bin\Debug\net9.0\ServiceLayer.runtimeconfig.json
+E:\C#\ErraSoft\SportEvent\ServiceLayer\bin\Debug\net9.0\ServiceLayer.dll
+E:\C#\ErraSoft\SportEvent\ServiceLayer\bin\Debug\net9.0\ServiceLayer.pdb
+E:\C#\ErraSoft\SportEvent\ServiceLayer\obj\Debug\net9.0\ServiceLayer.csproj.AssemblyReference.cache
+E:\C#\ErraSoft\SportEvent\ServiceLayer\obj\Debug\net9.0\ServiceLayer.GeneratedMSBuildEditorConfig.editorconfig
+E:\C#\ErraSoft\SportEvent\ServiceLayer\obj\Debug\net9.0\ServiceLayer.AssemblyInfoInputs.cache
+E:\C#\ErraSoft\SportEvent\ServiceLayer\obj\Debug\net9.0\ServiceLayer.AssemblyInfo.cs
+E:\C#\ErraSoft\SportEvent\ServiceLayer\obj\Debug\net9.0\ServiceLayer.csproj.CoreCompileInputs.cache
+E:\C#\ErraSoft\SportEvent\ServiceLayer\obj\Debug\net9.0\ServiceLayer.dll
+E:\C#\ErraSoft\SportEvent\ServiceLayer\obj\Debug\net9.0\refint\ServiceLayer.dll
+E:\C#\ErraSoft\SportEvent\ServiceLayer\obj\Debug\net9.0\ServiceLayer.pdb
+E:\C#\ErraSoft\SportEvent\ServiceLayer\obj\Debug\net9.0\ServiceLayer.genruntimeconfig.cache
+E:\C#\ErraSoft\SportEvent\ServiceLayer\obj\Debug\net9.0\ref\ServiceLayer.dll
