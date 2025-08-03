@@ -15,7 +15,7 @@ namespace DataAccessLayer.Models
         public PlayerPosition? Position { get; set; }
         public string? ImgPath { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public string National { get; set; } = string.Empty;
+        public string Nationality { get; set; } = string.Empty;
         public ICollection<TeamPlayer> Teams { get; set; } = new List<TeamPlayer>();
 
     }

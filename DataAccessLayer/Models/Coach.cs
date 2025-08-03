@@ -14,5 +14,6 @@ namespace DataAccessLayer.Models
         [Column(TypeName = "text")]
         public string? Description { get; set; } = string.Empty;
         public string? ImageUrl { get; set; } = string.Empty;
+        public string Nationality { get; set; } = string.Empty;
     }
 }

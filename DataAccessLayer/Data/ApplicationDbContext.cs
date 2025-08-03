@@ -39,7 +39,7 @@ namespace DataAccessLayer.Data
                 .HasOne(m => m.HomeTeam)
                 .WithMany()
                 .HasForeignKey(m => m.HomeTeamId)
-                .OnDelete(DeleteBehavior.Restrict); // أو NoAction
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Match>()
                 .HasOne(m => m.AwayTeam)
@@ -51,7 +51,9 @@ namespace DataAccessLayer.Data
                 .HasOne(m => m.Tournament)
                 .WithMany()
                 .HasForeignKey(m => m.TournamentId)
-                .OnDelete(DeleteBehavior.Cascade); // لو حابب تسيبها Cascade هنا
+                .OnDelete(DeleteBehavior.Cascade);
+
+            
         }
 
 

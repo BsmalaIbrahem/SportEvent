@@ -1,5 +1,6 @@
 using CoreLayer.Utility;
 using DataAccessLayer.Data;
+using DataAccessLayer.DBInitilizer;
 using DataAccessLayer.Repositories;
 using DataAccessLayer.Repositories.IRepositories;
 using Microsoft.AspNetCore.Identity;
@@ -21,6 +22,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 }).AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
+builder.Services.AddScoped<IDBInitializer, DBInitializer>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(MainRepository<>));
 builder.Services.AddScoped<ICoachRepository, CoachRepository>();
 builder.Services.AddScoped<IContactRepository, ContactRepository>();
@@ -61,8 +63,13 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+    pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbInitializer = scope.ServiceProvider.GetRequiredService<IDBInitializer>();
+    dbInitializer.Initialize();
+}
 
 app.Run();
