@@ -25,8 +25,8 @@ out/
 SportEvent.sln
 
 /PresentationLayer/.vs/
-/PresentationLayer/AmannaBackEnd.csproj.user
-/PresentationLayer/AmannaBackEnd.csproj
+/PresentationLayer/PresentationLayer.csproj.user
+/PresentationLayer/PresentationLayer.csproj
 # IIS Express
 *.vspscc
 *.vssscc
