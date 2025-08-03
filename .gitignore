@@ -6,14 +6,10 @@ bin/
 obj/
 out/
 
-/PresentationLayer/bin/*
-/PresentationLayer/obj/*
+**/bin/
+**/obj/
+.vs/
 
-/DataAccessLayer/bin/*
-/DataAccessLayer/obj/*
-
-/CoreLayer/bin/*
-/CoreLayer/obj/*
 # User-specific files
 *.user
 *.suo
@@ -25,6 +21,8 @@ out/
 
 # Visual Studio working folder
 .vs/
+
+SportEvent.sln
 
 /PresentationLayer/.vs/
 /PresentationLayer/AmannaBackEnd.csproj.user
