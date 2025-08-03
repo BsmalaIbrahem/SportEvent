@@ -27,6 +27,8 @@ out/
 .vs/
 
 /PresentationLayer/.vs/
+/PresentationLayer/AmannaBackEnd.csproj.user
+/PresentationLayer/AmannaBackEnd.csproj
 # IIS Express
 *.vspscc
 *.vssscc
