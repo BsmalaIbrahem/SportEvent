@@ -4,7 +4,6 @@ namespace DataAccessLayer.Repositories.IRepositories
 {
     public interface IUnitOfWork : IDisposable
     {
-        IBaseModelRepository BaseModelRepository { get; }
         ICoachRepository CoachRepository { get; }
         IContactRepository ContactRepository { get; }
         IMatchPlayerRepository MatchPlayerRepository { get; }

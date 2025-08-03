@@ -8,14 +8,13 @@ namespace DataAccessLayer.Repositories
     {
         private readonly ApplicationDbContext _context;
 
-        public UnitOfWork(IBaseModelRepository baseModelRepository,ICoachRepository coachRepository,
+        public UnitOfWork(ICoachRepository coachRepository,
             IContactRepository contactRepository,IMatchPlayerRepository matchPlayerRepository,
             IMatchRepository matchRepository,IMatchStatisticRepository matchStatisticRepository,
             INewRepository newRepository,IPlayerRepository playerRepository,ITeamRepository teamRepository
             ,ITeamPlayerRepository teamPlayerRepository,ITournamentRepository tournamentRepository,
             ApplicationDbContext context)
         {
-            BaseModelRepository = baseModelRepository;
             CoachRepository = coachRepository;
             ContactRepository = contactRepository;
             MatchPlayerRepository = matchPlayerRepository;
@@ -28,8 +27,6 @@ namespace DataAccessLayer.Repositories
             TournamentRepository = tournamentRepository;
             _context = context;
         }
-
-        public IBaseModelRepository BaseModelRepository { get; }
         public ICoachRepository CoachRepository { get; }
         public IContactRepository ContactRepository { get; }
         public IMatchPlayerRepository MatchPlayerRepository { get; }
