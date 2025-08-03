@@ -6,6 +6,14 @@ bin/
 obj/
 out/
 
+/PresentationLayer/bin/*
+/PresentationLayer/obj/*
+
+/DataAccessLayer/bin/*
+/DataAccessLayer/obj/*
+
+/CoreLayer/bin/*
+/CoreLayer/obj/*
 # User-specific files
 *.user
 *.suo
@@ -18,6 +26,7 @@ out/
 # Visual Studio working folder
 .vs/
 
+/PresentationLayer/.vs/
 # IIS Express
 *.vspscc
 *.vssscc
