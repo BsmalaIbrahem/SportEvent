@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "Q6zuGTI1axE=",
+  "dgSpecHash": "pGjit1kFnl4=",
   "success": true,
-  "projectFilePath": "E:\\C#\\ErraSoft\\SportEvent\\CoreLayer\\CoreLayer.csproj",
+  "projectFilePath": "D:\\Microsoft Visual Studio\\data\\All Projects\\Final Project-SportEvent\\CoreLayer\\CoreLayer.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\3com\\.nuget\\packages\\microsoft.aspnetcore.http.features\\5.0.17\\microsoft.aspnetcore.http.features.5.0.17.nupkg.sha512",
-    "C:\\Users\\3com\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.1\\microsoft.extensions.primitives.5.0.1.nupkg.sha512",
-    "C:\\Users\\3com\\.nuget\\packages\\system.io.pipelines\\5.0.2\\system.io.pipelines.5.0.2.nupkg.sha512"
+    "C:\\Users\\Lenovo\\.nuget\\packages\\microsoft.aspnetcore.http.features\\5.0.17\\microsoft.aspnetcore.http.features.5.0.17.nupkg.sha512",
+    "C:\\Users\\Lenovo\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.1\\microsoft.extensions.primitives.5.0.1.nupkg.sha512",
+    "C:\\Users\\Lenovo\\.nuget\\packages\\system.io.pipelines\\5.0.2\\system.io.pipelines.5.0.2.nupkg.sha512"
   ],
   "logs": []
 }

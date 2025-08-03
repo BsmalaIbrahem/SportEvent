@@ -4961,23 +4961,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\3com\\.nuget\\packages\\": {},
+    "C:\\Users\\Lenovo\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\C#\\ErraSoft\\SportEvent\\PresentationLayer\\PresentationLayer.csproj",
+      "projectUniqueName": "D:\\Microsoft Visual Studio\\data\\All Projects\\Final Project-SportEvent\\PresentationLayer\\PresentationLayer.csproj",
       "projectName": "PresentationLayer",
-      "projectPath": "E:\\C#\\ErraSoft\\SportEvent\\PresentationLayer\\PresentationLayer.csproj",
-      "packagesPath": "C:\\Users\\3com\\.nuget\\packages\\",
-      "outputPath": "E:\\C#\\ErraSoft\\SportEvent\\PresentationLayer\\obj\\",
+      "projectPath": "D:\\Microsoft Visual Studio\\data\\All Projects\\Final Project-SportEvent\\PresentationLayer\\PresentationLayer.csproj",
+      "packagesPath": "C:\\Users\\Lenovo\\.nuget\\packages\\",
+      "outputPath": "D:\\Microsoft Visual Studio\\data\\All Projects\\Final Project-SportEvent\\PresentationLayer\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\3com\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -4992,8 +4992,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "E:\\C#\\ErraSoft\\SportEvent\\DataAccessLayer\\DataAccessLayer.csproj": {
-              "projectPath": "E:\\C#\\ErraSoft\\SportEvent\\DataAccessLayer\\DataAccessLayer.csproj"
+            "D:\\Microsoft Visual Studio\\data\\All Projects\\Final Project-SportEvent\\DataAccessLayer\\DataAccessLayer.csproj": {
+              "projectPath": "D:\\Microsoft Visual Studio\\data\\All Projects\\Final Project-SportEvent\\DataAccessLayer\\DataAccessLayer.csproj"
             }
           }
         }
@@ -5008,7 +5008,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.300"
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
       "net9.0": {
@@ -5052,7 +5052,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
