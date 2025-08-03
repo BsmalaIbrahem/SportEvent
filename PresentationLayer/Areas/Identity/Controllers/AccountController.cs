@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using PresentationLayer.ViewModels;
 
 namespace PresentationLayer.Areas.Identity.Controllers
 {
@@ -140,5 +140,6 @@ namespace PresentationLayer.Areas.Identity.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login", "Account", new { area = "Identity" });
         }
+
     }
 }

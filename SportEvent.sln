@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36127.28 d17.14
+VisualStudioVersion = 17.14.36127.28
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresentationLayer", "PresentationLayer\PresentationLayer.csproj", "{F025E3FE-F442-411F-8F13-DCEAE6E1DD39}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLayer", "DataAccessLayer\DataAccessLayer.csproj", "{2967B887-2C77-4D3A-93B9-AD7016EF65DD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceLayer", "ServiceLayer\ServiceLayer.csproj", "{0F665070-AE93-42FA-B5F7-BF0FCCF63B4E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreLayer", "CoreLayer\CoreLayer.csproj", "{38F1CEC2-ECD7-4240-BCAB-1A49671ECE4C}"
 EndProject
@@ -25,10 +23,6 @@ Global
 		{2967B887-2C77-4D3A-93B9-AD7016EF65DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2967B887-2C77-4D3A-93B9-AD7016EF65DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2967B887-2C77-4D3A-93B9-AD7016EF65DD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0F665070-AE93-42FA-B5F7-BF0FCCF63B4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0F665070-AE93-42FA-B5F7-BF0FCCF63B4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0F665070-AE93-42FA-B5F7-BF0FCCF63B4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0F665070-AE93-42FA-B5F7-BF0FCCF63B4E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{38F1CEC2-ECD7-4240-BCAB-1A49671ECE4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{38F1CEC2-ECD7-4240-BCAB-1A49671ECE4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38F1CEC2-ECD7-4240-BCAB-1A49671ECE4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
