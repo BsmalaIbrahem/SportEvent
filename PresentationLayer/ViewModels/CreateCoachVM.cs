@@ -10,5 +10,6 @@ namespace PresentationLayer.ViewModels
 
         [Required(ErrorMessage= "Nationality is Required")]
         public string Nationality { get; set; } = string.Empty;
+        public string ImgPath { get; set; } = string.Empty;
     }
 }

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace PresentationLayer.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CoachController : Controller
     {
         private readonly IRepository<Coach> _repository;
@@ -20,7 +21,7 @@ namespace PresentationLayer.Areas.Admin.Controllers
             Expression<Func<Coach, bool>>? filterExpression = c => string.IsNullOrEmpty(filter.SearchTerm) || c.Name.Contains(filter.SearchTerm);
             var coaches = await _repository.GetAllAsync(
                 filter: filterExpression,
-                skip: filter.SkipNumber - 1,
+                skip: filter.SkipNumber,
                 take: filter.PageSize,
                 orderBy: q => q.OrderByDescending(c => c.Id)
             );
@@ -60,10 +61,15 @@ namespace PresentationLayer.Areas.Admin.Controllers
             if(ImgPath != null && ImgPath.Length > 0)
             {
                 string fileName = FileHelper.CreateFileName(ImgPath.FileName);
-                var path = "~\\assets\\images\\news";
+                var path = "assets\\images\\coaches";
                 string filePath = FileHelper.GetFilePath(fileName, "wwwroot\\" + path);
                 await FileHelper.UploadFile(filePath, ImgPath);
-                coach.ImageUrl = path + '\\' + fileName;
+                coach.ImageUrl = "/" + path.Replace("\\", "/") + "/" + fileName;
+            }
+            else
+            {
+                ModelState.AddModelError("ImgPath", "Image is required.");
+                return View(request);
             }
             await _repository.AddAsync(coach);
             await _repository.SaveChangesAsync();
@@ -112,16 +118,16 @@ namespace PresentationLayer.Areas.Admin.Controllers
             if (ImgPath != null && ImgPath.Length > 0)
             {
                 string fileName = FileHelper.CreateFileName(ImgPath.FileName);
-                var path = "~\\assets\\images\\news";
+                var path = "assets\\images\\coaches";
                 string filePath = FileHelper.GetFilePath(fileName, "wwwroot\\" + path);
                 await FileHelper.UploadFile(filePath, ImgPath);
-                existingCoach.ImageUrl = path + '\\' + fileName;
+                existingCoach.ImageUrl = "/" + path.Replace("\\", "/") + "/" + fileName;
             }
 
             _repository.Update(existingCoach);
             await _repository.SaveChangesAsync();
 
-            return View(coach);
+            return RedirectToAction(nameof(Index));
         }
 
 

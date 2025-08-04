@@ -18,10 +18,18 @@ namespace CoreLayer.Helpers
 
         public static async Task UploadFile(string filePath, IFormFile file)
         {
+            var directory = Path.GetDirectoryName(filePath);
+
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
             using (var stream = System.IO.File.Create(filePath))
             {
                 await file.CopyToAsync(stream);
             }
         }
+
     }
 }
