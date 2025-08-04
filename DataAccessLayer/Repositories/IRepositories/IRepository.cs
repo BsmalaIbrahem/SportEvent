@@ -19,7 +19,7 @@ namespace DataAccessLayer.Repositories.IRepositories
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null);
         Task<int> CountAsync(Expression<Func<T, bool>>? expression = null);
         Task AddAsync(T entity);
-        void UpdateAsync(T entity);
+        void Update(T entity);
         Task DeleteAsync(Expression<Func<T, bool>> expression);
         Task SaveChangesAsync();
     }

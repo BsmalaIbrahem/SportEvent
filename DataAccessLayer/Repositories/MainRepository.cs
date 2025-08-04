@@ -75,7 +75,7 @@ namespace DataAccessLayer.Repositories
             }
 
         }
-        public void  UpdateAsync(T entity)
+        public void  Update(T entity)
         {
             try
             {
