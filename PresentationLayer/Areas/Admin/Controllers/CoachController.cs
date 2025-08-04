@@ -1,6 +1,7 @@
 ﻿using CoreLayer.Helpers;
 using DataAccessLayer.Models;
 using DataAccessLayer.Repositories.IRepositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.ViewModels;
 using System.Linq.Expressions;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 namespace PresentationLayer.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin,SuperAdmin")]
     public class CoachController : Controller
     {
         private readonly IRepository<Coach> _repository;
