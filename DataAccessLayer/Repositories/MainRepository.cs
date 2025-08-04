@@ -67,6 +67,7 @@ namespace DataAccessLayer.Repositories
         {
             try
             {
+                _context.Entry(entity).Property("CreatedAt").CurrentValue = DateTime.Now;
                 await _context.Set<T>().AddAsync(entity);
             }
             catch (Exception ex)
@@ -79,6 +80,8 @@ namespace DataAccessLayer.Repositories
         {
             try
             {
+                _context.Entry(entity).Property("UpdatedAt").CurrentValue = DateTime.Now;
+                _context.Entry(entity).State = EntityState.Modified;
                 _context.Set<T>().Update(entity);
             }
             catch (Exception ex)
