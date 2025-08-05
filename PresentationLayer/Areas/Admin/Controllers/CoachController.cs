@@ -119,6 +119,14 @@ namespace PresentationLayer.Areas.Admin.Controllers
 
             if (ImgPath != null && ImgPath.Length > 0)
             {
+                if (!string.IsNullOrEmpty(existingCoach.ImageUrl))
+                {
+                    var oldImagePath = Path.Combine("wwwroot", existingCoach.ImageUrl.TrimStart('/').Replace("/", "\\"));
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
                 string fileName = FileHelper.CreateFileName(ImgPath.FileName);
                 var path = "assets\\images\\coaches";
                 string filePath = FileHelper.GetFilePath(fileName, "wwwroot\\" + path);
@@ -128,6 +136,8 @@ namespace PresentationLayer.Areas.Admin.Controllers
 
             _repository.Update(existingCoach);
             await _repository.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Coach Edit successfully.";
 
             return RedirectToAction(nameof(Index));
         }

@@ -1,0 +1,191 @@
+﻿@model PresentationLayer.ViewModels.EditTeamVM
+
+@if (Model == null)
+{
+    <h2>Error: Team data is not available.</h2>
+    return;
+}
+
+<h2 class="container mt-3">Edit Team</h2>
+<div class="container mt-3">
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="form-group mb-3">
+            <label asp-for="Name" class="form-label">Team Name</label>
+            <input asp-for="Name" class="form-control" required />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Description" class="form-label">Description</label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label for="formFile" class="form-label">LogoUrl</label>
+            <input class="form-control" type="file" id="formFile" asp-for="LogoUrl" value="@Model.LogoUrl" onchange="previewImage(event)" />
+            @if (!string.IsNullOrEmpty(Model.LogoUrl))
+            {
+                <img id="imagePreview" src="@Model.LogoUrl" class="img-thumbnail mt-2" style="max-height: 200px;" />
+            }
+            else
+            {
+                <img id="imagePreview" src="#" class="img-thumbnail mt-2" style="display:none; max-height: 200px;" />
+            }
+            <span class="text-danger" asp-validation-for="LogoUrl"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Country" class="form-label">Country</label>
+            <input asp-for="Country" class="form-control" required />
+            <span asp-validation-for="Country" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Founded" class="form-label">Founded Date</label>
+            <input asp-for="Founded" type="date" class="form-control" value="@Model.Founded.ToString("yyyy-MM-dd")" required />
+            <span asp-validation-for="Founded" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="CoachesId" class="form-label">Coach</label>
+            <select asp-for="CoachesId" asp-items="@(Model.Coaches ?? new List<SelectListItem>())" class="form-control" required>
+                <option value="">Select a Coach</option>
+            </select>
+            <span asp-validation-for="CoachesId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label">Players</label>
+            <select id="playerSelect" class="form-control" multiple>
+                @foreach (var player in Model.AvailablePlayers ?? new List<SelectListItem>())
+                {
+                    <option value="@player.Value">@player.Text</option>
+                }
+            </select>
+            <button type="button" id="addPlayer" class="btn btn-secondary mt-2">Add Player</button>
+            <div id="selectedPlayers" class="mt-3">
+                @for (int i = 0; i < (Model.SelectedPlayers?.Count ?? 0); i++)
+                {
+                    <div class="player-selection mb-3" data-player-id="@Model.SelectedPlayers[i].PlayerId">
+                        <input type="hidden" name="SelectedPlayers[@i].PlayerId" value="@Model.SelectedPlayers[i].PlayerId" />
+                        <label>Player: @Model.AvailablePlayers?.FirstOrDefault(p => p.Value == Model.SelectedPlayers[i].PlayerId.ToString())?.Text</label>
+                        <div class="form-group">
+                            <label>Joined Date</label>
+                            <input type="date" name="SelectedPlayers[@i].JoinedDate" value="@Model.SelectedPlayers[i].JoinedDate.ToString("yyyy-MM-dd")" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Number</label>
+                            <input type="number" name="SelectedPlayers[@i].Number" value="@Model.SelectedPlayers[i].Number" class="form-control" min="1" max="99" />
+                        </div>
+                        <button type="button" class="btn btn-danger remove-player">Remove</button>
+                    </div>
+                }
+            </div>
+            <span class="text-danger" id="playersError"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="CaptainId" class="form-label">Captain</label>
+            <select asp-for="CaptainId" id="captainSelect" class="form-control" required>
+                <option value="">Select a Captain</option>
+                @foreach (var player in Model.SelectedPlayers ?? new List<EditTeamVM.PlayerSelection>())
+                {
+                    <option value="@player.PlayerId" selected="@(player.PlayerId == Model.CaptainId ? "selected" : null)">
+                        @(Model.AvailablePlayers?.FirstOrDefault(p => p.Value == player.PlayerId.ToString())?.Text ?? "Unknown Player")
+                    </option>
+                }
+            </select>
+            <span asp-validation-for="CaptainId" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+            function previewImage(event) {
+            const input = event.target;
+            const preview = document.getElementById('imagePreview');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        $(document).ready(function () {
+            $('#playerSelect').select2({
+                placeholder: "Select players",
+                allowClear: true
+            });
+
+            let playerIndex = @(Model?.SelectedPlayers?.Count ?? 0);
+            let captainOptions = '<option value="">Select a Captain</option>';
+            @foreach (var player in Model?.SelectedPlayers ?? new List<EditTeamVM.PlayerSelection>())
+            {
+                    @:captainOptions += `<option value="@player.PlayerId">@(Model.AvailablePlayers?.FirstOrDefault(p => p.Value == player.PlayerId.ToString())?.Text ?? "Unknown Player")</option>`;
+            }
+            $('#captainSelect').html(captainOptions);
+            $('#captainSelect').val(@(Model?.CaptainId ?? 0)).trigger('change');
+
+            $('#addPlayer').click(function () {
+                const selectedOptions = $('#playerSelect').val();
+                if (!selectedOptions || selectedOptions.length === 0) {
+                    $('#playersError').text('Please select at least one player.');
+                    return;
+                }
+                $('#playersError').text('');
+
+                selectedOptions.forEach(function (playerId) {
+                    const playerText = $('#playerSelect option[value="' + playerId + '"]').text();
+                    const html = `
+                        <div class="player-selection mb-3" data-player-id="${playerId}">
+                            <input type="hidden" name="SelectedPlayers[${playerIndex}].PlayerId" value="${playerId}" />
+                            <label>Player: ${playerText}</label>
+                            <div class="form-group">
+                                <label>Joined Date</label>
+                                <input type="date" name="SelectedPlayers[${playerIndex}].JoinedDate" class="form-control" required />
+                            </div>
+                            <div class="form-group">
+                                <label>Number</label>
+                                <input type="number" name="SelectedPlayers[${playerIndex}].Number" class="form-control" min="1" max="99" />
+                            </div>
+                            <button type="button" class="btn btn-danger remove-player">Remove</button>
+                        </div>`;
+                    $('#selectedPlayers').append(html);
+                    captainOptions += `<option value="${playerId}">${playerText}</option>`;
+                    playerIndex++;
+                });
+                $('#captainSelect').html(captainOptions);
+                $('#playerSelect').val(null).trigger('change');
+            });
+
+            $(document).on('click', '.remove-player', function () {
+                const playerId = $(this).closest('.player-selection').data('player-id');
+                $(this).closest('.player-selection').remove();
+                $(`#captainSelect option[value="${playerId}"]`).remove();
+                if ($('#captainSelect').val() === playerId) {
+                    $('#captainSelect').val('');
+                }
+            });
+
+            $('form').submit(function (e) {
+                if ($('.player-selection').length === 0) {
+                    e.preventDefault();
+                    $('#playersError').text('At least one player is required.');
+                }
+            });
+        });
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+}

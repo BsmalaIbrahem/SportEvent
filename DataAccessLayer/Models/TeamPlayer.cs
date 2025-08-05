@@ -17,6 +17,7 @@ namespace DataAccessLayer.Models
         public DateTime JoinedDate { get; set; }
         public DateTime? LeftDate { get; set; } = null;
         public int ? Number { get; set; } = null;
+        public bool IsCaptain { get; set; } = false;
 
     }
 }
