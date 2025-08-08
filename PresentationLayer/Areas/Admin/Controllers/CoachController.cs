@@ -3,6 +3,7 @@ using DataAccessLayer.Models;
 using DataAccessLayer.Repositories.IRepositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PresentationLayer.ViewModels;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -25,7 +26,8 @@ namespace PresentationLayer.Areas.Admin.Controllers
                 filter: filterExpression,
                 skip: filter.SkipNumber,
                 take: filter.PageSize,
-                orderBy: q => q.OrderByDescending(c => c.Id)
+                orderBy: q => q.OrderByDescending(c => c.Id),
+                includeChain: q => q.Include(c => c.Team)
             );
             var data = new ModelsWithPaginationVM<Coach>
             {

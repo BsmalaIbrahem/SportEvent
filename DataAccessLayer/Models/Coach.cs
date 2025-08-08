@@ -15,5 +15,6 @@ namespace DataAccessLayer.Models
         public string? Description { get; set; }
         public string? ImageUrl { get; set; }
         public string Nationality { get; set; } = string.Empty;
+        public Team Team { get; set; } = null!;
     }
 }
