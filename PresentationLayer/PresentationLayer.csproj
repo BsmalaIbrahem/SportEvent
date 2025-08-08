@@ -21,4 +21,9 @@
     <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\assets\images\coaches\" />
+    <Folder Include="wwwroot\assets\images\TeamLogo\" />
+  </ItemGroup>
+
 </Project>
