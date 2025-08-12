@@ -1,0 +1,127 @@
+﻿@model ModelsWithPaginationVM<New>
+
+<div style="text-align:right; margin-top:30px; margin-right:20px;">
+    <a asp-action="Create" class="btn btn-primary">Create</a>
+</div>
+<div class="container-xxl flex-grow-1 ">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Tables / </span>News</h4>
+
+    <div class="mt-2 mb-3">
+        <div class="btn-group">
+            @{
+                int[] PageSizes = new int[] { 5, 10, 15, 20 };
+            }
+
+            <button type="button"
+                    class="btn btn-outline-primary dropdown-toggle"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                @( Model.Pagination.PageSize != 0 ?  Model.Pagination.PageSize: "Page Size")
+            </button>
+            <ul class="dropdown-menu">
+                @for (var j = 0; j < PageSizes.Length; j++)
+                {
+                    <li><a class="dropdown-item" href="@Url.Action("Index", new { PageSize = PageSizes[j] })">@PageSizes[j]</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <!-- Bootstrap Table with Header - Light -->
+    <div class="row">
+        @if (Model.Items.Count() > 0)
+        {
+            @foreach (var item in Model.Items)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        @if (!string.IsNullOrEmpty(item.ImgPath))
+                        {
+                            <img src="@item.ImgPath"
+                                 class="card-img-top"
+                                 alt="@item.Title"
+                                 style="height: 200px; object-fit: cover;" />
+                        }
+                        else
+                        {
+                            <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <span>No Image</span>
+                            </div>
+                        }
+
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Title</h5>
+                            <p class="card-text">
+                                @(item.Content?.Length > 70 ? item.Content.Substring(0, 70) + "..." : item.Content)
+                            </p>
+                            <small class="text-muted">By @item.Author.UserName</small>
+                        </div>
+
+                        <div class="card-footer text-end">
+                            <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@item.Id">
+                                <i class="bx bx-edit-alt"></i> Edit
+                            </a>
+                            <a class="btn btn-sm btn-primary" asp-action="Details" asp-route-id="@item.Id">
+                                <i class="bx bx-edit-alt"></i> Details
+                            </a>
+                            <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.Id">
+                                <i class="bx bx-trash"></i> Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <h3 class="text-danger text-center">No Data</h3>
+        }
+    </div>
+
+    <!-- Bootstrap Table with Header - Light -->
+
+    <hr class="" />
+
+
+    <div class="col-lg-4" style="margin:auto;">
+        <small class="text-light fw-semibold"></small>
+        <div class="demo-inline-spacing">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    @{
+                        var currentPage = Model.Pagination.PageNumber;
+                        var PageSize = Model.Pagination.PageSize;
+                    }
+
+                    @if (Model.Pagination.HasPreviousPage)
+                    {
+                        <li class="page-item prev">
+                            <a class="page-link" href="@Url.Action("Index", new { PageNumber = currentPage - 1, PageSize = PageSize })">
+                                <i class="tf-icon bx bx-chevrons-left"></i>
+                            </a>
+                        </li>
+                    }
+
+                    @for (var i = 1; i <= Model.Pagination.TotalPages; i++)
+                    {
+                        <li class="page-item @(currentPage == i ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { PageNumber = i, PageSize = PageSize })">@i</a>
+                        </li>
+                    }
+
+                    @if (Model.Pagination.HasNextPage)
+                    {
+                        <li class="page-item next">
+                            <a class="page-link" href="@Url.Action("Index", new { PageNumber = currentPage + 1, PageSize = PageSize })">
+                                <i class="tf-icon bx bx-chevrons-right"></i>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+
+
+</div>

@@ -1,0 +1,39 @@
+﻿@model DataAccessLayer.Models.New
+
+<div class="container mt-4">
+    <div class="card shadow p-3">
+        <div class="row g-0">
+            <!-- عمود الصورة -->
+            <div class="col-md-5">
+                @if (!string.IsNullOrEmpty(Model.ImgPath))
+                {
+                    <img src="@Model.ImgPath"
+                         alt="@Model.Title"
+                         class="img-fluid rounded-start"
+                         style="height: 100%; object-fit: cover; width: 100%;" />
+                }
+                else
+                {
+                    <div class="bg-light d-flex align-items-center justify-content-center"
+                         style="height: 100%; min-height: 300px;">
+                        <span>No Image</span>
+                    </div>
+                }
+            </div>
+
+            <!-- عمود البيانات -->
+            <div class="col-md-7">
+                <div class="card-body">
+                    <h3 class="card-title">@Model.Title</h3>
+                    <p class="card-text">@Model.Content</p>
+                    <p class="text-muted mb-4">By @Model.Author?.UserName</p>
+
+                    <div class="text-end">
+                        <a asp-action="Index" class="btn btn-secondary me-2">Back to List</a>
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

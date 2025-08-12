@@ -1,11 +1,13 @@
 ﻿using DataAccessLayer.Data;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataAccessLayer.Models
+namespace PresentationLayer.ViewModels
 {
-    public class New : BaseModel
+    public class CreateNewsVM
     {
         public int Id { get; set; }
+        [Required(ErrorMessage = "Title is required.")]
         public string Title { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
         public string AuthorId { get; set; } = string.Empty;
