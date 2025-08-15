@@ -1,0 +1,17 @@
+﻿@model DataAccessLayer.Models.Contact
+<meta charset="utf-8" />
+<div class="container mt-4">
+    <h2>Message Details</h2>
+
+    <div class="card p-3">
+        <p><strong>ID:</strong> @Model.Id</p>
+        <p><strong>Name:</strong> @Model.Name</p>
+        <p><strong>Email:</strong> @Model.Email</p>
+        <p><strong>Phone:</strong> @Model.PhoneNumber</p>
+        <p><strong>Subject:</strong> @Model.Subject</p>
+        <p><strong>Massege:</strong> @Model.Message</p>
+        <p><strong>Sent Date:</strong> @Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")</p>
+    </div>
+
+    <a asp-action="Index" class="btn btn-secondary mt-3">Back to List</a>
+</div>
