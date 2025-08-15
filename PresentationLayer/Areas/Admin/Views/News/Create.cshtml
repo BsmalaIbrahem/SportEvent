@@ -1,0 +1,61 @@
+﻿
+@model PresentationLayer.ViewModels.CreateNewsVM
+
+<div class="container-xxl flex-grow-3">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">News / </span>Create New News</h4>
+
+    <!-- Form -->
+    <div class="card">
+        <h5 class="card-header">Create News</h5>
+        <div class="card-body">
+            <form asp-action="Create" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label">Title</label>
+                    <input asp-for="Title" class="form-control" placeholder="Enter news title" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Content" class="form-label">Content</label>
+                    <textarea asp-for="Content" class="form-control" rows="5" placeholder="Enter news content"></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="ImgPath" class="form-label">Image</label>
+                    <input type="file" name="ImgPath" class="form-control" accept="image/*" />
+                    <span asp-validation-for="ImgPath" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary me-2">
+                        <i class="bx bx-save me-1"></i> Create
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bx bx-arrow-back me-1"></i> Back to List
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+             function previewImage(event) {
+            const input = event.target;
+            const preview = document.getElementById('imagePreview');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+}

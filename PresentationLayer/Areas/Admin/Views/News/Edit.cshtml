@@ -1,0 +1,81 @@
+﻿@model PresentationLayer.ViewModels.CreateNewsVM
+
+<div class="container-xxl flex-grow-3">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">News / </span>Edit News</h4>
+
+    <!-- Form -->
+    <div class="card">
+        <h5 class="card-header">Edit News</h5>
+        <div class="card-body">
+            <form asp-action="Edit" enctype="multipart/form-data" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label">Title</label>
+                    <input asp-for="Title" class="form-control" placeholder="Enter news title" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Content" class="form-label">Content</label>
+                    <textarea asp-for="Content" class="form-control" rows="5" placeholder="Enter news content"></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+
+                <!-- عرض الصورة الحالية -->
+                @if (!string.IsNullOrEmpty(Model.ImgPath))
+                {
+                    <div class="mb-3">
+                        <label class="form-label">Current Image</label>
+                        <div>
+                            <img src="@Model.ImgPath" id="imagePreview" alt="News Image" class="img-thumbnail" style="max-height: 200px;" />
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="mb-3">
+                        <img id="imagePreview" src="" alt="" class="img-thumbnail" style="max-height: 200px; display:none;" />
+                    </div>
+                }
+
+                <!-- رفع صورة جديدة -->
+                <div class="mb-3">
+                    <label for="ImgPath" class="form-label">Change Image</label>
+                    <input type="file" name="ImgPath" class="form-control" accept="image/*" onchange="previewImage(event)" />
+                    <span asp-validation-for="ImgPath" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary me-2">
+                        <i class="bx bx-save me-1"></i> Save Changes
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bx bx-arrow-back me-1"></i> Back to List
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function previewImage(event) {
+            const input = event.target;
+            const preview = document.getElementById('imagePreview');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+}
