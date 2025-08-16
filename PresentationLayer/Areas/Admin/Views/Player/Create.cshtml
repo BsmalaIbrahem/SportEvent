@@ -46,7 +46,7 @@
 
                         <div class="mb-3">
                             <label class="form-label" for="Description">Position</label>
-                            <select asp-for="Position" class="form-select">
+                            <select asp-for="Position" style="width:100%" class="js-example-basic-single form-control">
                                 <option value="">Select Position</option>
                                 @foreach (var position in Enum.GetValues(typeof(PlayerPosition)))
                                 {
@@ -58,7 +58,7 @@
 
                         <div class="mb-3">
                             <label class="form-label" for="Description">Current Team</label>
-                            <select class="form-select" asp-for="TeamId" asp-items="ViewBag.Teams">
+                            <select class="js-example-basic-single form-control" style="width:100%" asp-for="TeamId" asp-items="ViewBag.Teams">
                                 <option value="">Select Team</option>
                             </select>
                             <span class="text-danger" asp-validation-for="TeamId"></span>

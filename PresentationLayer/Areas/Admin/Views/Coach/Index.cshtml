@@ -3,125 +3,132 @@
 <div style="text-align:right; margin-top:30px; margin-right:20px;">
     <a asp-action="Create" class="btn btn-primary">Create</a>
 </div>
-<div class="container-xxl flex-grow-1 ">
-    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Tables / </span>Coaches</h4>
 
-    <div class="mt-2 mb-3">
-        <div class="btn-group">
-            @{
-                int[] PageSizes = new int[] { 5, 10, 15, 20 };
-            }
-
-            <button type="button"
-                    class="btn btn-outline-primary dropdown-toggle"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                @( Model.Pagination.PageSize != 0 ?  Model.Pagination.PageSize: "Page Size")
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+        <h4 class="card-title">Coaches</h4>
+        <div class="dropdown" style="margin-bottom: 1.125rem;">
+                <button class="btn  dropdown-toggle" style="border: 1px solid #444;" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @( Model.Pagination.PageSize != 0 ?  Model.Pagination.PageSize: "Page Size")
             </button>
-            <ul class="dropdown-menu">
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                @{
+                    int[] PageSizes = new int[] { 5, 10, 15, 20 };
+                }
                 @for (var j = 0; j < PageSizes.Length; j++)
                 {
-                    <li><a class="dropdown-item" href="@Url.Action("Index", new { PageSize = PageSizes[j] })">@PageSizes[j]</a></li>
+                    <a class="dropdown-item" href="@Url.Action("Index", new { PageSize = PageSizes[j] })">@PageSizes[j]</a>
                 }
-            </ul>
+            </div>
         </div>
-    </div>
 
-    <!-- Bootstrap Table with Header - Light -->
-    <div class="card">
-        <h5 class="card-header"> </h5>
-        <div class="table-responsive text-nowrap">
-            @if(Model.Items.Count() > 0){
-            <table class="table">
-                <thead class="table-light">
+        
+        <div class="table-responsive">
+            <table class="table table-dark">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Nationality</th>
+                    <th>Team</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
                     <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Nationality</th>
-                        <th>Team</th>
-                        <th>Actions</th>
+                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>@item.Id</strong></td>
+                        <td>@item.Name</td>
+                        <td>@item.Description</td>
+                        <th>@item.Nationality</th>
+                        <th>@item.Team?.Name</th>
+                        <td>
+                            <div >
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn p-0" >
+                                      <i class="mdi mdi-lead-pencil"></i>
+                                </a>
+                            </div>
+                        </td>
                     </tr>
-                </thead>
-                <tbody class="table-border-bottom-0">
-                    @foreach (var item in Model.Items)
-                    {
-                        <tr>
-                            <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>@item.Id</strong></td>
-                            <td>@item.Name</td>
-                            <td>@item.Description</td>
-                            <th>@item.Nationality</th>
-                            <th>@item.Team?.Name</th>
-                            <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id"><i class="bx bx-edit-alt me-1"></i> Edit</a>
+                 }
 
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    }
+
                 </tbody>
-                </table>
-            }
-            else
-            {
-                <h3 class="text-danger text-center">No Data</h3>
-            }
+            </table>
         </div>
-    </div>
-    <!-- Bootstrap Table with Header - Light -->
-
-    <hr class="" />
-
-
-    <div class="col-lg-4" style="margin:auto;">
-        <small class="text-light fw-semibold"></small>
-        <div class="demo-inline-spacing">
+        </div>
+        <div class="col-lg-4" style="margin:auto;">
             <nav aria-label="Page navigation">
-                <ul class="pagination">
+                <ul class="pagination justify-content-center">
                     @{
                         var currentPage = Model.Pagination.PageNumber;
-                        var PageSize = Model.Pagination.PageSize;
+                        var pageSize = Model.Pagination.PageSize;
+                        var totalPages = Model.Pagination.TotalPages;
+                        var maxPagesToShow = 5;
+
+                        var startPage = Math.Max(1, currentPage - maxPagesToShow / 2);
+                        var endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
+
+                        if (endPage - startPage < maxPagesToShow - 1)
+                        {
+                            startPage = Math.Max(1, endPage - maxPagesToShow + 1);
+                        }
                     }
 
                     @if (Model.Pagination.HasPreviousPage)
                     {
-                        <li class="page-item prev">
-                            <a class="page-link" href="@Url.Action("Index", new { PageNumber = currentPage - 1, PageSize = PageSize })">
-                                <i class="tf-icon bx bx-chevrons-left"></i>
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { PageNumber = currentPage - 1, PageSize = pageSize })">
+                                &laquo;
                             </a>
                         </li>
                     }
 
-                    @for (var i = 1; i <= Model.Pagination.TotalPages; i++)
+                    @if (startPage > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { PageNumber = 1, PageSize = pageSize })">1</a>
+                        </li>
+                        @if (startPage > 2)
+                        {
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        }
+                    }
+
+                    @for (var i = startPage; i <= endPage; i++)
                     {
                         <li class="page-item @(currentPage == i ? "active" : "")">
-                            <a class="page-link" href="@Url.Action("Index", new { PageNumber = i, PageSize = PageSize })">@i</a>
+                            <a class="page-link" href="@Url.Action("Index", new { PageNumber = i, PageSize = pageSize })">@i</a>
+                        </li>
+                    }
+
+                    @if (endPage < totalPages)
+                    {
+                        @if (endPage < totalPages - 1)
+                        {
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        }
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { PageNumber = totalPages, PageSize = pageSize })">@totalPages</a>
                         </li>
                     }
 
                     @if (Model.Pagination.HasNextPage)
                     {
-                        <li class="page-item next">
-                            <a class="page-link" href="@Url.Action("Index", new { PageNumber = currentPage + 1, PageSize = PageSize })">
-                                <i class="tf-icon bx bx-chevrons-right"></i>
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { PageNumber = currentPage + 1, PageSize = pageSize })">
+                                &raquo;
                             </a>
                         </li>
                     }
-
-
-
-
                 </ul>
             </nav>
-
         </div>
+
+
     </div>
+ </div>
 
-
-</div>
