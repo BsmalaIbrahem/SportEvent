@@ -1,0 +1,89 @@
+﻿@using CoreLayer.Enums
+@model EditMatchVM
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Match/</span> Edit</h4>
+
+    <!-- Basic Layout -->
+    <div class="row">
+        <div class="col-xl">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Match</h5>
+                    <small class="text-muted float-end">Edit</small>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="mb-3">
+                            <label class="form-label" for="TournamentId">Tournament</label>
+                            <select class="form-select" asp-for="TournamentId" asp-items="ViewBag.Tournaments">
+                                <option value="">Select Tournament</option>
+                            </select>
+                            <span class="text-danger" asp-validation-for="TournamentId"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="Description">Home Team</label>
+                            <select class="form-select" asp-for="HomeTeamId" asp-items="ViewBag.Teams">
+                                <option value="">Select Home Team</option>
+                            </select>
+                            <span class="text-danger" asp-validation-for="HomeTeamId"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="HomeScore">Home Score</label>
+                            <input type="Number" min="0" value="0" class="form-control" id="HomeScore" asp-for="HomeScore" />
+                            <span class="text-danger" asp-validation-for="HomeScore"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="AwayTeamId">Away Team</label>
+                            <select class="form-select" asp-for="AwayTeamId" asp-items="ViewBag.Teams">
+                                <option value="">Select Away Team</option>
+                            </select>
+                            <span class="text-danger" asp-validation-for="AwayTeamId"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="AwayScore">Away Score</label>
+                            <input type="Number" min="0" value="0" class="form-control" id="AwayScore" asp-for="AwayScore" />
+                            <span class="text-danger" asp-validation-for="AwayScore"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="Location">Location</label>
+                            <input type="text" class="form-control" id="Location" placeholder="ACME Inc." asp-for="Location" />
+                            <span class="text-danger" asp-validation-for="Location"></span>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label class="form-label" for="MatchDate">Match Date</label>
+                            <input type="datetime-local" class="form-control" id="MatchDate" asp-for="MatchDate" />
+                            <span class="text-danger" asp-validation-for="MatchDate"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="Description">Match Status</label>
+                            <select asp-for="MatchStatus" class="form-select">
+                                <option value="">Select Match Status</option>
+                                @foreach (var status in Enum.GetValues(typeof(MatchStatus)))
+                                {
+                                    <option value="@status">@status</option>
+                                }
+                            </select>
+                            <span class="text-danger" asp-validation-for="MatchStatus"></span>
+                        </div>
+
+
+                        <button type="submit" class="btn btn-primary">Edit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
