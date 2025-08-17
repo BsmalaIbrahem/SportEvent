@@ -1,6 +1,13 @@
 ﻿@using CoreLayer.Enums
 @model CreateMatchVM
 
+<style>
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #444;
+        line-height: 14px;
+    }
+</style>
+
 <div class="container-xxl flex-grow-1 container-p-y">
     <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Match/</span> Create</h4>
 
@@ -16,7 +23,7 @@
                     <form method="post" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label class="form-label" for="TournamentId">Tournament</label>
-                            <select class="form-select" asp-for="TournamentId" asp-items="ViewBag.Tournaments">
+                            <select asp-for="TournamentId" asp-items="ViewBag.Tournaments" class="js-example-basic-single form-control">
                                 <option value="">Select Tournament</option>
                             </select>
                             <span class="text-danger" asp-validation-for="TournamentId"></span>
@@ -24,7 +31,7 @@
 
                         <div class="mb-3">
                             <label class="form-label" for="Description">Home Team</label>
-                            <select class="form-select" asp-for="HomeTeamId" asp-items="ViewBag.Teams">
+                            <select  asp-for="HomeTeamId" asp-items="ViewBag.Teams" style="width:100%; line-height:none;" class="js-example-basic-single form-control">
                                 <option value="">Select Home Team</option>
                             </select>
                             <span class="text-danger" asp-validation-for="HomeTeamId"></span>
@@ -38,7 +45,7 @@
 
                         <div class="mb-3">
                             <label class="form-label" for="AwayTeamId">Away Team</label>
-                            <select class="form-select" asp-for="AwayTeamId" asp-items="ViewBag.Teams">
+                            <select asp-for="AwayTeamId" asp-items="ViewBag.Teams" style="width:100%; line-height:none;" class="js-example-basic-single form-control">
                                 <option value="">Select Away Team</option>
                             </select>
                             <span class="text-danger" asp-validation-for="AwayTeamId"></span>
@@ -65,7 +72,7 @@
 
                         <div class="mb-3">
                             <label class="form-label" for="Description">Match Status</label>
-                            <select asp-for="MatchStatus" class="form-select">
+                            <select asp-for="MatchStatus" style="width:100%;" class="js-example-basic-single form-control">
                                 <option value="">Select Match Status</option>
                                 @foreach (var status in Enum.GetValues(typeof(MatchStatus)))
                                 {
