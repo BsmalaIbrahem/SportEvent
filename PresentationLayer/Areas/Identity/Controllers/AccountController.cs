@@ -121,7 +121,7 @@ namespace PresentationLayer.Areas.Identity.Controllers
                 var roles = await _userManager.GetRolesAsync(user);
                 if (roles.Contains("SuperAdmin") || roles.Contains("Admin"))
                 {
-                    return RedirectToAction("Index", "Home", new { area = "Admin" });
+                    return RedirectToAction("Dashboard", "Home", new { area = "Admin" });
                 }
                 else
                 {

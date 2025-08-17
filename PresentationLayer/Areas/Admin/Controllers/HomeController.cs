@@ -7,7 +7,7 @@ namespace PresentationLayer.Areas.Admin.Controllers
     [Authorize(Roles ="Admin,SuperAdmin")]
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Dashboard()
         {
             return View();
         }
