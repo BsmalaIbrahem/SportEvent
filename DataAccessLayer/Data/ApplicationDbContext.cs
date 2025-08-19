@@ -1316,7 +1316,7 @@ namespace DataAccessLayer.Data
 
             #region Tournment Data
             modelBuilder.Entity<Tournament>().HasData(
-                new Tournament { Id = 1, Title = "Egyptian Premier League", Description = "Top professional league for association football clubs in Egypt", Logo = "Egyptian_Premier_League_Logo.jpg", Country = "Egypt", Season = "2025/2026", StartDate = new DateTime(2025, 8, 8), EndDate = new DateTime(2026, 5, 31), Venue = "Various stadiums in Egypt", Type = TournamentType.League }
+                new Tournament { Id = 1, Title = TournamentTitles.EgyptianPremierLeague, Description = "Top professional league for association football clubs in Egypt", Logo = "Egyptian_Premier_League_Logo.jpg", Country = "Egypt", Season = "2025/2026", StartDate = new DateTime(2025, 8, 8), EndDate = new DateTime(2026, 5, 31), Venue = "Various stadiums in Egypt", Type = TournamentType.League }
             );
             #endregion
         }

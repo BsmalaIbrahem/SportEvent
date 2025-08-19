@@ -10,7 +10,7 @@ namespace DataAccessLayer.Models
     public class Tournament : BaseModel
     {
         public int Id { get; set; }
-        public string Title { get; set; } = string.Empty;
+        public TournamentTitles Title { get; set; }
         public string? Description { get; set; }
         public string? Logo { get; set; }
         public string? Country { get; set; }
