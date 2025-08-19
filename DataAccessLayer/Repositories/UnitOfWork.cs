@@ -38,7 +38,7 @@ namespace DataAccessLayer.Repositories
         public ITeamPlayerRepository TeamPlayerRepository { get; }
         public ITournamentRepository TournamentRepository { get; }
 
-       
+        public IApplicationUserOTPRepository ApplicationUserOTPRepository { get; }
         void IDisposable.Dispose()
         {
         }

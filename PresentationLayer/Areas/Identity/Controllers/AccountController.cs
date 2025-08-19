@@ -1,7 +1,11 @@
-﻿using DataAccessLayer.Data;
+﻿using CoreLayer.Utility;
+using DataAccessLayer.Data;
+using DataAccessLayer.Repositories;
+using DataAccessLayer.Repositories.IRepositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using PresentationLayer.ViewModels;
 
 namespace PresentationLayer.Areas.Identity.Controllers
@@ -13,12 +17,14 @@ namespace PresentationLayer.Areas.Identity.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public AccountController(UserManager<ApplicationUser> _userManager, SignInManager<ApplicationUser> _signInManager, IEmailSender _emailSender, RoleManager<IdentityRole> roleManager)
+        private readonly IUnitOfWork _unitOfWork;
+        public AccountController(UserManager<ApplicationUser> _userManager, SignInManager<ApplicationUser> _signInManager, IEmailSender _emailSender, RoleManager<IdentityRole> roleManager, IUnitOfWork unitOfWork)
         {
             this._userManager = _userManager;
             this._signInManager = _signInManager;
             this._emailSender = _emailSender;
             _roleManager = roleManager;
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult Register()
@@ -33,6 +39,14 @@ namespace PresentationLayer.Areas.Identity.Controllers
             {
                 return View(model);
             }
+            var existingUser = await _userManager.FindByEmailAsync(model.Email) ??
+                       await _userManager.FindByNameAsync(model.UserName);
+            if(existingUser !=  null)
+            {
+                ModelState.AddModelError(string.Empty, "User with this email or username already exists.");
+                return View(model);
+            }
+
             var user = new ApplicationUser
             {
                 FirstName = model.FirstName,
@@ -43,7 +57,7 @@ namespace PresentationLayer.Areas.Identity.Controllers
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, "User");
+                await _userManager.AddToRoleAsync(user, SD.Customer);
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { userId = user.Id, token = token }, Request.Scheme);
                 await _emailSender.SendEmailAsync(model.Email, "Confirm your email", $"Please confirm your account by clicking this link: <a href='{confirmationLink}'>link</a>");
@@ -142,5 +156,117 @@ namespace PresentationLayer.Areas.Identity.Controllers
             return RedirectToAction("Login", "Account", new { area = "Identity" });
         }
 
+
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgetPassword(ForgetPasswordVM forgetPasswordVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(forgetPasswordVM);
+            }
+
+            var user = await _userManager.FindByEmailAsync(forgetPasswordVM.EmailOrUserName);
+
+            if (user is null)
+            {
+                user = await _userManager.FindByNameAsync(forgetPasswordVM.EmailOrUserName);
+            }
+
+            if (user is not null)
+            {
+                // Send Confirmation Email
+                var otpNumber = new Random().Next(1000, 9999);
+
+                var totalNumberOfOTPs = (await _unitOfWork.ApplicationUserOTPRepository.GetAllAsync(e => e.ApplicationUserId == user.Id && DateTime.UtcNow.Day == e.SendDate.Day));
+
+                if (totalNumberOfOTPs.Count() > 5)
+                {
+                    TempData["error-notification"] = "Many Requests of OTPs";
+                    return View(forgetPasswordVM);
+                }
+
+                await _unitOfWork.ApplicationUserOTPRepository.AddAsync(new()
+                {
+                    ApplicationUserId = user.Id,
+                    OTPNumber = otpNumber,
+                    Reason = "ForgetPassword",
+                    SendDate = DateTime.UtcNow,
+                    Status = false,
+                    ValidTo = DateTime.UtcNow.AddMinutes(30)
+                });
+
+                await _emailSender.SendEmailAsync(user!.Email ?? "", "OTP Your Account", $"<h1>Reset Password using OTP: {otpNumber}</h1>");
+
+                TempData["success-notification"] = "Send OTP to your Email Successfully";
+
+                TempData["Redirection"] = Guid.NewGuid();
+
+                return RedirectToAction("ResetPassword", "Account", new { area = "Identity", userId = user.Id });
+            }
+
+            return View(forgetPasswordVM);
+        }
+
+        public async Task<IActionResult> ResetPassword(string userId)
+        {
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user is not null)
+            {
+                return View(new ResetPasswordVM()
+                {
+                    UserId = userId
+                });
+            }
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordVM resetPasswordVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(resetPasswordVM);
+            }
+
+            var user = await _userManager.FindByIdAsync(resetPasswordVM.UserId);
+
+            if (user is not null)
+            {
+                var lastOTP = (await _unitOfWork.ApplicationUserOTPRepository.GetAllAsync(e => e.ApplicationUserId == resetPasswordVM.UserId)).OrderBy(e => e.Id).LastOrDefault();
+
+                if (lastOTP is not null)
+                {
+                    if (lastOTP.OTPNumber == resetPasswordVM.OTP && (lastOTP.ValidTo - DateTime.UtcNow).TotalMinutes < 30 && !lastOTP.Status)
+                    {
+                        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                        var result = await _userManager.ResetPasswordAsync(user, token, resetPasswordVM.Password);
+
+                        if (result.Succeeded)
+                        {
+                            TempData["success-notification"] = "Reset Password Successfully";
+                        }
+                        else
+                        {
+                            TempData["error-notification"] = $"{String.Join(",", result.Errors)}";
+                        }
+
+                        return RedirectToAction("Index", "Home", new { area = "Customer" });
+                    }
+                }
+
+                TempData["error-notification"] = "Invalid OR Expired OTP";
+                return View(resetPasswordVM);
+            }
+
+            return NotFound();
+        }
     }
 }
