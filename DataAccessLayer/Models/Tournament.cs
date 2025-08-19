@@ -19,5 +19,6 @@ namespace DataAccessLayer.Models
         public DateTime EndDate { get; set; }
         public string? Venue { get; set; }
         public TournamentType Type { get; set; }
+        //public ICollection<Match> Matches { get; set; } = new List<Match>();
     }
 }
