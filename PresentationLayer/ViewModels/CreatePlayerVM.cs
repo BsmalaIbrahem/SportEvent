@@ -12,7 +12,7 @@ namespace PresentationLayer.ViewModels
 
         [Required(ErrorMessage = "Nationality is Required")]
         public string Nationality { get; set; } = string.Empty;
-        public string ImgPath { get; set; } = string.Empty;
+        public string? ImgPath { get; set; } = string.Empty;
         [Required(ErrorMessage = "Date of Birth is required.")]
         [DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }

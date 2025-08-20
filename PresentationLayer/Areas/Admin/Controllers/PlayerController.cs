@@ -141,5 +141,92 @@ namespace PresentationLayer.Areas.Admin.Controllers
             return true;
         }
 
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var player = await _unitOfWork.PlayerRepository.GetOneAsync(
+                e => e.Id == id,
+                includeChain: q => q.Include(p => p.Teams).ThenInclude(tp => tp.Team)
+            );
+
+            if (player is null)
+            {
+                return NotFound();
+            }
+
+            var teamPlayer = player.Teams.FirstOrDefault(tp => tp.LeftDate == null);
+
+            var playerVm = new CreatePlayerVM
+            {
+                Name = player.Name,
+                Description = player.Description,
+                Nationality = player.Nationality,
+                ImgPath = player.ImgPath!,
+                DateOfBirth = player.DateOfBirth,
+                Position = player.Position,
+                TeamId = teamPlayer?.TeamId ?? 0,
+                Number = teamPlayer?.Number,
+                IsCaptain = teamPlayer?.IsCaptain ?? false,
+                JoinedDate = teamPlayer?.JoinedDate ?? DateTime.Now
+            };
+
+            await SetViewBag(playerVm.TeamId);
+            return View(playerVm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, CreatePlayerVM request, IFormFile? ImgPath)
+        {
+            if (!ModelState.IsValid)
+            {
+                await SetViewBag(request.TeamId);
+                return View(request);
+            }
+
+            var player = await _unitOfWork.PlayerRepository.GetOneAsync(e => e.Id == id);
+            if (player is null)
+            {
+                return NotFound();
+            }
+
+            // Update properties
+            player.Name = request.Name;
+            player.Description = request.Description;
+            player.Nationality = request.Nationality;
+            player.DateOfBirth = request.DateOfBirth;
+            player.Position = request.Position;
+
+            var teamPlayer = player.Teams.FirstOrDefault(tp => tp.TeamId == request.TeamId && tp.LeftDate == null);
+            if (teamPlayer != null)
+            {
+                teamPlayer.Number = request.Number;
+                teamPlayer.JoinedDate = request.JoinedDate;
+                teamPlayer.IsCaptain = request.IsCaptain;
+            }
+
+            // Image Update
+            if (ImgPath != null && ImgPath.Length > 0)
+            {
+                if (!string.IsNullOrEmpty(player.ImgPath))
+                {
+                    var oldImagePath = Path.Combine("wwwroot", player.ImgPath.TrimStart('/').Replace("/", "\\"));
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
+                string fileName = FileHelper.CreateFileName(ImgPath.FileName);
+                var path = "assets\\images\\players";
+                string filePath = FileHelper.GetFilePath(fileName, "wwwroot\\" + path);
+                await FileHelper.UploadFile(filePath, ImgPath);
+                player.ImgPath = "/" + path.Replace("\\", "/") + "/" + fileName;
+            }
+
+            _unitOfWork.PlayerRepository.Update(player);
+            await _unitOfWork.PlayerRepository.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Player updated successfully.";
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
