@@ -1,5 +1,100 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model DashboardVM
 @{
+    ViewData["Title"] = "Dashboard";
 }
+
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            
+                            <div class="col-9">
+                                <h6 class="text-muted font-weight-normal">Total Matches</h6>
+                                <div class="d-flex align-items-center align-self-start">
+                                    <h3 class="mb-0" style="text-align:center">@Model.TotalMatches</h3>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="icon icon-box-success ">
+                                    <span class="mdi mdi-soccer icon-item"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+
+                            <div class="col-9">
+                                <h6 class="text-muted font-weight-normal">Upcoming Matches</h6>
+                                <div class="d-flex align-items-center align-self-start">
+                                    <h3 class="mb-0" style="text-align:center">@Model.TotalUpcomingMatches</h3>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="icon icon-box-danger ">
+                                    <span class="mdi mdi-calendar-clock icon-item"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+
+                            <div class="col-9">
+                                <h6 class="text-muted font-weight-normal">Finished Matches</h6>
+                                <div class="d-flex align-items-center align-self-start">
+                                    <h3 class="mb-0" style="text-align:center">@Model.TotalFinishedMatches</h3>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="icon icon-box-success ">
+                                    <span class="mdi mdi-check-circle-outline icon-item"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+
+                            <div class="col-9">
+                                <h6 class="text-muted font-weight-normal">Total Teams</h6>
+                                <div class="d-flex align-items-center align-self-start">
+                                    <h3 class="mb-0" style="text-align:center">@Model.TotalTeams</h3>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="icon icon-box-success ">
+                                    <span class="mdi mdi-account-group icon-item"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

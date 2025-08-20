@@ -1,6 +1,8 @@
-﻿using DataAccessLayer.Repositories.IRepositories;
+﻿using CoreLayer.Enums;
+using DataAccessLayer.Repositories.IRepositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PresentationLayer.ViewModels;
 using System.Threading.Tasks;
 
@@ -25,8 +27,34 @@ namespace PresentationLayer.Areas.Admin.Controllers
                 return View(new DashboardFilterVM());
             }
 
-            //
-            return View();
+            var totalMaches = await _unitOfWork.MatchRepository.CountAsync(m => m.TournamentId == Tournment.Id);
+            var totalUpcomingMatches = await _unitOfWork.MatchRepository.CountAsync(m => m.TournamentId == Tournment.Id && m.MatchDate > DateTime.Now && m.Status == MatchStatus.Scheduled);
+            var totalFinishedMatches = await _unitOfWork.MatchRepository.CountAsync(m => m.TournamentId == Tournment.Id && m.Status == MatchStatus.Finished);
+           
+            var matches = await _unitOfWork.MatchRepository.GetAllAsync(m => m.TournamentId == Tournment.Id);
+            var teams = new List<int>();
+            foreach (var match in matches)
+            {
+                if (!teams.Contains(match.HomeTeamId))
+                {
+                    teams.Add(match.HomeTeamId);
+                }
+                if (!teams.Contains(match.AwayTeamId))
+                {
+                    teams.Add(match.AwayTeamId);
+                }
+            }
+            var totlTeams = teams.Count;
+
+            var data = new DashboardVM
+            {
+                TotalMatches = totalMaches,
+                TotalUpcomingMatches = totalUpcomingMatches,
+                TotalFinishedMatches = totalFinishedMatches,
+                TotalTeams = totlTeams
+            };
+
+            return View(data);
         }
     }
 }
