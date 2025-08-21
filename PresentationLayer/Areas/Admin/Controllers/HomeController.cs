@@ -45,13 +45,54 @@ namespace PresentationLayer.Areas.Admin.Controllers
                 }
             }
             var totlTeams = teams.Count;
+            var leagueStandings = new List<LeagueStandingVM>();
+
+            foreach (var teamId in teams) 
+            {
+                var matchesPlayed = await _unitOfWork.MatchRepository.CountAsync(x => x.TournamentId == Tournment.Id && (x.HomeTeamId == teamId || x.AwayTeamId == teamId));
+                var wins = await _unitOfWork.MatchRepository.CountAsync(x => x.TournamentId == Tournment.Id && ((x.HomeTeamId == teamId && x.HomeScore > x.AwayScore) || (x.AwayTeamId == teamId && x.HomeScore < x.AwayScore)));
+                var losses = await _unitOfWork.MatchRepository.CountAsync(x => x.TournamentId == Tournment.Id && ((x.HomeTeamId == teamId && x.HomeScore < x.AwayScore) || (x.AwayTeamId == teamId && x.HomeScore > x.AwayScore)));
+                var draws = await _unitOfWork.MatchRepository.CountAsync(x => x.TournamentId == Tournment.Id && ((x.HomeTeamId == teamId && x.HomeScore == x.AwayScore) || (x.AwayTeamId == teamId && x.HomeScore == x.AwayScore)));
+
+                int GoalsFor = 0, GoalsAgainst = 0;
+                var homeMatches =await _unitOfWork.MatchRepository.GetAllAsync(x => x.TournamentId == Tournment.Id && x.HomeTeamId == teamId);
+                GoalsFor += homeMatches.Sum(x => x.HomeScore);
+                GoalsAgainst += homeMatches.Sum(x => x.AwayScore);
+                var awayMatches = await _unitOfWork.MatchRepository.GetAllAsync(x => x.TournamentId == Tournment.Id && x.AwayTeamId == teamId);
+                GoalsFor += awayMatches.Sum(x => x.AwayScore);
+                GoalsAgainst += awayMatches.Sum(x => x.HomeScore);
+
+                var goalDifference = GoalsFor - GoalsAgainst;
+
+                var team = await _unitOfWork.TeamRepository.GetOneAsync(t => t.Id == teamId);
+                if (team == null)
+                {
+                    continue;
+                }
+
+                leagueStandings.Add(new LeagueStandingVM
+                {
+                    TeamId = team.Id,
+                    TeamName = team.Name,
+                    TeamLogo = team.LogoUrl,
+                    MatchesPlayed = matchesPlayed,
+                    Wins = wins,
+                    Losses = losses,
+                    Draws = draws,
+                    GoalsFor = GoalsFor,
+                    GoalsAgainst = GoalsAgainst,
+                    GoalDifference = goalDifference,
+                    Points= (wins * 3) + draws
+                });
+            }
 
             var data = new DashboardVM
             {
                 TotalMatches = totalMaches,
                 TotalUpcomingMatches = totalUpcomingMatches,
                 TotalFinishedMatches = totalFinishedMatches,
-                TotalTeams = totlTeams
+                TotalTeams = totlTeams,
+                LeagueStandings = leagueStandings.OrderByDescending(x => x.Points).ThenByDescending(x => x.GoalDifference).ToList(),
             };
 
             return View(data);

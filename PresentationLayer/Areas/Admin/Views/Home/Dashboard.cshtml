@@ -2,6 +2,27 @@
 @{
     ViewData["Title"] = "Dashboard";
 }
+<style>
+
+    .table thead th {
+        text-transform: uppercase;
+        font-size: 13px;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f1f1f1;
+        transition: 0.3s ease;
+    }
+
+     .table tbody tr:hover td .text-white{
+         color:black;
+     }
+
+    .table td {
+        vertical-align: middle;
+    }
+</style>
+
 
 <div class="main-panel">
     <div class="content-wrapper">
@@ -96,5 +117,60 @@
                 </div>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-12 grid-margin">
+                <div class="card shadow-sm border-0 rounded-3">
+                    <div class="card-body">
+                        <h4 class="card-title text-center mb-4 fw-bold text-uppercase">
+                            League Standing
+                        </h4>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle text-center">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Club</th>
+                                        <th>MP</th>
+                                        <th>W</th>
+                                        <th>D</th>
+                                        <th>L</th>
+                                        <th>GF</th>
+                                        <th>GA</th>
+                                        <th>GD</th>
+                                        <th>Pts</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        int i = 1;
+                                    }
+                                    @foreach (var LeagueStanding in Model.LeagueStandings)
+                                    {
+                                        <tr>
+                                            <td>@i</td>
+                                            <td class="fw-semibold text-start ps-3">@LeagueStanding.TeamName</td>
+                                            <td>@LeagueStanding.MatchesPlayed</td>
+                                            <td class="text-success fw-bold">@LeagueStanding.Wins</td>
+                                            <td class="text-warning fw-bold">@LeagueStanding.Draws</td>
+                                            <td class="text-danger fw-bold">@LeagueStanding.Losses</td>
+                                            <td>@LeagueStanding.GoalsFor</td>
+                                            <td>@LeagueStanding.GoalsAgainst</td>
+                                            <td>@LeagueStanding.GoalDifference</td>
+                                            <td class="fw-bold  text-white rounded-pill px-3">
+                                                @LeagueStanding.Points
+                                            </td>
+                                        </tr>
+                                        i++;
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       
     </div>
 </div>
