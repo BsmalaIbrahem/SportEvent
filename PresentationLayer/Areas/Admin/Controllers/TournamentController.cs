@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using NuGet.Protocol.Core.Types;
 using PresentationLayer.ViewModels;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace PresentationLayer.Areas.Admin.Controllers
 {
@@ -81,6 +82,68 @@ namespace PresentationLayer.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> Edit(int id)
+        {
+            var existingTournament = await _unitOfWork.TournamentRepository.GetOneAsync(e=>e.Id == id);
+            if (existingTournament is null)
+            {
+                return NotFound();
+            }
 
+            var editTournament = new CreateTournamentVM
+            {
+                Title = existingTournament.Title,
+                Description= existingTournament.Description,
+                Season = existingTournament.Season,
+                StartDate = existingTournament.StartDate,
+                EndDate = existingTournament.EndDate,
+                Venue= existingTournament.Venue,
+                Type = existingTournament.Type
+            };
+            return View(editTournament);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id,CreateTournamentVM tournament)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(tournament);
+            }
+
+            var editTM = await _unitOfWork.TournamentRepository.GetOneAsync(e=> e.Id == id);
+            
+            if (editTM is null)
+            {
+                return NotFound();
+            }
+
+            if(tournament.StartDate >= tournament.EndDate)
+            {
+                ModelState.AddModelError("EndDate", "EndDate Must Be After the StartDate");
+                return View(tournament);
+            }
+
+            var duplicateTournament = await _unitOfWork.TournamentRepository.GetOneAsync
+                (t => t.Title == tournament.Title && t.Season == tournament.Season && t.Id != id);
+
+            if (duplicateTournament is not null)
+            {
+                ModelState.AddModelError("", "A tournament with the same title and season already exists.");
+                return View(tournament);
+            }
+
+            editTM.Title = tournament.Title;
+            editTM.Description = tournament.Description;
+            editTM.Season = tournament.Season;
+            editTM.StartDate = tournament.StartDate;
+            editTM.EndDate = tournament.EndDate;
+            editTM.Venue = tournament.Venue;
+            editTM.Type = tournament.Type;
+
+            _unitOfWork.TournamentRepository.Update(editTM);
+            await _unitOfWork.TournamentRepository.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
