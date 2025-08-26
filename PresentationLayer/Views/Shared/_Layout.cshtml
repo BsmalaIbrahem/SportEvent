@@ -41,18 +41,16 @@
             <div class="container">
                 <div class="d-flex align-items-center">
                     <div class="site-logo">
-                        <a href="~/Customer/index.html">
-                            <img src="~/Customer/images/logo.png" alt="Logo">
-                        </a>
+                        <a class="sidebar-brand brand-logo" asp-controller="Home" asp-action="Index" style="color:white;font-size:25px;font-family: sans-serif;">⚽Matchy</a>
                     </div>
                     <div class="ml-auto">
                         <nav class="site-navigation position-relative text-right" role="navigation">
                             <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
-                                <li class="active"><a href="~/Customer/index.html" class="nav-link">Home</a></li>
-                                <li><a href="~/Customer/matches.html" class="nav-link">Matches</a></li>
-                                <li><a href="~/Customer/players.html" class="nav-link">Players</a></li>
-                                <li><a href="~/Customer/blog.html" class="nav-link">Blog</a></li>
-                                <li><a href="~/Customer/contact.html" class="nav-link">Contact</a></li>
+                                <li class="active"><a asp-controller="Home" asp-action="Index" class="nav-link">Home</a></li>
+                                <li><a asp-controller="Match" asp-action="Index" class="nav-link">Matches</a></li>
+                                <li><a asp-controller="Player" asp-action="Index" class="nav-link">Players</a></li>
+                                <li><a asp-controller="New" asp-action="Index" class="nav-link">Blog</a></li>
+                                <li><a asp-controller="Contact" asp-action="Index" class="nav-link">Contact</a></li>
                             </ul>
                         </nav>
 
