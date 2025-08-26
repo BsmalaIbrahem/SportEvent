@@ -49,16 +49,16 @@ namespace PresentationLayer.Areas.Admin.Controllers
 
             foreach (var teamId in teams) 
             {
-                var matchesPlayed = await _unitOfWork.MatchRepository.CountAsync(x => x.TournamentId == Tournment.Id && (x.HomeTeamId == teamId || x.AwayTeamId == teamId));
-                var wins = await _unitOfWork.MatchRepository.CountAsync(x => x.TournamentId == Tournment.Id && ((x.HomeTeamId == teamId && x.HomeScore > x.AwayScore) || (x.AwayTeamId == teamId && x.HomeScore < x.AwayScore)));
-                var losses = await _unitOfWork.MatchRepository.CountAsync(x => x.TournamentId == Tournment.Id && ((x.HomeTeamId == teamId && x.HomeScore < x.AwayScore) || (x.AwayTeamId == teamId && x.HomeScore > x.AwayScore)));
-                var draws = await _unitOfWork.MatchRepository.CountAsync(x => x.TournamentId == Tournment.Id && ((x.HomeTeamId == teamId && x.HomeScore == x.AwayScore) || (x.AwayTeamId == teamId && x.HomeScore == x.AwayScore)));
+                var matchesPlayed = await _unitOfWork.MatchRepository.CountAsync(x => x.TournamentId == Tournment.Id && x.Status != MatchStatus.Scheduled && (x.HomeTeamId == teamId || x.AwayTeamId == teamId));
+                var wins = await _unitOfWork.MatchRepository.CountAsync(x => x.TournamentId == Tournment.Id && x.Status != MatchStatus.Scheduled && ((x.HomeTeamId == teamId && x.HomeScore > x.AwayScore) || (x.AwayTeamId == teamId && x.HomeScore < x.AwayScore)));
+                var losses = await _unitOfWork.MatchRepository.CountAsync(x => x.TournamentId == Tournment.Id && x.Status != MatchStatus.Scheduled && ((x.HomeTeamId == teamId && x.HomeScore < x.AwayScore) || (x.AwayTeamId == teamId && x.HomeScore > x.AwayScore)));
+                var draws = await _unitOfWork.MatchRepository.CountAsync(x => x.TournamentId == Tournment.Id && x.Status != MatchStatus.Scheduled && ((x.HomeTeamId == teamId && x.HomeScore == x.AwayScore) || (x.AwayTeamId == teamId && x.HomeScore == x.AwayScore)));
 
                 int GoalsFor = 0, GoalsAgainst = 0;
-                var homeMatches =await _unitOfWork.MatchRepository.GetAllAsync(x => x.TournamentId == Tournment.Id && x.HomeTeamId == teamId);
+                var homeMatches =await _unitOfWork.MatchRepository.GetAllAsync(x => x.TournamentId == Tournment.Id && x.Status != MatchStatus.Scheduled && x.HomeTeamId == teamId);
                 GoalsFor += homeMatches.Sum(x => x.HomeScore);
                 GoalsAgainst += homeMatches.Sum(x => x.AwayScore);
-                var awayMatches = await _unitOfWork.MatchRepository.GetAllAsync(x => x.TournamentId == Tournment.Id && x.AwayTeamId == teamId);
+                var awayMatches = await _unitOfWork.MatchRepository.GetAllAsync(x => x.TournamentId == Tournment.Id && x.Status != MatchStatus.Scheduled && x.AwayTeamId == teamId);
                 GoalsFor += awayMatches.Sum(x => x.AwayScore);
                 GoalsAgainst += awayMatches.Sum(x => x.HomeScore);
 

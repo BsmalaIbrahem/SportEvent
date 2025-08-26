@@ -42,6 +42,8 @@
                             <th>Home Team</th>
                             <th>Away Team</th>
                             <th>Tournament</th>
+                            <th>Status</th>
+                            <th>Date Time</th>
                             <th>Available Tickets</th>
                             <th>Actions</th>
                         </tr>
@@ -54,6 +56,8 @@
                                 <td>@item.HomeTeam.Name (Score : @item.HomeScore)</td>
                                 <td>@item.AwayTeam.Name (Score : @item.AwayScore)</td>
                                 <th>@item.Tournament.Title.GetDisplayName()</th>
+                                <th>@item.Status</th>
+                                <th>@item.MatchDate</th>
                                 <th>@item.AvailableTickets</th>
                                 <td>
                                     <div>
