@@ -1,24 +1,24 @@
-﻿using CoreLayer.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿    using CoreLayer.Enums;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
 
-namespace DataAccessLayer.Models
-{
-    public class Tournament : BaseModel
+    namespace DataAccessLayer.Models
     {
-        public int Id { get; set; }
-        public TournamentTitles Title { get; set; }
-        public string? Description { get; set; }
-        public string? Logo { get; set; }
-        public string? Country { get; set; }
-        public string Season { get; set; } = string.Empty;
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public string? Venue { get; set; }
-        public TournamentType Type { get; set; }
-        //public ICollection<Match> Matches { get; set; } = new List<Match>();
+        public class Tournament : BaseModel
+        {
+            public int Id { get; set; }
+            public TournamentTitles Title { get; set; }
+            public string? Description { get; set; }
+            public string? Logo { get; set; }
+            public string? Country { get; set; }
+            public string Season { get; set; } = string.Empty;
+            public DateTime StartDate { get; set; }
+            public DateTime EndDate { get; set; }
+            public string? Venue { get; set; }
+            public TournamentType Type { get; set; }
+            //public ICollection<Match> Matches { get; set; } = new List<Match>();
+        }
     }
-}

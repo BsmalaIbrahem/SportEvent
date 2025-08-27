@@ -153,7 +153,7 @@ namespace PresentationLayer.Areas.Admin.Controllers
                 await SetViewBag(request.HomeTeamId, request.TournamentId);
                 return View(request);
             }
-            var match = await _unitOfWork.MatchRepository.GetOneAsync(x => x.Id == request.Id, AsNoTracking:true);
+            var match = await _unitOfWork.MatchRepository.GetOneAsync(x => x.Id == request.Id, asNoTracking: true);
             if (match == null)
             {
                 return NotFound();
