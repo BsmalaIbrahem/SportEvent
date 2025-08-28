@@ -41,6 +41,16 @@ namespace PresentationLayer.Areas.Customer.Controllers
                     );
             }
 
+            List<TeamPlayer> players = new List<TeamPlayer>();
+            if (currentMatch != null)
+            {
+                players = (List<TeamPlayer>)await _unitOfWork.TeamPlayerRepository.GetAllAsync(
+                    tp => tp.TeamId == currentMatch.HomeTeamId || tp.TeamId == currentMatch.AwayTeamId,
+                    includeChain: q => q.Include(tp => tp.Player),
+                    take: 8
+                );
+            }
+
 
             //Next Match
             var nextMatch = await _unitOfWork.MatchRepository.GetOneAsync(
@@ -67,6 +77,7 @@ namespace PresentationLayer.Areas.Customer.Controllers
             var matchPage = new MatchPageVM
             {
                 CurrentMatch = currentMatch,
+                TeamPlayer = players,
                 NextMatch = nextMatch,
                 UpcomingMatches = upcomingMatches?.ToList() ?? new List<Match>()
             };
