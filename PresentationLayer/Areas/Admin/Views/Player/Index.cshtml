@@ -54,6 +54,13 @@
                                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn p-0" >
                                           <i class="mdi mdi-lead-pencil"></i>
                                     </a>
+                                    <a href="javascript:void(0);"
+                                        class="btn p-0"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#archiveModal"
+                                        data-id="@item.Id">
+                                        <i class="mdi mdi-archive"></i>
+                                    </a>
                                 </div>
                             </td>
                         </tr>

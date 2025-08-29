@@ -144,6 +144,27 @@ namespace PresentationLayer.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> Archive(int id)
+        {
+            var existingCoach = await _repository.GetOneAsync(c => c.Id == id);
+            if (existingCoach == null)
+            {
+                existingCoach = await _repository.GetOneAsync(c => c.Id == id, IsDeleted: true);
+                if (existingCoach == null)
+                {
+                    return NotFound();
+                }
+                await _repository.AddToArchiveAsync(c => c.Id == id);
+                await _repository.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Coach Removed from Archive successfully.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            await _repository.AddToArchiveAsync(c => c.Id == id);
+            await _repository.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Coach Moved To Archive successfully.";
+            return RedirectToAction(nameof(Index));
+        }
 
     }
 }

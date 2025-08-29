@@ -14,16 +14,17 @@ namespace DataAccessLayer.Repositories.IRepositories
          Expression<Func<T, bool>>? expression = null,
          Func<IQueryable<T>, IIncludableQueryable<T, object>>? includeChain = null,
          bool asNoTracking = false,
-         Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null
+         Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, bool IsDeleted = false
     );
         Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>>? includeChain = null,
             bool asNoTracking = false, int? skip = null, int? take = null,
-            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null);
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, bool IsDeleted = false);
         Task<int> CountAsync(Expression<Func<T, bool>>? expression = null);
         Task AddAsync(T entity);
         void Update(T entity);
         Task DeleteAsync(Expression<Func<T, bool>> expression);
+        Task AddToArchiveAsync(Expression<Func<T, bool>> expression);
         Task SaveChangesAsync();
     }
 }

@@ -184,6 +184,28 @@ namespace PresentationLayer.Areas.Admin.Controllers
 
         }
 
+        public async Task<IActionResult> Archive(int id)
+        {
+            var existingCoach = await _unitOfWork.MatchRepository.GetOneAsync(c => c.Id == id);
+            if (existingCoach == null)
+            {
+                existingCoach = await _unitOfWork.MatchRepository.GetOneAsync(c => c.Id == id, IsDeleted: true);
+                if (existingCoach == null)
+                {
+                    return NotFound();
+                }
+                await _unitOfWork.MatchRepository.AddToArchiveAsync(c => c.Id == id);
+                await _unitOfWork.MatchRepository.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Match Removed from Archive successfully.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            await _unitOfWork.MatchRepository.AddToArchiveAsync(c => c.Id == id);
+            await _unitOfWork.MatchRepository.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Match Moved To Archive successfully.";
+            return RedirectToAction(nameof(Index));
+        }
+
 
 
     }

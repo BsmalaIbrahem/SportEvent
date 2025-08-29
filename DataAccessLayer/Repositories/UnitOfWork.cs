@@ -12,7 +12,7 @@ namespace DataAccessLayer.Repositories
             IContactRepository contactRepository,IMatchPlayerRepository matchPlayerRepository,
             IMatchRepository matchRepository,IMatchStatisticRepository matchStatisticRepository,
             INewRepository newRepository,IPlayerRepository playerRepository,ITeamRepository teamRepository
-            ,ITeamPlayerRepository teamPlayerRepository,ITournamentRepository tournamentRepository,
+            ,ITeamPlayerRepository teamPlayerRepository,ITournamentRepository tournamentRepository, ITicketRepository ticketRepository,
             ApplicationDbContext context)
         {
             CoachRepository = coachRepository;
@@ -25,6 +25,7 @@ namespace DataAccessLayer.Repositories
             TeamRepository = teamRepository;
             TeamPlayerRepository = teamPlayerRepository;
             TournamentRepository = tournamentRepository;
+            TicketRepository = ticketRepository;
             _context = context;
         }
         public ICoachRepository CoachRepository { get; }
@@ -39,6 +40,9 @@ namespace DataAccessLayer.Repositories
         public ITournamentRepository TournamentRepository { get; }
 
         public IApplicationUserOTPRepository ApplicationUserOTPRepository { get; }
+
+        public ITicketRepository TicketRepository {get; }
+
         void IDisposable.Dispose()
         {
         }

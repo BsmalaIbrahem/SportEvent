@@ -234,5 +234,29 @@ namespace PresentationLayer.Areas.Admin.Controllers
             TempData["SuccessMessage"] = "Player updated successfully.";
             return RedirectToAction(nameof(Index));
         }
+
+
+        public async Task<IActionResult> Archive(int id)
+        {
+            var existingCoach = await _unitOfWork.PlayerRepository.GetOneAsync(c => c.Id == id);
+            if (existingCoach == null)
+            {
+                existingCoach = await _unitOfWork.PlayerRepository.GetOneAsync(c => c.Id == id, IsDeleted: true);
+                if (existingCoach == null)
+                {
+                    return NotFound();
+                }
+                await _unitOfWork.PlayerRepository.AddToArchiveAsync(c => c.Id == id);
+                await _unitOfWork.PlayerRepository.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Player Removed from Archive successfully.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            await _unitOfWork.PlayerRepository.AddToArchiveAsync(c => c.Id == id);
+            await _unitOfWork.PlayerRepository.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Player Moved To Archive successfully.";
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

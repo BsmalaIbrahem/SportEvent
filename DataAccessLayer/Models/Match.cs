@@ -26,5 +26,6 @@ namespace DataAccessLayer.Models
         [ForeignKey(nameof(TournamentId))]
         public Tournament Tournament { get; set; } = null!;
         public int AvailableTickets { get; set; } = 0;
+        public decimal TicketPrice { get; set; } = 0;
     }
 }

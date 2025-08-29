@@ -23,10 +23,11 @@ namespace DataAccessLayer.Repositories
         public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>>? includeChain = null,
             bool asNoTracking = false, int? skip = null, int? take = null,
-            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, bool IsDeleted = false
         )
         {
             IQueryable<T> query = _context.Set<T>();
+            query = query.Where(e => EF.Property<bool>(e, "IsDeleted") == IsDeleted);
 
             if (filter != null)
                 query = query.Where(filter);
@@ -50,9 +51,10 @@ namespace DataAccessLayer.Repositories
         Expression<Func<T, bool>>? filter = null,
         Func<IQueryable<T>, IIncludableQueryable<T, object>>? includeChain = null,
         bool asNoTracking = false,
-        Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null)
+        Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, bool IsDeleted = false)
         {
             IQueryable<T> query = _context.Set<T>();
+            query = query.Where(e => EF.Property<bool>(e, "IsDeleted") == IsDeleted);
 
             if (filter != null)
                 query = query.Where(filter);
@@ -122,9 +124,30 @@ namespace DataAccessLayer.Repositories
                 throw new Exception("An error occurred while deleting the entity.", ex);
             }
         }
+
+        public async Task AddToArchiveAsync(Expression<Func<T, bool>> expression)
+        {
+            var item = await _context.Set<T>().FirstOrDefaultAsync(expression);
+            if(item != null)
+            {
+                try
+                {
+                    _context.Entry(item).Property("IsDeleted").CurrentValue = true;
+                    _context.Entry(item).Property("DeletedAt").CurrentValue = DateTime.Now;
+                    _context.Set<T>().Update(item);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("An error occurred while archiving the entity.", ex);
+                }
+            }
+        }
+
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
         }
+
+        
     }
 }

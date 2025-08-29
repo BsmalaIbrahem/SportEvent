@@ -145,5 +145,27 @@ namespace PresentationLayer.Areas.Admin.Controllers
             await _unitOfWork.TournamentRepository.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Archive(int id)
+        {
+            var existingCoach = await _unitOfWork.TournamentRepository.GetOneAsync(c => c.Id == id);
+            if (existingCoach == null)
+            {
+                existingCoach = await _unitOfWork.TournamentRepository.GetOneAsync(c => c.Id == id, IsDeleted: true);
+                if (existingCoach == null)
+                {
+                    return NotFound();
+                }
+                await _unitOfWork.TournamentRepository.AddToArchiveAsync(c => c.Id == id);
+                await _unitOfWork.TournamentRepository.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Tournament Removed from Archive successfully.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            await _unitOfWork.TournamentRepository.AddToArchiveAsync(c => c.Id == id);
+            await _unitOfWork.TournamentRepository.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Tournament Moved To Archive successfully.";
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
