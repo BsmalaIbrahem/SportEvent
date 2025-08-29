@@ -92,7 +92,7 @@ namespace PresentationLayer.Areas.Admin.Controllers
                 TotalUpcomingMatches = totalUpcomingMatches,
                 TotalFinishedMatches = totalFinishedMatches,
                 TotalTeams = totlTeams,
-                LeagueStandings = leagueStandings.OrderByDescending(x => x.Points).ThenByDescending(x => x.GoalDifference).ToList(),
+                LeagueStandings = leagueStandings.OrderByDescending(x => x.Points).ThenByDescending(x => x.GoalDifference).ThenByDescending(x => x.GoalsFor).ToList(),
                 DrawsCount = leagueStandings.Sum(x => x.Draws) / 2,
                 WinsCount = leagueStandings.Sum(x => x.Wins),
             };
