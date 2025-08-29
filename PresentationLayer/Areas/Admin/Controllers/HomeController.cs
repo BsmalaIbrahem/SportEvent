@@ -93,8 +93,10 @@ namespace PresentationLayer.Areas.Admin.Controllers
                 TotalFinishedMatches = totalFinishedMatches,
                 TotalTeams = totlTeams,
                 LeagueStandings = leagueStandings.OrderByDescending(x => x.Points).ThenByDescending(x => x.GoalDifference).ToList(),
+                DrawsCount = leagueStandings.Sum(x => x.Draws) / 2,
+                WinsCount = leagueStandings.Sum(x => x.Wins),
             };
-
+            
             return View(data);
         }
     }

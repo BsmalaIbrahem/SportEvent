@@ -21,6 +21,13 @@
     .table td {
         vertical-align: middle;
     }
+
+    .statistics-chart {
+        max-width: 250px;
+        max-height: 250px;
+        margin: auto;
+        display: block;
+    }
 </style>
  
 
@@ -119,13 +126,48 @@
         </div>
 
         <div class="row">
+            <div class="col-md-4 grid-margin stretch-card">
+                <div class="card  text-white">
+                    <div class="card-body text-center">
+                        <h4 class="card-title mb-4">Wins vs Draws</h4>
+
+                        <!-- Doughnut Chart -->
+                        <div style="width: 200px; margin: auto;">
+                            <canvas id="wins-draws-doughnut"></canvas>
+                            <div style="position: relative; top: -130px; font-size: 20px; font-weight: bold; color: #fff;">
+                                @(@Model.WinsCount + @Model.DrawsCount)
+                                <div style="font-size: 14px; font-weight: normal;">Total</div>
+                            </div>
+                        </div>
+
+                        <!-- Item 1 -->
+                        <div class="bg-gray-dark d-flex justify-content-between align-items-center py-3 px-4 rounded">
+                            <div class="text-left">
+                                <h6 class="mb-1">Wins</h6>
+                                <p class="text-muted mb-0">Total Wins Count</p>
+                            </div>
+                            <h6 class="font-weight-bold mb-0">@Model.WinsCount</h6>
+                        </div>
+
+                        <!-- Item 2 -->
+                        <div class="bg-gray-dark d-flex justify-content-between align-items-center py-3 px-4 rounded mt-3">
+                            <div class="text-left">
+                                <h6 class="mb-1">Draws</h6>
+                                <p class="text-muted mb-0">Total Draws Count</p>
+                            </div>
+                            <h6 class="font-weight-bold mb-0">@Model.DrawsCount</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <div class="col-md-8">
                 <div class="card shadow-sm border-0 rounded-3">
                     <div class="card-body">
                         <h4 class="card-title text-center mb-4 fw-bold text-uppercase">
                             League Standing
                         </h4>
-                        <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+                        <div class="table-responsive" style="max-height: 410px; overflow-y: auto;">
                             <table class="table table-hover table-dark align-middle text-center mb-0">
                                 <thead class="sticky-top bg-dark text-uppercase">
                                     <tr>
@@ -175,6 +217,90 @@
             </div>
         </div>
 
-       
+        <div class="row">
+            <div class="col-sm-4 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Revenue</h5>
+                        <div class="row">
+                            <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                                <div class="d-flex d-sm-block d-md-flex align-items-center">
+                                    <h2 class="mb-0">$32123</h2>
+                                    <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p>
+                                </div>
+                                <h6 class="text-muted font-weight-normal">11.38% Since last month</h6>
+                            </div>
+                            <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                                <i class="icon-lg mdi mdi-codepen text-primary ml-auto"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Sales</h5>
+                        <div class="row">
+                            <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                                <div class="d-flex d-sm-block d-md-flex align-items-center">
+                                    <h2 class="mb-0">$45850</h2>
+                                    <p class="text-success ml-2 mb-0 font-weight-medium">+8.3%</p>
+                                </div>
+                                <h6 class="text-muted font-weight-normal"> 9.61% Since last month</h6>
+                            </div>
+                            <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                                <i class="icon-lg mdi mdi-wallet-travel text-danger ml-auto"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Purchase</h5>
+                        <div class="row">
+                            <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                                <div class="d-flex d-sm-block d-md-flex align-items-center">
+                                    <h2 class="mb-0">$2039</h2>
+                                    <p class="text-danger ml-2 mb-0 font-weight-medium">-2.1% </p>
+                                </div>
+                                <h6 class="text-muted font-weight-normal">2.27% Since last month</h6>
+                            </div>
+                            <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                                <i class="icon-lg mdi mdi-monitor text-success ml-auto"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var ctx = document.getElementById("wins-draws-doughnut").getContext("2d");
+
+    new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels: ["Wins", "Draws"],
+        datasets: [{
+          data: [@Model.WinsCount, @Model.DrawsCount],
+          backgroundColor: ["#4caf50", "#ff9800"], // Wins أخضر - Draws برتقالي
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        cutout: "75%", // الفتحة الداخلية
+        plugins: {
+          legend: {
+            display: false // نخفي الليجند عشان يبقى زي الديزاين
+          }
+        }
+      }
+    });
+</script>
