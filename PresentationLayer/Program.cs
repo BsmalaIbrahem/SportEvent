@@ -44,6 +44,8 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
 });
 
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -71,5 +73,12 @@ using (var scope = app.Services.CreateScope())
     var dbInitializer = scope.ServiceProvider.GetRequiredService<IDBInitializer>();
     dbInitializer.Initialize();
 }
+
+app.MapGet("/Admin", context =>
+{
+    context.Response.Redirect("/Admin/Home/Dashboard", permanent: true);
+    return Task.CompletedTask;
+});
+
 
 app.Run();

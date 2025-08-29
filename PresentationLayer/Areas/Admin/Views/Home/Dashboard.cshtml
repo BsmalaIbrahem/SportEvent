@@ -130,6 +130,7 @@
                                 <thead class="sticky-top bg-dark text-uppercase">
                                     <tr>
                                         <th>#</th>
+                                        <th></th>
                                         <th>Club</th>
                                         <th>MP</th>
                                         <th>W</th>
@@ -149,7 +150,10 @@
                                     {
                                         <tr>
                                             <td>@i</td>
-                                            <td class="fw-semibold text-start ps-3">@LeagueStanding.TeamName</td>
+                                            <th><img src="~/assets//images/teamsLogo/@LeagueStanding.TeamLogo" /></th>
+                                            <td class="fw-semibold text-start ps-3">
+                                                @LeagueStanding.TeamName
+                                            </td>
                                             <td>@LeagueStanding.MatchesPlayed</td>
                                             <td class="text-success fw-bold">@LeagueStanding.Wins</td>
                                             <td class="text-warning fw-bold">@LeagueStanding.Draws</td>

@@ -8851,7 +8851,7 @@ namespace DataAccessLayer.Migrations
                             Founded = new DateTime(1907, 4, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsDeleted = false,
-                            LogoUrl = "Al_Ahly_Logo.jpg",
+                            LogoUrl = "Al_Ahly_Logo.png",
                             Name = "Al Ahly FC",
                             UpdatedAt = new DateTime(2025, 8, 26, 19, 57, 12, 107, DateTimeKind.Utc).AddTicks(2759)
                         },
@@ -8865,7 +8865,7 @@ namespace DataAccessLayer.Migrations
                             Founded = new DateTime(1911, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsDeleted = false,
-                            LogoUrl = "Zamalek_Logo.jpg",
+                            LogoUrl = "Zamalek_Logo.png",
                             Name = "Zamalek SC",
                             UpdatedAt = new DateTime(2025, 8, 26, 19, 57, 12, 107, DateTimeKind.Utc).AddTicks(4166)
                         },
@@ -8879,7 +8879,7 @@ namespace DataAccessLayer.Migrations
                             Founded = new DateTime(2008, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsDeleted = false,
-                            LogoUrl = "Pyramids_Logo.jpg",
+                            LogoUrl = "Pyramids_Logo.png",
                             Name = "Pyramids FC",
                             UpdatedAt = new DateTime(2025, 8, 26, 19, 57, 12, 107, DateTimeKind.Utc).AddTicks(4169)
                         },
@@ -8893,7 +8893,7 @@ namespace DataAccessLayer.Migrations
                             Founded = new DateTime(1920, 3, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsDeleted = false,
-                            LogoUrl = "El_Masry_Logo.jpg",
+                            LogoUrl = "El_Masry_Logo.png",
                             Name = "El Masry SC",
                             UpdatedAt = new DateTime(2025, 8, 26, 19, 57, 12, 107, DateTimeKind.Utc).AddTicks(4171)
                         },
@@ -8907,7 +8907,7 @@ namespace DataAccessLayer.Migrations
                             Founded = new DateTime(2006, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsDeleted = false,
-                            LogoUrl = "Ceramica_Cleopatra_Logo.jpg",
+                            LogoUrl = "Ceramica_Cleopatra_Logo.png",
                             Name = "Ceramica Cleopatra FC",
                             UpdatedAt = new DateTime(2025, 8, 26, 19, 57, 12, 107, DateTimeKind.Utc).AddTicks(4194)
                         },
@@ -8921,7 +8921,7 @@ namespace DataAccessLayer.Migrations
                             Founded = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsDeleted = false,
-                            LogoUrl = "National_Bank_Logo.jpg",
+                            LogoUrl = "National_Bank_Logo.png",
                             Name = "National Bank of Egypt SC",
                             UpdatedAt = new DateTime(2025, 8, 26, 19, 57, 12, 107, DateTimeKind.Utc).AddTicks(4196)
                         },
@@ -8935,7 +8935,7 @@ namespace DataAccessLayer.Migrations
                             Founded = new DateTime(2011, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsDeleted = false,
-                            LogoUrl = "Modern_Sport_Logo.jpg",
+                            LogoUrl = "Modern_Sport_Logo.png",
                             Name = "Modern Sport FC",
                             UpdatedAt = new DateTime(2025, 8, 26, 19, 57, 12, 107, DateTimeKind.Utc).AddTicks(4198)
                         },
@@ -8949,7 +8949,7 @@ namespace DataAccessLayer.Migrations
                             Founded = new DateTime(2019, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsDeleted = false,
-                            LogoUrl = "ZED_Logo.jpg",
+                            LogoUrl = "ZED_Logo.png",
                             Name = "ZED FC",
                             UpdatedAt = new DateTime(2025, 8, 26, 19, 57, 12, 107, DateTimeKind.Utc).AddTicks(4200)
                         },
@@ -8963,7 +8963,7 @@ namespace DataAccessLayer.Migrations
                             Founded = new DateTime(1985, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsDeleted = false,
-                            LogoUrl = "ENPPI_Logo.jpg",
+                            LogoUrl = "ENPPI_Logo.png",
                             Name = "ENPPI SC",
                             UpdatedAt = new DateTime(2025, 8, 26, 19, 57, 12, 107, DateTimeKind.Utc).AddTicks(4201)
                         },
@@ -8977,7 +8977,7 @@ namespace DataAccessLayer.Migrations
                             Founded = new DateTime(1948, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsDeleted = false,
-                            LogoUrl = "Smouha_Logo.jpg",
+                            LogoUrl = "Smouha_Logo.png",
                             Name = "Smouha SC",
                             UpdatedAt = new DateTime(2025, 8, 26, 19, 57, 12, 107, DateTimeKind.Utc).AddTicks(4203)
                         },
@@ -8991,7 +8991,7 @@ namespace DataAccessLayer.Migrations
                             Founded = new DateTime(1996, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsDeleted = false,
-                            LogoUrl = "Talaea_El_Gaish_Logo.jpg",
+                            LogoUrl = "Talaea_El_Gaish_Logo.png",
                             Name = "Tala'ea El Gaish SC",
                             UpdatedAt = new DateTime(2025, 8, 26, 19, 57, 12, 107, DateTimeKind.Utc).AddTicks(4205)
                         },
@@ -9005,7 +9005,7 @@ namespace DataAccessLayer.Migrations
                             Founded = new DateTime(1914, 8, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsDeleted = false,
-                            LogoUrl = "Al_Ittihad_Alexandria_Logo.jpg",
+                            LogoUrl = "Al_Ittihad_Alexandria_Logo.png",
                             Name = "Al Ittihad Alexandria",
                             UpdatedAt = new DateTime(2025, 8, 26, 19, 57, 12, 107, DateTimeKind.Utc).AddTicks(4207)
                         },
@@ -9019,7 +9019,7 @@ namespace DataAccessLayer.Migrations
                             Founded = new DateTime(1932, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsDeleted = false,
-                            LogoUrl = "Haras_El_Hodoud_Logo.jpg",
+                            LogoUrl = "Haras_El_Hodoud_Logo.png",
                             Name = "Haras El Hodoud SC",
                             UpdatedAt = new DateTime(2025, 8, 26, 19, 57, 12, 107, DateTimeKind.Utc).AddTicks(4208)
                         },
@@ -9033,7 +9033,7 @@ namespace DataAccessLayer.Migrations
                             Founded = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsDeleted = false,
-                            LogoUrl = "Petrojet_Logo.jpg",
+                            LogoUrl = "Petrojet_Logo.png",
                             Name = "Petrojet SC",
                             UpdatedAt = new DateTime(2025, 8, 26, 19, 57, 12, 107, DateTimeKind.Utc).AddTicks(4211)
                         },
@@ -9047,7 +9047,7 @@ namespace DataAccessLayer.Migrations
                             Founded = new DateTime(1936, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsDeleted = false,
-                            LogoUrl = "Ghazl_El_Mahalla_Logo.jpg",
+                            LogoUrl = "Ghazl_El_Mahalla_Logo.png",
                             Name = "Ghazl El Mahalla SC",
                             UpdatedAt = new DateTime(2025, 8, 26, 19, 57, 12, 107, DateTimeKind.Utc).AddTicks(4213)
                         },
@@ -9061,7 +9061,7 @@ namespace DataAccessLayer.Migrations
                             Founded = new DateTime(1924, 3, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsDeleted = false,
-                            LogoUrl = "Ismaily_SC_Logo.jpg",
+                            LogoUrl = "Ismaily_SC_Logo.png",
                             Name = "Ismaily SC",
                             UpdatedAt = new DateTime(2025, 8, 26, 19, 57, 12, 107, DateTimeKind.Utc).AddTicks(4214)
                         },
@@ -9075,7 +9075,7 @@ namespace DataAccessLayer.Migrations
                             Founded = new DateTime(2003, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsDeleted = false,
-                            LogoUrl = "El_Gouna_Logo.jpg",
+                            LogoUrl = "El_Gouna_Logo.png",
                             Name = "El Gouna FC",
                             UpdatedAt = new DateTime(2025, 8, 26, 19, 57, 12, 107, DateTimeKind.Utc).AddTicks(4216)
                         },
@@ -9089,7 +9089,7 @@ namespace DataAccessLayer.Migrations
                             Founded = new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsDeleted = false,
-                            LogoUrl = "Pharco_Logo.jpg",
+                            LogoUrl = "Pharco_Logo.png",
                             Name = "Pharco FC",
                             UpdatedAt = new DateTime(2025, 8, 26, 19, 57, 12, 107, DateTimeKind.Utc).AddTicks(4218)
                         },
@@ -9103,7 +9103,7 @@ namespace DataAccessLayer.Migrations
                             Founded = new DateTime(1973, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsDeleted = false,
-                            LogoUrl = "Al_Mokawloon_Al_Arab_Logo.jpg",
+                            LogoUrl = "Al_Mokawloon_Al_Arab_Logo.png",
                             Name = "Al Mokawloon Al Arab SC",
                             UpdatedAt = new DateTime(2025, 8, 26, 19, 57, 12, 107, DateTimeKind.Utc).AddTicks(4220)
                         },
@@ -9117,7 +9117,7 @@ namespace DataAccessLayer.Migrations
                             Founded = new DateTime(2002, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsDeleted = false,
-                            LogoUrl = "Wadi_Degla_Logo.jpg",
+                            LogoUrl = "Wadi_Degla_Logo.png",
                             Name = "Wadi Degla SC",
                             UpdatedAt = new DateTime(2025, 8, 26, 19, 57, 12, 107, DateTimeKind.Utc).AddTicks(4234)
                         },
@@ -9131,7 +9131,7 @@ namespace DataAccessLayer.Migrations
                             Founded = new DateTime(1935, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             IsDeleted = false,
-                            LogoUrl = "Kahrabaa_Ismailia_Logo.jpg",
+                            LogoUrl = "Kahrabaa_Ismailia_Logo.png",
                             Name = "Kahrabaa Ismailia SC",
                             UpdatedAt = new DateTime(2025, 8, 26, 19, 57, 12, 107, DateTimeKind.Utc).AddTicks(4236)
                         });
