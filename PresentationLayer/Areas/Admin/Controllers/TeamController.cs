@@ -120,7 +120,7 @@ namespace PresentationLayer.Areas.Admin.Controllers
             if (LogoUrl != null && LogoUrl.Length > 0)
             {
                 string fileName = FileHelper.CreateFileName(LogoUrl.FileName);
-                var path = "assets\\images\\TeamLogo";
+                var path = "assets\\images\\TeamsLogo";
                 string filePath = FileHelper.GetFilePath(fileName, "wwwroot\\" + path);
                 await FileHelper.UploadFile(filePath, LogoUrl);
                 createTeam.LogoUrl = "/" + path.Replace("\\", "/") + "/" + fileName;
@@ -238,7 +238,7 @@ namespace PresentationLayer.Areas.Admin.Controllers
                     }
                 }
                 string fileName = FileHelper.CreateFileName(LogoUrl.FileName);
-                var path = "assets\\images\\TeamLogo";
+                var path = "assets\\images\\TeamsLogo";
                 string filePath = FileHelper.GetFilePath(fileName, "wwwroot\\" + path);
                 await FileHelper.UploadFile(filePath, LogoUrl);
                 team.LogoUrl = "/" + path.Replace("\\", "/") + "/" + fileName;

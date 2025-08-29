@@ -8,6 +8,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace DataAccessLayer.Repositories
 {
@@ -46,12 +47,28 @@ namespace DataAccessLayer.Repositories
         }
 
         public async Task<T?> GetOneAsync(
-            Expression<Func<T, bool>>? filter = null,
-            Func<IQueryable<T>, IIncludableQueryable<T, object>>? includeChain = null,
-            bool asNoTracking = false)
+        Expression<Func<T, bool>>? filter = null,
+        Func<IQueryable<T>, IIncludableQueryable<T, object>>? includeChain = null,
+        bool asNoTracking = false,
+        Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null)
         {
-            return (await GetAllAsync(filter, includeChain, asNoTracking)).FirstOrDefault();
+            IQueryable<T> query = _context.Set<T>();
+
+            if (filter != null)
+                query = query.Where(filter);
+
+            if (includeChain != null)
+                query = includeChain(query);
+
+            if (asNoTracking)
+                query = query.AsNoTracking();
+
+            if (orderBy != null)
+                query = orderBy(query);
+
+            return await query.FirstOrDefaultAsync();
         }
+
 
         public async Task<int> CountAsync(Expression<Func<T, bool>>? expression = null)
         {

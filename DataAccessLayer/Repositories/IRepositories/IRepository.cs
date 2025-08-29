@@ -10,9 +10,12 @@ namespace DataAccessLayer.Repositories.IRepositories
 {
     public interface IRepository<T> where T : class
     {
-        Task<T?> GetOneAsync(Expression<Func<T, bool>>? expression = null, Func<IQueryable<T>,
-           IIncludableQueryable<T, object>>? includeChain = null,
-           bool AsNoTracking = false);
+        Task<T?> GetOneAsync(
+         Expression<Func<T, bool>>? expression = null,
+         Func<IQueryable<T>, IIncludableQueryable<T, object>>? includeChain = null,
+         bool asNoTracking = false,
+         Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null
+    );
         Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>>? includeChain = null,
             bool asNoTracking = false, int? skip = null, int? take = null,

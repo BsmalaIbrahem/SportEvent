@@ -109,7 +109,7 @@ namespace PresentationLayer.Areas.Admin.Controllers
             {
                 return View(coach);
             }
-            var existingCoach = await _repository.GetOneAsync(c => c.Id == coach.Id, AsNoTracking: true);
+            var existingCoach = await _repository.GetOneAsync(c => c.Id == coach.Id, asNoTracking: true);
             if (existingCoach == null)
             {
                 return NotFound();
