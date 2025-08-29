@@ -90,7 +90,8 @@ namespace PresentationLayer.Areas.Admin.Controllers
                 Status = request.MatchStatus,
                 HomeScore = request.HomeScore,
                 AwayScore = request.AwayScore,
-                AvailableTickets = request.AvailableTickets
+                AvailableTickets = request.AvailableTickets,
+                TicketPrice = request.TicketPrice,
 
             };
 
@@ -119,7 +120,8 @@ namespace PresentationLayer.Areas.Admin.Controllers
                 MatchStatus = match.Status,
                 HomeScore = match.HomeScore,
                 AwayScore = match.AwayScore,
-                AvailableTickets = match.AvailableTickets
+                AvailableTickets = match.AvailableTickets,
+                TicketPrice = match.TicketPrice
             };
 
             await SetViewBag();
@@ -167,6 +169,7 @@ namespace PresentationLayer.Areas.Admin.Controllers
             match.HomeScore = request.HomeScore;
             match.AwayScore = request.AwayScore;
             match.AvailableTickets = request.AvailableTickets;
+            match.TicketPrice = request.TicketPrice;
             _unitOfWork.MatchRepository.Update(match);
             await _unitOfWork.MatchRepository.SaveChangesAsync();
             TempData["SuccessMessage"] = "Match Edited successfully.";

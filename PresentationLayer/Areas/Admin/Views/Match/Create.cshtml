@@ -81,6 +81,18 @@
                             </select>
                             <span class="text-danger" asp-validation-for="MatchStatus"></span>
                         </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="Price">Ticket Price</label>
+                            <input type="number" min="0" class="form-control" id="Price" value="0" placeholder="0" asp-for="TicketPrice" />
+                            <span class="text-danger" asp-validation-for="TicketPrice"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="AvailableTickets">Available Tickets</label>
+                            <input type="number" min="0" class="form-control" id="AvailableTickets" value="0" placeholder="0." asp-for="AvailableTickets" />
+                            <span class="text-danger" asp-validation-for="AvailableTickets"></span>
+                        </div>
                         
 
                         <button type="submit" class="btn btn-primary">Add</button>

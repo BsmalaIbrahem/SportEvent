@@ -23,5 +23,6 @@ namespace PresentationLayer.ViewModels
         public int AwayScore { get; set; } = 0;
         [Range(0, int.MaxValue, ErrorMessage = "Available Tickets must be a non-negative number.")]
         public int AvailableTickets { get; set; } = 0;
+        public decimal TicketPrice { get; set; } = 0;
     }
 }
