@@ -113,7 +113,8 @@ namespace PresentationLayer.Areas.Admin.Controllers
                     PlayerId = p.PlayerId,
                     JoinedDate = p.JoinedDate,
                     Number = p.Number,
-                    LeftDate = null
+                    LeftDate = null,
+                    IsCaptain = p.PlayerId == createTeam.CaptainId
                 }).ToList()
             };
             // التعامل مع رفع ملف اللوجو
