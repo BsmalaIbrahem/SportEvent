@@ -1,14 +1,5 @@
 ﻿@model ModelsWithPaginationVM<Coach>
-
-
-    <style>
-    .pagination .page-link {
-        padding: 4px 12px; /* صغر الارتفاع */
-        line-height: 5; /* يرفع الرقم لفوق شوية */
-        margin: 0 2px; /* تباعد بسيط بين الأزرار */
-    }
-
-    </style>
+    
 
 <div style="text-align:right; margin-top:30px; margin-right:20px;">
     <a asp-action="Create" class="btn btn-primary">Create</a>
@@ -34,114 +25,49 @@
         </div>
 
         
-        <div class="table-responsive">
-            <table class="table table-dark">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Nationality</th>
-                    <th>Team</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.Items)
-                {
-                    <tr>
-                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>@item.Id</strong></td>
-                        <td>@item.Name</td>
-                        <td>@item.Description</td>
-                        <th>@item.Nationality</th>
-                        <th>@item.Team?.Name</th>
-                        <td>
-                            <div >
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn p-0" >
-                                      <i class="mdi mdi-lead-pencil"></i>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                 }
-
-
-                </tbody>
-            </table>
-        </div>
-        </div>
-        <div class="w-100 d-flex justify-content-center mt-2 mb-3">
-            <nav aria-label="Page navigation">
-                <ul class="pagination">
-                    @{
-                        var currentPage = Model.Pagination.PageNumber;
-                        var pageSize = Model.Pagination.PageSize;
-                        var totalPages = Model.Pagination.TotalPages;
-                        var maxPagesToShow = 5;
-
-                        var startPage = Math.Max(1, currentPage - maxPagesToShow / 2);
-                        var endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
-
-                        if (endPage - startPage < maxPagesToShow - 1)
+            <div class="table-responsive">
+                <table class="table table-dark">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Nationality</th>
+                            <th>Team</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
                         {
-                            startPage = Math.Max(1, endPage - maxPagesToShow + 1);
-                        }
-                    }
+                            <tr>
+                                <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>@item.Id</strong></td>
+                                <td>@item.Name</td>
+                                <td>@item.Description</td>
+                                <th>@item.Nationality</th>
+                                <th>@item.Team?.Name</th>
+                                <td>
+                                    <div >
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn p-0" >
+                                              <i class="mdi mdi-lead-pencil"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                         }
 
-                    @if (Model.Pagination.HasPreviousPage)
-                    {
-                        <li class="page-item">
-                            <a class="page-link" href="@Url.Action("Index", new { PageNumber = currentPage - 1, PageSize = pageSize })">
-                                &laquo;
-                            </a>
-                        </li>
-                    }
 
-                    @if (startPage > 1)
-                    {
-                        <li class="page-item">
-                            <a class="page-link" href="@Url.Action("Index", new { PageNumber = 1, PageSize = pageSize })">1</a>
-                        </li>
-                        @if (startPage > 2)
-                        {
-                            <li class="page-item disabled"><span class="page-link">...</span></li>
-                        }
-                    }
+                        </tbody>
+                </table>
+            </div>
 
-                    @for (var i = startPage; i <= endPage; i++)
-                    {
-                        <li class="page-item @(currentPage == i ? "active" : "")">
-                            <a class="page-link" href="@Url.Action("Index", new { PageNumber = i, PageSize = pageSize })">@i</a>
-                        </li>
-                    }
+            <div class="card-footer d-flex justify-content-center">
+                <partial name="~/Views/Shared/_AdminPagination.cshtml" model="Model.Pagination" />
+            </div>
 
-                    @if (endPage < totalPages)
-                    {
-                        @if (endPage < totalPages - 1)
-                        {
-                            <li class="page-item disabled"><span class="page-link">...</span></li>
-                        }
-                        <li class="page-item">
-                            <a class="page-link" href="@Url.Action("Index", new { PageNumber = totalPages, PageSize = pageSize })">@totalPages</a>
-                        </li>
-                    }
-
-                    @if (Model.Pagination.HasNextPage)
-                    {
-                        <li class="page-item">
-                            <a class="page-link" href="@Url.Action("Index", new { PageNumber = currentPage + 1, PageSize = pageSize })">
-                                &raquo;
-                            </a>
-                        </li>
-                    }
-                </ul>
-            </nav>
         </div>
 
-
-
-
-
+      
     </div>
  </div>
 
