@@ -35,6 +35,7 @@ namespace PresentationLayer.Areas.Customer.Controllers
             {
                     currentMatch = await _unitOfWork.MatchRepository.GetOneAsync(
                      m => m.Status == CoreLayer.Enums.MatchStatus.Finished,
+                     orderBy: x => x.OrderByDescending(x => x.MatchDate),
                      includeChain: q => q.Include(m => m.HomeTeam)
                      .Include(m => m.AwayTeam)
                      .Include(t => t.Tournament)
