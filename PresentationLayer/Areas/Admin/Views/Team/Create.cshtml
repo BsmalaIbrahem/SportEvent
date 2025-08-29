@@ -1,5 +1,12 @@
 ﻿@model PresentationLayer.ViewModels.CreateTeamVM
 
+<style>
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #444;
+        line-height: 14px;
+    }
+</style>
+
 <h3 class="container mt-3">Create New Team</h3>
 
 <div class="container mt-3">
@@ -36,7 +43,7 @@
 
         <div class="form-group mb-3 text-bg-success">
             <label asp-for="CoachesId" class="form-label">Coach</label>
-            <select asp-for="CoachesId" asp-items="@Model.Coaches" class="form-control" required>
+            <select asp-for="CoachesId" asp-items="@Model.Coaches" style="width:100%; line-height:14px;" class="js-example-basic-single form-control" required>
                 <option value="">Select a Coach</option>
             </select>
             <span asp-validation-for="CoachesId" class="text-danger"></span>
@@ -44,7 +51,7 @@
 
         <div class="form-group mb-3">
             <label class="form-label">Players</label>
-            <select id="playerSelect" class="form-control" multiple>
+            <select id="playerSelect" style="width:100%; line-height:14px;" class="js-example-basic-single form-control" multiple>
                 @foreach (var player in Model.AvailablePlayers)
                 {
                     <option value="@player.Value">@player.Text</option>
@@ -57,7 +64,7 @@
 
         <div class="form-group mb-3">
             <label asp-for="CaptainId" class="form-label">Captain</label>
-            <select asp-for="CaptainId" id="captainSelect" class="form-control" required>
+            <select asp-for="CaptainId" style="width:100%; line-height:14px;" id="captainSelect" class="js-example-basic-single form-control" required>
                 <option value="">Select a Captain</option>
             </select>
             <span asp-validation-for="CaptainId" class="text-danger"></span>
@@ -130,6 +137,4 @@
             });
         });
     </script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 }

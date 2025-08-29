@@ -15,7 +15,7 @@ namespace PresentationLayer.ViewModels
         [Required(ErrorMessage = "Founded date is required.")]
         public DateTime Founded { get; set; }
         [Required(ErrorMessage = "Coach is required.")]
-        public int CoachesId { get; set; }
+        public int? CoachesId { get; set; }
         public List<SelectListItem> Coaches { get; set; } = new List<SelectListItem>();
         [Required(ErrorMessage = "At least one player is required.")]
         public List<PlayerSelection> SelectedPlayers { get; set; } = new List<PlayerSelection>();

@@ -46,7 +46,7 @@
                                 <td>@(item.Description?.Length > 70 ? item.Description.Substring(0, 70) + "..." : item.Description)</td>
                                 <th>@item.Country</th>
                                 <th>@item.Founded.ToString("yyyy,MM,dd").</th>
-                                <th>@item.Coach.Name</th>
+                                <th>@item?.Coach?.Name</th>
                                 <td>
                                     <div>
                                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn p-0">

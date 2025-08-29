@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol.Core.Types;
 using PresentationLayer.ViewModels;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace PresentationLayer.Areas.Admin.Controllers
 {
@@ -98,6 +99,10 @@ namespace PresentationLayer.Areas.Admin.Controllers
                         Text = p.Name
                     }).ToList();
                 return View(createTeam);
+            }
+            if (createTeam.CoachesId.HasValue)
+            {
+                await RemoveCoachFromOldTeam(createTeam.CoachesId.Value);
             }
             // إنشاء الفريق
             var team = new Team
@@ -213,6 +218,11 @@ namespace PresentationLayer.Areas.Admin.Controllers
                 return NotFound();
             }
 
+            if (editTeam.CoachesId.HasValue)
+            {
+                await RemoveCoachFromOldTeam(editTeam.CoachesId.Value, editTeam.Id);
+            }
+
             team.Name = editTeam.Name;
             team.Description = editTeam.Description;
             team.Country = editTeam.Country;
@@ -250,5 +260,18 @@ namespace PresentationLayer.Areas.Admin.Controllers
             TempData["SuccessMessage"] = "Team Edit successfully.";
             return RedirectToAction(nameof(Index));
         }
+    
+        
+        private async Task RemoveCoachFromOldTeam(int coachId, int currentTeam = 0)
+        {
+            var team = await _unitOfWork.TeamRepository.GetOneAsync(t => t.CoachId == coachId && t.Id !=  currentTeam);
+            if(team != null)
+            {
+                team.CoachId = null;
+                _unitOfWork.TeamRepository.Update(team);
+                await _unitOfWork.TeamRepository.SaveChangesAsync();
+            }
+        }
+
     }
 }

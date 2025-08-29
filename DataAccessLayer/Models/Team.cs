@@ -15,9 +15,9 @@ namespace DataAccessLayer.Models
         public string? LogoUrl { get; set; } = string.Empty;
         public string Country { get; set; } = string.Empty;
         public DateTime Founded { get; set; }
-        public int CoachId { get; set; }
+        public int? CoachId { get; set; }
         [ForeignKey(nameof(CoachId))]
-        public Coach Coach { get; set; } = null!;
+        public Coach? Coach { get; set; }
         public ICollection<TeamPlayer> Players { get; set; } = new List<TeamPlayer>();
     }
 }
