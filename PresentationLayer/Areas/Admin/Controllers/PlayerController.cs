@@ -131,9 +131,9 @@ namespace PresentationLayer.Areas.Admin.Controllers
             return true;
         }
 
-        private async Task<bool> IsValidTShirtNumber(int teamId, int tshirtNumber)
+        private async Task<bool> IsValidTShirtNumber(int teamId, int tshirtNumber, int playerId = 0)
         {
-            var existingPlayer = await _unitOfWork.TeamPlayerRepository.GetOneAsync(x => x.TeamId == teamId && x.Number == tshirtNumber && x.LeftDate == null);
+            var existingPlayer = await _unitOfWork.TeamPlayerRepository.GetOneAsync(x => x.TeamId == teamId && x.Number == tshirtNumber && x.LeftDate == null && x.PlayerId != playerId);
             if(existingPlayer != null)
             {
                 return false;
@@ -189,7 +189,13 @@ namespace PresentationLayer.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            // Update properties
+            if (request.Number != null && !await IsValidTShirtNumber(request.TeamId, request.Number ?? 1, id))
+            {
+                await SetViewBag(request.TeamId);
+                ModelState.AddModelError("Number", "T-Shirt Number is already taken in this team.");
+                return View(request);
+            }
+
             player.Name = request.Name;
             player.Description = request.Description;
             player.Nationality = request.Nationality;
