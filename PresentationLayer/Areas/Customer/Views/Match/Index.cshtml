@@ -48,6 +48,7 @@
                         <img src="@Url.Content("~/assets/images/teamsLogo/" + Model.CurrentMatch.HomeTeam.LogoUrl)"
                              alt="@Model.CurrentMatch.HomeTeam.Name" class="img-fluid">
                         <h3 class="@homeStatusClass">@Model.CurrentMatch.HomeTeam.Name</h3>
+
                         <h5 class="mt-3 text-primary">🔹Players</h5>
                         <ul class="list-unstyled">
                             @foreach (var player in Model.TeamPlayer
@@ -57,13 +58,34 @@
                                 <li>@player.Player.Name (@player.Number)</li>
                             }
                         </ul>
+
+                        <h5 class="mt-3 text-warning">⚽ Goals</h5>
+                        <ul class="list-unstyled">
+                            @{
+                                var homeGoals = Model.Goals.Where(g => g.TeamId == Model.CurrentMatch.HomeTeamId).ToList();
+                            }
+                            @if (homeGoals.Any())
+                            {
+                                foreach (var goal in homeGoals)
+                                {
+                                    <li>@goal.Player.Name - @goal.MinuteInMatch'</li>
+                                }
+                            }
+                            else
+                            {
+                                <li class="text-muted">No goals yet</li>
+                            }
+                        </ul>
                     </div>
                 </div>
+
+
                 <div class="team-2 w-50">
                     <div class="team-details w-100 text-center">
                         <img src="@Url.Content("~/assets/images/teamsLogo/" + Model.CurrentMatch.AwayTeam.LogoUrl)"
                              alt="@Model.CurrentMatch.AwayTeam.Name" class="img-fluid">
                         <h3 class="@awayStatusClass">@Model.CurrentMatch.AwayTeam.Name</h3>
+
                         <h5 class="mt-3 text-success">🔹Players</h5>
                         <ul class="list-unstyled">
                             @foreach (var player in Model.TeamPlayer
@@ -71,6 +93,24 @@
                                                         .Take(4))
                             {
                                 <li>@player.Player.Name (@player.Number)</li>
+                            }
+                        </ul>
+
+                        <h5 class="mt-3 text-warning">⚽ Goals</h5>
+                        <ul class="list-unstyled">
+                            @{
+                                var awayGoals = Model.Goals.Where(g => g.TeamId == Model.CurrentMatch.AwayTeamId).ToList();
+                            }
+                            @if (awayGoals.Any())
+                            {
+                                foreach (var goal in awayGoals)
+                                {
+                                    <li>@goal.Player.Name - @goal.MinuteInMatch'</li>
+                                }
+                            }
+                            else
+                            {
+                                <li class="text-muted">No goals yet</li>
                             }
                         </ul>
                     </div>
@@ -113,7 +153,7 @@
                         </div>
 
                         <div class="text-center widget-vs-contents mb-4">
-                            <h4>@Model.CurrentMatch.Tournament?.Title</h4>
+                            <h4>@Model.NextMatch.Tournament?.Title</h4>
                             <p class="mb-5">
                                 <span class="d-block">@Model.NextMatch.MatchDate.ToString("MMMM dd, yyyy")</span>
                                 <span class="d-block">@Model.NextMatch.MatchDate.ToString("hh:mm tt")</span>
@@ -132,7 +172,7 @@
             </div>
             @foreach (var item in Model.UpcomingMatches)
             {
-                <div class="col-lg-6 mb-4">
+                <div class="col-lg-6 col-md-6 mb-4">
                     <div class="bg-light p-4 rounded">
                         <div class="widget-body">
                             <div class="widget-vs">
