@@ -44,18 +44,6 @@ namespace PresentationLayer.HostedServices
                 }
                 await unitOfWork.MatchRepository.SaveChangesAsync();
 
-                var FinishedMatches = await unitOfWork.MatchRepository.GetAllAsync(m =>
-                   (m.Status != MatchStatus.Finished) &&
-                   m.MatchDate.AddHours(3) < DateTime.Now
-               );
-
-                foreach (var match in InprogressMatches)
-                {
-                    match.Status = MatchStatus.Finished;
-                    unitOfWork.MatchRepository.Update(match);
-                }
-
-                await unitOfWork.MatchRepository.SaveChangesAsync();
             }
         }
     }
