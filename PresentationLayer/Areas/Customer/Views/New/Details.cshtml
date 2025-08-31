@@ -1,0 +1,40 @@
+﻿@using DataAccessLayer.Models
+@model New
+@{
+    ViewData["Title"] = "New Details";
+}
+<style>
+    .hero, .hero > .container > .row {
+        height: 5vh;
+       min-height: 50px;
+    }
+</style>
+<div class="hero overlay" style="">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-5 mx-auto text-center">
+                <h1 class="text-white"></h1>
+                <p></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- تفاصيل الخبر -->
+<div class="container site-section mt-4">
+    <div class="row align-items-start">
+        <!-- الصورة على الشمال -->
+        <div class="col-lg-4 mb-4">
+            <img src="@Model.ImgPath" alt="Image" class="img-fluid rounded shadow-sm">
+        </div>
+
+        <!-- النص على اليمين -->
+        <div class="col-lg-8">
+            <span class="meta text-muted d-block mb-2">
+                @Model.CreatedAt.ToString("MMMM dd, yyyy")
+            </span>
+            <h3 class="mb-3">@Model.Title</h3>
+            <p>@Model.Content</p>
+        </div>
+    </div>
+</div>
