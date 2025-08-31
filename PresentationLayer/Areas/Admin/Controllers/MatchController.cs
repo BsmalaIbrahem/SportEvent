@@ -1,4 +1,5 @@
-﻿using DataAccessLayer.Models;
+﻿using CoreLayer.Enums;
+using DataAccessLayer.Models;
 using DataAccessLayer.Repositories.IRepositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,11 +23,17 @@ namespace PresentationLayer.Areas.Admin.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IActionResult> Index(PageFilterVM filter)
+        public async Task<IActionResult> Index(MatchFilterVM filter)
         {
+            Expression<Func<Match, bool>>? filterExpression =
+                c => (filter.status == null || c.Status == filter.status)
+                && (filter.IsToday == true ? (DateOnly.FromDateTime(c.MatchDate) == DateOnly.FromDateTime(DateTime.Now) ) 
+                                       : true);
+
             var matches = await _unitOfWork.MatchRepository.GetAllAsync(
-                skip: filter.SkipNumber,
-                take: filter.PageSize,
+                filter: filterExpression,
+                skip: filter.IsToday == true  ? null : filter.SkipNumber,
+                take: filter.IsToday == true ? null : filter.PageSize,
                 orderBy: q => q.OrderByDescending(c => c.Id),
                 includeChain: q => q.Include(c => c.Tournament).Include(c => c.AwayTeam).Include(c => c.HomeTeam)
             );
@@ -37,13 +44,16 @@ namespace PresentationLayer.Areas.Admin.Controllers
                 {
                     PageNumber = filter.PageNumber ?? 1,
                     PageSize = filter.PageSize ?? 5,
-                    TotalCount = await _unitOfWork.MatchRepository.CountAsync()
+                    TotalCount = await _unitOfWork.MatchRepository.CountAsync(filterExpression)
                 }
 
             };
+            ViewBag.IsToday = filter.IsToday == true ? "true" : "false";
+            ViewBag.Status = filter.status.ToString();
             return View(data);
         }
 
+      
         public async Task<IActionResult> Create()
         {
             await SetViewBag();
