@@ -13,5 +13,10 @@ namespace DataAccessLayer.Models
         public bool IsDeleted { get; set; } = false;
         public DateTime? DeletedAt { get; set; } = null;
         public bool IsActive { get; set; } = true;
+        public bool isSold { get; set; } = false;
+        public bool isBigMatch { get; set; } = false;
+        
+
+
     }
 }

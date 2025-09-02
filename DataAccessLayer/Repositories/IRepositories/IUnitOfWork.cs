@@ -16,6 +16,7 @@ namespace DataAccessLayer.Repositories.IRepositories
         ITournamentRepository TournamentRepository { get; }
         IApplicationUserOTPRepository ApplicationUserOTPRepository { get; }
         ITicketRepository TicketRepository { get; }
+        Task<int> SaveChangesAsync();
 
     }
 }

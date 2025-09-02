@@ -43,6 +43,10 @@ namespace DataAccessLayer.Repositories
 
         public ITicketRepository TicketRepository {get; }
 
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync();
+        }
         void IDisposable.Dispose()
         {
         }

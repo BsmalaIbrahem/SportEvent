@@ -3,6 +3,8 @@ using DataAccessLayer.Data;
 using DataAccessLayer.DBInitilizer;
 using DataAccessLayer.Repositories;
 using DataAccessLayer.Repositories.IRepositories;
+using Hangfire;
+using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -19,10 +21,9 @@ builder.Logging.AddConsole();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyConnection")));
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-{
-}).AddEntityFrameworkStores<ApplicationDbContext>()
-.AddDefaultTokenProviders();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => { })
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddScoped<IDBInitializer, DBInitializer>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(MainRepository<>));
@@ -38,6 +39,7 @@ builder.Services.AddScoped<ITeamPlayerRepository, TeamPlayerRepository>();
 builder.Services.AddScoped<ITournamentRepository, TournamentRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<TicketPricingService>();
 
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 
@@ -47,21 +49,34 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
 });
 
-builder.Services.AddHostedService<MatchStatusService>();
+builder.Services.AddHangfire(config =>
+{
+    config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+          .UseSimpleAssemblyNameTypeSerializer()
+          .UseRecommendedSerializerSettings()
+          .UseSqlServerStorage(builder.Configuration.GetConnectionString("MyConnection"), new SqlServerStorageOptions
+          {
+              CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+              SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+              QueuePollInterval = TimeSpan.Zero,
+              UseRecommendedIsolationLevel = true,
+              DisableGlobalLocks = true
+          });
+});
+builder.Services.AddHangfireServer();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
@@ -77,11 +92,18 @@ using (var scope = app.Services.CreateScope())
     dbInitializer.Initialize();
 }
 
+app.UseHangfireDashboard("/hangfire");
+
+RecurringJob.AddOrUpdate<TicketPricingService>(
+    "update-ticket-prices",
+    s => s.UpdateTicketPricesAsync(),
+    Cron.Hourly() 
+);
+
 app.MapGet("/Admin", context =>
 {
     context.Response.Redirect("/Admin/Home/Dashboard", permanent: true);
     return Task.CompletedTask;
 });
-
 
 app.Run();
