@@ -57,7 +57,7 @@ namespace DataAccessLayer.Data
 
 
             #region Coach Data
-            modelBuilder.Entity<Coach>().HasData(
+           modelBuilder.Entity<Coach>().HasData(
                 new Coach { Id = 1, Name = "José Riveiro", Nationality = "Spain", Description = "Head coach since May 29, 2025", ImageUrl = "Jose_Riveiro.jpg" },
                 new Coach { Id = 2, Name = "José Gomes", Nationality = "Portugal", Description = "Head coach since February 2024", ImageUrl = "Jose_Gomes.jpg" },
                 new Coach { Id = 3, Name = "Krunoslav Jurcic", Nationality = "Croatia", Description = "Head coach since February 2024", ImageUrl = "Krunoslav_Jurcic.jpg" },
@@ -703,7 +703,7 @@ namespace DataAccessLayer.Data
                 new Team { Id = 13, Name = "Haras El Hodoud SC", Description = "Founded in 1932, competes in the Egyptian Premier League, won Egypt Cup and Super Cup in 2009", LogoUrl = "Haras_El_Hodoud_Logo.png", Country = "Egypt", Founded = new DateTime(1932, 1, 1), CoachId = 14 },
                 new Team { Id = 14, Name = "Petrojet SC", Description = "Founded in 2000, competes in the Egyptian Premier League, promoted in 2023-24", LogoUrl = "Petrojet_Logo.png", Country = "Egypt", Founded = new DateTime(2000, 1, 1), CoachId = 15 },
                 new Team { Id = 15, Name = "Ghazl El Mahalla SC", Description = "Founded in 1936, competes in the Egyptian Premier League, won the league in 1972-73", LogoUrl = "Ghazl_El_Mahalla_Logo.png", Country = "Egypt", Founded = new DateTime(1936, 11, 30), CoachId = 16 },
-                new Team {  Id = 16,Name = "Ismaily SC",Description = "Founded in 1924, competes in the Egyptian Premier League, won CAF Champions League in 1969, Egyptian Premier League 3 times(1967, 1991, 2002),and Egypt Cup twice(1997, 2000)", LogoUrl = "Ismaily_SC_Logo.png", Country = "Egypt", Founded = new DateTime(1924, 3, 20), CoachId = 17 },
+                new Team { Id = 16, Name = "Ismaily SC", Description = "Founded in 1924, competes in the Egyptian Premier League, won CAF Champions League in 1969, Egyptian Premier League 3 times(1967, 1991, 2002),and Egypt Cup twice(1997, 2000)", LogoUrl = "Ismaily_SC_Logo.png", Country = "Egypt", Founded = new DateTime(1924, 3, 20), CoachId = 17 },
                 new Team { Id = 17, Name = "El Gouna FC", Description = "Founded in 2003, competes in the Egyptian Premier League, promoted in 2023-24", LogoUrl = "El_Gouna_Logo.png", Country = "Egypt", Founded = new DateTime(2003, 1, 1), CoachId = 18 },
                 new Team { Id = 18, Name = "Pharco FC", Description = "Founded in 2010, competes in the Egyptian Premier League since 2021, based in Alexandria", LogoUrl = "Pharco_Logo.png", Country = "Egypt", Founded = new DateTime(2010, 1, 1), CoachId = 19 },
                 new Team { Id = 19, Name = "Al Mokawloon Al Arab SC", Description = "Founded in 1973, competes in the Egyptian Premier League, won the Egyptian Premier League in 1983, Egypt Cup 3 times (1990, 1995, 2004), and CAF Cup Winners' Cup 3 times (1982, 1983, 1996)", LogoUrl = "Al_Mokawloon_Al_Arab_Logo.png", Country = "Egypt", Founded = new DateTime(1973, 1, 1), CoachId = 20 },

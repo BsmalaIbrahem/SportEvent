@@ -153,7 +153,7 @@ namespace PresentationLayer.Areas.Identity.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Login", "Account", new { area = "Identity" });
+            return RedirectToAction("Index", "Home", new { area = "Customer" });
         }
 
 

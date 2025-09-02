@@ -21,9 +21,14 @@ namespace DataAccessLayer.Models
         public TicketStatus Status { get; set; }
         public DateTime ExpiryDate { get; set; }
         public decimal Price { get; set; }
+        public decimal CurrentPrice { get; set; }
+        public DateTime? PriceUpdatedAt { get; set; } = DateTime.UtcNow;
         public string? PaymentMethod { get; set; }
         public string? PaymentId { get; set; }
         public string? SessionId { get; set; }
+        public bool? IsPromoted { get; set; } = false;
+
+
 
     }
 }

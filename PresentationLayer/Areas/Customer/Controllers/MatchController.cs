@@ -5,6 +5,7 @@ using DataAccessLayer.Repositories.IRepositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using PresentationLayer.HostedServices;
 using PresentationLayer.ViewModels;
 using System.Linq;
 
@@ -14,10 +15,12 @@ namespace PresentationLayer.Areas.Customer.Controllers
     public class MatchController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly TicketPricingService _ticketPricingService;
 
-        public MatchController(IUnitOfWork unitOfWork)
+        public MatchController(IUnitOfWork unitOfWork,TicketPricingService ticketPricingService)
         {
             _unitOfWork = unitOfWork;
+            _ticketPricingService = ticketPricingService;
         }
         public async Task<IActionResult> Index()
         {
