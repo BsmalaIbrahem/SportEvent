@@ -86,7 +86,7 @@ namespace DataAccessLayer.Data
             #region Player Data
             modelBuilder.Entity<Player>().HasData(
                 new Player { Id = 1, Name = "Mohamed El Shenawy", Description = "", Position = PlayerPosition.Goalkeeper, ImgPath = "Mohamed_El_Shenawy.jpg", DateOfBirth = new DateTime(1988, 12, 18), Nationality = "Egypt" },
-                new Player { Id = 2, Name = "Oufa Shobeir", Description = "", Position = PlayerPosition.Goalkeeper, ImgPath = "Oufa_Shobeir.jpg", DateOfBirth = new DateTime(2000, 1, 1), Nationality = "Egypt" },
+                new Player { Id = 2, Name = "Moustfa Shobeir", Description = "", Position = PlayerPosition.Goalkeeper, ImgPath = "Oufa_Shobeir.jpg", DateOfBirth = new DateTime(2000, 1, 1), Nationality = "Egypt" },
                 new Player { Id = 3, Name = "Mohamed Seha", Description = "", Position = PlayerPosition.Goalkeeper, ImgPath = "Mohamed_Seha.jpg", DateOfBirth = new DateTime(2001, 1, 1), Nationality = "Egypt" },
                 new Player { Id = 4, Name = "Mostafa Makhlouf", Description = "", Position = PlayerPosition.Goalkeeper, ImgPath = "Mostafa_Makhlouf.jpg", DateOfBirth = new DateTime(2003, 1, 1), Nationality = "Egypt" },
                 new Player { Id = 5, Name = "Achraf Dari", Description = "", Position = PlayerPosition.CenterBack, ImgPath = "Achraf_Dari.jpg", DateOfBirth = new DateTime(1997, 1, 1), Nationality = "Morocco" },
