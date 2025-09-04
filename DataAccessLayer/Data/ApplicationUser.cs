@@ -13,5 +13,10 @@ namespace DataAccessLayer.Data
         public string LastName { get; set; } = string.Empty;
         public string? Address { get; set; }
         public int Points { get; set; } = 0;
+        public string? NationalId { get; set; }
+        public string? ProfilePictureUrl { get; set; }
+        public string? NationalIdFrontImage { get; set; }
+        public string? NationalIdBackImage { get; set; }
+
     }
 }

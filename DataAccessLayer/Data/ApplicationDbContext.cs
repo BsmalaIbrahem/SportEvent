@@ -32,6 +32,7 @@ namespace DataAccessLayer.Data
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<New> News { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<TicketPrice> TicketPrice { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -5,8 +5,11 @@ using DataAccessLayer.Repositories.IRepositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using NuGet.Protocol.Core.Types;
 using PresentationLayer.ViewModels;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace PresentationLayer.Areas.Customer.Controllers
 {
@@ -131,5 +134,37 @@ namespace PresentationLayer.Areas.Customer.Controllers
             return View(matchPage);
 
         }
+    
+        
+        public async Task<IActionResult> AvailableForBooking(PageFilterVM filter)
+        {
+            Expression<Func<Match, bool>>? filterExpression = m => DateOnly.FromDateTime(m.MatchDate) > DateOnly.FromDateTime(DateTime.Now)
+                                                                    && m.IsBookable == true;
+
+            var matches = await _unitOfWork.MatchRepository.GetAllAsync(
+                                                     filter: filterExpression,
+                                                     includeChain: q => q.Include(m => m.HomeTeam)
+                                                                        .Include(m => m.AwayTeam)
+                                                                        .Include(t => t.Tournament)
+                                                                        .Include(t => t.TicketPrices),
+                                                    skip: filter.SkipNumber, take: filter.PageSize,
+                                                    orderBy: q => q.OrderBy(m => m.MatchDate)
+                                       );
+
+            var data = new ModelsWithPaginationVM<Match>
+            {
+                Items = matches,
+                Pagination = new PaginationVM
+                {
+                    PageNumber = filter.PageNumber ?? 1,
+                    PageSize = filter.PageSize ?? 5,
+                    TotalCount = await _unitOfWork.MatchRepository.CountAsync(filterExpression)
+                }
+
+            };
+
+            return View(data);
+        }
+
     }
 }

@@ -21,6 +21,7 @@ namespace DataAccessLayer.Models
         public TicketStatus Status { get; set; }
         public DateTime ExpiryDate { get; set; }
         public decimal Price { get; set; }
+        public TicketCategory Category { get; set; }
         public string? PaymentMethod { get; set; }
         public string? PaymentId { get; set; }
         public string? SessionId { get; set; }

@@ -100,7 +100,7 @@ namespace PresentationLayer.Areas.Admin.Controllers
                 Status = request.MatchStatus,
                 HomeScore = request.HomeScore,
                 AwayScore = request.AwayScore,
-                AvailableTickets = request.AvailableTickets,
+                //AvailableTickets = request.AvailableTickets,
                 TicketPrice = request.TicketPrice,
 
             };
@@ -178,7 +178,7 @@ namespace PresentationLayer.Areas.Admin.Controllers
             match.Status = request.MatchStatus;
             match.HomeScore = request.HomeScore;
             match.AwayScore = request.AwayScore;
-            match.AvailableTickets = request.AvailableTickets;
+           // match.AvailableTickets = request.AvailableTickets;
             match.TicketPrice = request.TicketPrice;
             _unitOfWork.MatchRepository.Update(match);
             await _unitOfWork.MatchRepository.SaveChangesAsync();

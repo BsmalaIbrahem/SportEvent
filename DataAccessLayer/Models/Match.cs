@@ -25,7 +25,13 @@ namespace DataAccessLayer.Models
         public int TournamentId { get; set; }
         [ForeignKey(nameof(TournamentId))]
         public Tournament Tournament { get; set; } = null!;
-        public int AvailableTickets { get; set; } = 0;
+        public ICollection<TicketPrice> TicketPrices { get; set; } = new List<TicketPrice>();
+        [NotMapped]
+        public int AvailableTickets => TicketPrices.Sum(tp => tp.AvailableTickets);
         public decimal TicketPrice { get; set; } = 0;
+        public bool IsBookable { get; set; } = false;
+        [NotMapped]
+        public bool IsAvailableForBooking => DateOnly.FromDateTime(MatchDate) > DateOnly.FromDateTime(DateTime.Now)
+                                           && IsBookable == true && AvailableTickets > 0;
     }
 }
