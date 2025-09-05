@@ -1,6 +1,7 @@
 ﻿@using CoreLayer.Helpers
 @using DataAccessLayer.Models
 @using PresentationLayer.ViewModels
+@using System.Globalization
 @model ModelsWithPaginationVM<Match>
 @{
     ViewData["Title"] = "Available Matches for Booking";
@@ -475,6 +476,23 @@
         }
 
         }
+        
+        .team-logo {
+            width: 70px;
+            height: 70px;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: 0.2s ease;
+        }
+        .team-logo:hover {
+            transform: scale(1.05);
+        }
+        .team-logo.selected-team {
+            border: 3px solid #007bff;
+            background-color:#007bff;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
+        }
+
     </style>
 
 </head>
@@ -559,22 +577,40 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title">
-                                        <i class="bi bi-ticket-perforated me-2"></i> @item.HomeTeam.Name VS @item.AwayTeam.Name
+                                        <i class="bi bi-ticket-perforated me-2"></i> Add Ticket To Cart
                                     </h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
-                                <div class="modal-body">
-                                    <div class="match-info">
-                                        <h5><i class="bi bi-stadium"></i> Match Information</h5>
-                                        <p><strong>Stadium:</strong> @item.Location</p>
-                                        <p><strong>City:</strong>Cairo</p>
-                                        <p><strong>Date:</strong> @item.MatchDate.ToString("ddd dd MMM yyyy")</p>
-                                        <p><strong>Time:</strong> @item.MatchDate.ToString("hh:mm tt")</p>
+                              <div class="modal-body">
+                                    <!-- اختيار الفريق -->
+                                    <div id="team-select-@item.Id" class="d-flex justify-content-around  my-3" style="align-items:center">
+                                        <div style="width:150px;  text-align:center">
+                                             <img src="@Url.Content("~/assets/images/teamsLogo/" + item.HomeTeam.LogoUrl)"
+                                             alt="@item.HomeTeam.Name" class="team-logo mx-3"
+                                             onclick="selectTeam('@item.Id','Home', '@item.HomeTeam.Name')">
+                                             <h5>@item.HomeTeam.Name</h5>
+                                        </div>
+                                         <div class="match-info" style="text-align:center">
+                                            <p><strong></strong> @item.Location</p>
+                                            <p><strong></strong> @item.MatchDate.ToString("ddd dd MMM yyyy")</p>
+                                            <p><strong></strong> @item.MatchDate.ToString("hh:mm tt")</p>
+                                        </div>
+                                       <div style="width:150px; text-align:center">
+                                             <img src="@Url.Content("~/assets/images/teamsLogo/" + item.AwayTeam.LogoUrl)"
+                                             alt="@item.AwayTeam.Name" class="team-logo mx-3"
+                                             onclick="selectTeam('@item.Id','Away', '@item.AwayTeam.Name')">
+                                             <h5>@item.AwayTeam.Name</h5>
+                                       </div>
+                                      
                                     </div>
+
+                                    <p id="selected-team-@item.Id" class="text-center text-primary fw-bold">
+                                        Please select a team
+                                    </p>
 
                                     <h6 class="mb-3">Specify the number of tickets</h6>
                                     <div class="limit-notice">
-                                        <i class="bi bi-info-circle"></i> You can book up to only 4 tickets per match.
+                                        <i class="bi bi-info-circle"></i> You can book up to only 4 tickets per team.
                                     </div>
 
                                     <div class="ticket-options" id="tickets-@item.Id">
@@ -583,25 +619,49 @@
                                             <div class="ticket-category">
                                                 <div class="category-info">
                                                     <span class="category-name">@ticket.Category.GetDisplayName()</span>
-                                                    <span class="category-status @(ticket.AvailableTickets > 0 ? "available" : "sold-out")">
-                                                        @(ticket.AvailableTickets > 0 ? "Available" : "Sold Out")
+
+                                                    <!-- عدد المتاح لكل فريق -->
+                                                    <span class="category-status available"
+                                                          id="avail-@item.Id-Home-@ticket.Category"
+                                                          style="display:none">
+                                                        @ticket.HomeTickets available
                                                     </span>
+                                                    <span class="category-status available"
+                                                          id="avail-@item.Id-Away-@ticket.Category"
+                                                          style="display:none">
+                                                        @ticket.AwayTickets available
+                                                    </span>
+
                                                 </div>
-                                                <span class="category-price">@ticket.Price.ToString("C")</span>
+                                                <span class="category-price">@ticket.Price.ToString("C", new CultureInfo("en-EG"))</span>
                                                 <div class="quantity-controls">
-                                                    @if (ticket.AvailableTickets > 0)
-                                                    {
-                                                        <button class="quantity-btn" onclick="updateQuantity('@item.Id','@ticket.Category', -1)" disabled>-</button>
-                                                        <span class="quantity-value" id="@($"q-{item.Id}-{ticket.Category}")">0</span>
-                                                        <button class="quantity-btn" onclick="updateQuantity('@item.Id','@ticket.Category', 1)">+</button>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="quantity-value">0</span>
-                                                    }
+                                                    <button class="quantity-btn"
+                                                            onclick="updateQuantity('@item.Id','@ticket.Category', -1)">-</button>
+                    
+                                                    <!-- قيم لكل فريق -->
+                                                    <span class="quantity-value"
+                                                          id="q-@item.Id-Home-@ticket.Category"
+                                                          style="display:none;">0</span>
+                                                    <span class="quantity-value"
+                                                          id="q-@item.Id-Away-@ticket.Category"
+                                                          style="display:none;">0</span>
+
+                                                    <button class="quantity-btn"
+                                                            onclick="updateQuantity('@item.Id','@ticket.Category', 1)">+</button>
                                                 </div>
                                             </div>
                                         }
+                                        <script>
+                                            (window._matchInitBuffer = window._matchInitBuffer || []).push({
+                                                matchId: '@item.Id',
+                                                categories: [
+                                                    @foreach (var ticket in item.TicketPrices)
+                                                    {
+                                                        @: { category: "@ticket.Category", price: @ticket.Price, homeTickets: @ticket.HomeTickets, awayTickets: @ticket.AwayTickets },
+                                                    }
+                                                ]
+                                            });
+                                        </script>
                                     </div>
 
                                     <div class="total-section">
@@ -619,6 +679,17 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                
+                                <div class="modal-footer d-flex justify-content-between">
+                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                        <i class="bi bi-x-circle me-1"></i> Cancel
+                                    </button>
+                                    <button type="button" class="btn btn-success" onclick="confirmBooking('@item.Id')">
+                                        <i class="bi bi-check-circle me-1"></i> Add To Cart 
+                                    </button>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -632,40 +703,145 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-   <script>
-       let ticketData = {}; // structure: { matchId: { category: {price, quantity, max}, ... } }
+ <script>
+let ticketData = {}; // { matchId: { Home: {cat:{}}, Away: {cat:{}}, selectedTeam } }
 
-        function initMatch(matchId, categories) {
-            ticketData[matchId] = {};
-            categories.forEach(cat => {
-                ticketData[matchId][cat.category] = {
-                    price: cat.price,
-                    quantity: 0,
-                    max: cat.availableTickets
-                };
+function initMatch(matchId, categories) {
+    ticketData[matchId] = { Home: {}, Away: {}, selectedTeam: null };
+
+    categories.forEach(c => {
+        ticketData[matchId].Home[c.category] = { price: c.price, quantity: 0, max: c.homeTickets };
+        ticketData[matchId].Away[c.category] = { price: c.price, quantity: 0, max: c.awayTickets };
+    });
+}
+function selectTeam(matchId, team, teamName) {
+    // لو غيّر الفريق من قبل
+    if (ticketData[matchId].selectedTeam && ticketData[matchId].selectedTeam !== team) {
+        // reset الكميات
+        Object.keys(ticketData[matchId].Home).forEach(cat => {
+            ticketData[matchId].Home[cat].quantity = 0;
+            ticketData[matchId].Away[cat].quantity = 0;
+
+            // reset UI quantities
+            let qHome = document.getElementById(`q-${matchId}-Home-${cat}`);
+            let qAway = document.getElementById(`q-${matchId}-Away-${cat}`);
+            if (qHome) qHome.innerText = "0";
+            if (qAway) qAway.innerText = "0";
+
+            // إخفاء الـ availability
+            let homeAvail = document.getElementById(`avail-${matchId}-Home-${cat}`);
+            let awayAvail = document.getElementById(`avail-${matchId}-Away-${cat}`);
+            if (homeAvail) homeAvail.style.display = "none";
+            if (awayAvail) awayAvail.style.display = "none";
+        });
+
+        // reset totals
+        document.getElementById(`subtotal-${matchId}`).innerText = "EGP 0.00";
+        document.getElementById(`grand-total-${matchId}`).innerText = "EGP 0.00";
+        document.getElementById(`tickets-count-${matchId}`).innerText = "0";
+    }
+
+    // خزّن الفريق الجديد
+    ticketData[matchId].selectedTeam = team;
+
+    // تحديث الواجهة (highlight على الفريق المختار)
+    document.querySelectorAll(`#team-select-${matchId} .team-logo`).forEach(img => {
+        img.classList.remove("selected-team");
+    });
+    document.querySelector(`#team-select-${matchId} img[onclick*="'${team}']`)
+          ?.classList.add("selected-team");
+
+    // إظهار الكاونترات والـ availability الخاصة بالفريق الحالي فقط
+    ["Home", "Away"].forEach(t => {
+        Object.keys(ticketData[matchId][t]).forEach(cat => {
+            let qEl = document.getElementById(`q-${matchId}-${t}-${cat}`);
+            let availEl = document.getElementById(`avail-${matchId}-${t}-${cat}`);
+
+            if (qEl) qEl.style.display = (t === team ? "inline" : "none");
+            if (availEl) {
+                if (t === team) {
+                    availEl.style.display = "inline";
+                    let max = ticketData[matchId][team][cat].max;
+                    availEl.textContent = max > 0 ? "" : "Sold out";
+                } else {
+                    availEl.style.display = "none";
+                }
+            }
+        });
+    });
+
+    // نص الفريق الحالي
+    let label = document.getElementById(`selected-team-${matchId}`);
+    if (label) {
+        label.innerText = `Booking for ${teamName} Team`;
+    }
+}
+
+
+
+
+function updateQuantity(matchId, category, change) {
+    let selectedTeam = ticketData[matchId].selectedTeam;
+    if (!selectedTeam) { alert("Please select a team first."); return; }
+
+    let data = ticketData[matchId][selectedTeam][category];
+    let totalTickets = Object.values(ticketData[matchId][selectedTeam]).reduce((t, c) => t + c.quantity, 0);
+
+    if (change > 0 && totalTickets >= 4) { alert('Max 4 tickets per team.'); return; }
+    if (change > 0 && data.quantity >= data.max) { alert('No more tickets available.'); return; }
+
+    data.quantity = Math.max(0, data.quantity + change);
+
+    // update UI
+    document.getElementById(`q-${matchId}-${selectedTeam}-${category}`).textContent = data.quantity;
+
+    let total = 0, count = 0;
+    Object.values(ticketData[matchId][selectedTeam]).forEach(c => {
+        total += c.quantity * c.price;
+        count += c.quantity;
+    });
+
+    document.getElementById(`tickets-count-${matchId}`).textContent = count;
+    document.getElementById(`subtotal-${matchId}`).textContent = "EGP " + total.toFixed(2);
+    document.getElementById(`grand-total-${matchId}`).textContent = "EGP " + total.toFixed(2);
+}
+
+function submitBooking(matchId) {
+    let team = ticketData[matchId].selectedTeam;
+    if (!team) { alert("Please select a team first."); return; }
+
+    let booking = ticketData[matchId][team];
+    let tickets = [];
+
+    for (let category in booking) {
+        if (booking[category].quantity > 0) {
+            tickets.push({
+                category: category,
+                quantity: booking[category].quantity,
+                price: booking[category].price
             });
         }
+    }
 
-        function updateQuantity(matchId, category, change) {
-            let data = ticketData[matchId][category];
-            let totalTickets = Object.values(ticketData[matchId]).reduce((t, c) => t + c.quantity, 0);
+    if (tickets.length === 0) { alert("Select at least one ticket."); return; }
 
-            if (change > 0 && totalTickets >= 4) {
-                alert('You can book up to only 4 tickets per match.');
-                return;
-            }
+    $.ajax({
+        url: '/Booking/Confirm',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ matchId: matchId, team: team, tickets: tickets }),
+        success: function () { alert("Booking confirmed!"); location.reload(); },
+        error: function () { alert("Error while booking."); }
+    });
+}
 
-            data.quantity = Math.max(0, data.quantity + change);
-            document.getElementById(`q-${matchId}-${category}`).textContent = data.quantity;
+function processInitBuffer() {
+    (window._matchInitBuffer || []).forEach(x => initMatch(x.matchId, x.categories));
+    window._matchInitBuffer = [];
+}
+document.addEventListener('DOMContentLoaded', processInitBuffer);
+</script>
 
-            let total = Object.values(ticketData[matchId])
-                .reduce((sum, c) => sum + (c.quantity * c.price), 0);
 
-            document.getElementById(`tickets-count-${matchId}`).textContent = totalTickets;
-            document.getElementById(`subtotal-${matchId}`).textContent = total.toFixed(2);
-            document.getElementById(`grand-total-${matchId}`).textContent = total.toFixed(2);
-        }
-
-   </script>
 </body>
 </html>

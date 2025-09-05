@@ -55,6 +55,9 @@
                                 <li class="@(currentController == "Match" && currentAction == "Index" ? "active" : "")">
                                     <a asp-controller="Match" asp-action="Index" class="nav-link">Matches</a>
                                 </li>
+                                <li class="@(currentController == "Match" && currentAction == "AvailableForBooking" ? "active" : "")">
+                                    <a asp-controller="Match" asp-action="AvailableForBooking" class="nav-link">Book Tickets</a>
+                                </li>
                                 <li class="@(currentController == "Team" && currentAction == "Index" ? "active" : "")">
                                     <a asp-controller="Team" asp-action="Index" class="nav-link">Teams</a>
                                 </li>
