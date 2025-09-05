@@ -3,43 +3,282 @@
     ViewData["Title"] = "Login";
 }
 
-<div class="site-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6" style="margin:auto">
-                <form method="post">
-                    <h2 class="text-light text-center mb-5">Login</h2>
-                    <div asp-validation-summary="All" class="text-danger mb-3"></div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="First Name" asp-for="UserNameOrEmail">
-                        <span asp-validation-for="UserNameOrEmail" class="text-danger"></span>
-                    </div>
-                   
-                    <div class="form-group">
-                        <input type="password" class="form-control" placeholder="Password" asp-for="Password">
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-                    <div class="form-group" style="padding-left:20px;">
-                        <input class="form-check-input" asp-for="RememberMe" type="checkbox" id="terms-conditions" />
-                        <label class="form-check-label" for="terms-conditions">
-                            Remember Me
-                        </label>
-                    </div>
-                   
-                    <hr style="background-color:white;"/>
-                    <p>
-                        <span>New on our platform?</span>
-                        <a asp-action="Register">
-                            <span>Create an account</span>
-                        </a>
-                    </p>
-                    <div class="form-group" style="text-align:center; margin-top:30px;">
-                        <input type="submit" class="btn btn-primary py-3 px-5" value="Login">
-                    </div>
-                </form>
-               
-            </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Matchy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3d5ee1;
+            --secondary-color: #2c3e50;
+            --dark-color: #1a1d20;
+            --light-color: #f8f9fa;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --border-color: #4a5568;
+        }
 
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1552667466-07770ae110d0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80') no-repeat center center;
+            color: var(--light-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: linear-gradient(145deg, #2d3748, #1a202c);
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid var(--border-color);
+        }
+
+        .login-header {
+            background: linear-gradient(135deg, var(--primary-color), #2a4bcc);
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+
+            .login-header::after {
+                content: '';
+                position: absolute;
+                bottom: -10px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 80%;
+                height: 20px;
+                background: var(--primary-color);
+                filter: blur(15px);
+                opacity: 0.5;
+                z-index: -1;
+            }
+
+            .login-header h2 {
+                margin: 0;
+                font-weight: 700;
+                font-size: 28px;
+                color: white;
+            }
+
+        .login-body {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-control {
+            background-color: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--light-color);
+            padding: 12px 15px 12px 45px;
+            height: 50px;
+            transition: all 0.3s;
+        }
+
+            .form-control:focus {
+                background-color: rgba(255, 255, 255, 0.12);
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 3px rgba(61, 94, 225, 0.2);
+                color: var(--light-color);
+            }
+
+            .form-control::placeholder {
+                color: #a0aec0;
+            }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            color: #a0aec0;
+            width: 20px;
+            text-align: center;
+        }
+
+        .text-danger {
+            font-size: 13px;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .validation-summary {
+            background-color: rgba(220, 53, 69, 0.15);
+            border-left: 4px solid var(--danger-color);
+            padding: 12px 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+            .validation-summary ul {
+                margin: 0;
+                padding-left: 20px;
+            }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .form-check-input {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
+        }
+
+            .form-check-input:checked {
+                background-color: var(--primary-color);
+                border-color: var(--primary-color);
+            }
+
+        .form-check-label {
+            color: #a0aec0;
+            font-size: 14px;
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, var(--primary-color), #2a4bcc);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            padding: 12px 20px;
+            width: 100%;
+            font-size: 16px;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+            .btn-login:hover {
+                background: linear-gradient(135deg, #2a4bcc, #1e3bb8);
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(61, 94, 225, 0.4);
+            }
+
+        .register-link {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+            .register-link a {
+                color: var(--primary-color);
+                text-decoration: none;
+                font-weight: 600;
+                transition: all 0.3s;
+            }
+
+                .register-link a:hover {
+                    color: #2a4bcc;
+                    text-decoration: underline;
+                }
+
+        .Forget-link {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+            .Forget-link a {
+                color: var(--primary-color);
+                text-decoration: none;
+                font-weight: 600;
+                transition: all 0.3s;
+            }
+
+                .Forget-link a:hover {
+                    color: #2a4bcc;
+                    text-decoration: underline;
+                }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #a0aec0;
+            font-size: 14px;
+        }
+
+            .footer a {
+                color: var(--primary-color);
+                text-decoration: none;
+            }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h2><i class="fas fa-sign-in-alt me-2"></i>Welcome Back</h2>
+        </div>
+
+        <div class="login-body">
+            <div asp-validation-summary="All" class="validation-summary mb-4"></div>
+
+            <form method="post">
+                <div class="form-group">
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" class="form-control" placeholder="Username or Email" asp-for="UserNameOrEmail">
+                    <span asp-validation-for="UserNameOrEmail" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" class="form-control" placeholder="Password" asp-for="Password">
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="remember-me">
+                    <input class="form-check-input" asp-for="RememberMe" type="checkbox" id="remember-me" />
+                    <label class="form-check-label" for="remember-me">
+                        Remember Me
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-login">
+                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                </button>
+            </form>
+
+            <div class="register-link">
+                <p>New on our platform? <a asp-action="Register">Create an account</a></p>
+            </div>
+            <div class="Forget-link">
+                <p>Old User? <a asp-action="ForgetPassword">Forget Password</a></p>
+            </div>
         </div>
     </div>
-</div>
+
+    <div class="footer">
+        &copy; 2023 Matchy - Football Platform
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.form-control').on('focus', function() {
+                $(this).prev('.input-icon').css('color', '#3d5ee1');
+            }).on('blur', function() {
+                $(this).prev('.input-icon').css('color', '#a0aec0');
+            });
+        });
+    </script>
+</body>
+</html>
