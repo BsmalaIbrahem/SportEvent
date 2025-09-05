@@ -20,6 +20,9 @@ namespace DataAccessLayer.Models
         public int MatchId { get; set; }
         [ForeignKey(nameof(MatchId))]
         public Match Match { get; set; } = null!;
+        public int TeamId { get; set; }
+        [ForeignKey(nameof(TeamId))]
+        public Team Team { get; set; } = null!;
         public TicketCategory TicketCategory { get; set; }
         public int Quantity { get; set; } = 1;
 
