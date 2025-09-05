@@ -18,6 +18,7 @@ namespace DataAccessLayer.Repositories.IRepositories
         ITicketRepository TicketRepository { get; }
         ICartRepository CartRepository { get; }
         ICartItemRepository CartItemRepository { get; }
-
+        ITicketPriceRepository TicketPriceRepository { get; }
+        Task SaveChangesAsync();
     }
 }

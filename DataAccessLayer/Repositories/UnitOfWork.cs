@@ -12,7 +12,7 @@ namespace DataAccessLayer.Repositories
             IContactRepository contactRepository,IMatchPlayerRepository matchPlayerRepository,
             IMatchRepository matchRepository,IMatchStatisticRepository matchStatisticRepository,
             INewRepository newRepository,IPlayerRepository playerRepository,ITeamRepository teamRepository
-            ,ITeamPlayerRepository teamPlayerRepository,ITournamentRepository tournamentRepository, ITicketRepository ticketRepository,
+            ,ITeamPlayerRepository teamPlayerRepository,ITournamentRepository tournamentRepository, ITicketRepository ticketRepository,ITicketPriceRepository ticketPriceRepository,
             ICartRepository cartRepository, ICartItemRepository cartItemRepository,
             ApplicationDbContext context)
         {
@@ -27,6 +27,7 @@ namespace DataAccessLayer.Repositories
             TeamPlayerRepository = teamPlayerRepository;
             TournamentRepository = tournamentRepository;
             TicketRepository = ticketRepository;
+            TicketPriceRepository = ticketPriceRepository;
             CartRepository = cartRepository;
             CartItemRepository = cartItemRepository;
             _context = context;
@@ -45,9 +46,14 @@ namespace DataAccessLayer.Repositories
         public IApplicationUserOTPRepository ApplicationUserOTPRepository { get; }
 
         public ITicketRepository TicketRepository {get; }
+        public ITicketPriceRepository TicketPriceRepository { get; }
         public ICartRepository CartRepository { get; }
         public ICartItemRepository CartItemRepository { get; }
 
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
         void IDisposable.Dispose()
         {
         }
