@@ -30,6 +30,7 @@ namespace DataAccessLayer.Models
         public int AvailableTickets => TicketPrices.Sum(tp => tp.AvailableTickets);
         public decimal TicketPrice { get; set; } = 0;
         public bool IsBookable { get; set; } = false;
+        public bool isBigMatch { get; set; } = false;
         [NotMapped]
         public bool IsAvailableForBooking => DateOnly.FromDateTime(MatchDate) > DateOnly.FromDateTime(DateTime.Now)
                                            && IsBookable == true && AvailableTickets > 0;
