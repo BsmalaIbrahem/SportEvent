@@ -25,6 +25,7 @@ namespace DataAccessLayer.Models
         public string? PaymentMethod { get; set; }
         public string? PaymentId { get; set; }
         public string? SessionId { get; set; }
+        public string? ReferenceId { get; set; }
 
     }
 }
