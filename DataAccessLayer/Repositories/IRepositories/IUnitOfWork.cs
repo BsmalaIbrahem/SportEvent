@@ -16,6 +16,8 @@ namespace DataAccessLayer.Repositories.IRepositories
         ITournamentRepository TournamentRepository { get; }
         IApplicationUserOTPRepository ApplicationUserOTPRepository { get; }
         ITicketRepository TicketRepository { get; }
+        ICartRepository CartRepository { get; }
+        ICartItemRepository CartItemRepository { get; }
 
     }
 }

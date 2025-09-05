@@ -13,6 +13,7 @@ namespace DataAccessLayer.Repositories
             IMatchRepository matchRepository,IMatchStatisticRepository matchStatisticRepository,
             INewRepository newRepository,IPlayerRepository playerRepository,ITeamRepository teamRepository
             ,ITeamPlayerRepository teamPlayerRepository,ITournamentRepository tournamentRepository, ITicketRepository ticketRepository,
+            ICartRepository cartRepository, ICartItemRepository cartItemRepository,
             ApplicationDbContext context)
         {
             CoachRepository = coachRepository;
@@ -26,6 +27,8 @@ namespace DataAccessLayer.Repositories
             TeamPlayerRepository = teamPlayerRepository;
             TournamentRepository = tournamentRepository;
             TicketRepository = ticketRepository;
+            CartRepository = cartRepository;
+            CartItemRepository = cartItemRepository;
             _context = context;
         }
         public ICoachRepository CoachRepository { get; }
@@ -42,6 +45,8 @@ namespace DataAccessLayer.Repositories
         public IApplicationUserOTPRepository ApplicationUserOTPRepository { get; }
 
         public ITicketRepository TicketRepository {get; }
+        public ICartRepository CartRepository { get; }
+        public ICartItemRepository CartItemRepository { get; }
 
         void IDisposable.Dispose()
         {

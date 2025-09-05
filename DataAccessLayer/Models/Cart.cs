@@ -23,8 +23,7 @@ namespace DataAccessLayer.Models
         public int TeamId { get; set; }
         [ForeignKey(nameof(TeamId))]
         public Team Team { get; set; } = null!;
-        public TicketCategory TicketCategory { get; set; }
-        public int Quantity { get; set; } = 1;
+        public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
 
     }
 }

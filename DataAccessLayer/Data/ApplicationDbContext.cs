@@ -34,6 +34,7 @@ namespace DataAccessLayer.Data
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<TicketPrice> TicketPrice { get; set; }
         public DbSet<Cart> Cart { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
