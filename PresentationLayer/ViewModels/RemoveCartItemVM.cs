@@ -5,6 +5,6 @@ namespace PresentationLayer.ViewModels
     public class RemoveCartItemVM
     {
         public int CartId { get; set; }
-        public TicketCategory TicketCategory { get; set; }
+        public string TicketCategory { get; set; }
     }
 }

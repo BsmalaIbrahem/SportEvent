@@ -1,5 +1,732 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using DataAccessLayer.Models
+@model IEnumerable<Cart>
+
 @{
+    ViewData["Title"] = "My Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+    <link rel="stylesheet" href="~/assets/Admin/vendors/mdi/css/materialdesignicons.min.css" />
+    <style>
+    :root {
+        --primary-color: #3d5ee1;
+        --secondary-color: #2c3e50;
+        --dark-color: #1a1d20;
+        --light-color: #f8f9fa;
+        --accent-red: #dc3545;
+        --accent-green: #28a745;
+        --accent-gold: #ffd700;
+        --card-bg: #2d3748;
+        --border-color: #4a5568;
+        --vip-color: #ffd700;
+        --cat1-color: #dc3545;
+        --cat2-color: #fd7e14;
+        --cat3-color: #20c997;
+    }
+
+    .cart-section {
+        background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), url('https://images.unsplash.com/photo-1575361204480-aadea25e6e68?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80') no-repeat center center;
+        background-size: cover;
+        min-height: 100vh;
+        padding: 60px 0;
+    }
+
+    .page-title {
+        color: white;
+        text-align: center;
+        margin-bottom: 40px;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        position: relative;
+        padding-bottom: 15px;
+    }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--accent-red);
+        }
+
+    .cart-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .cart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .cart-count {
+        background: linear-gradient(135deg, var(--primary-color), #2a4bcc);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+    }
+
+        .cart-count i {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+
+    .cart-summary {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 30px;
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--border-color);
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        color: white;
+    }
+
+    .summary-total {
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: var(--accent-gold);
+        border-top: 1px solid var(--border-color);
+        padding-top: 10px;
+        margin-top: 10px;
+    }
+
+    .checkout-btn {
+        background: linear-gradient(135deg, var(--accent-green), #1e7e34);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-weight: 600;
+        width: 100%;
+        margin-top: 15px;
+        transition: all 0.3s;
+    }
+
+        .checkout-btn:hover {
+            background: linear-gradient(135deg, #1e7e34, #145a23);
+            transform: translateY(-2px);
+        }
+
+    .matches-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 25px;
+    }
+
+    .match-card {
+        background: linear-gradient(145deg, var(--card-bg), #1a202c);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+        .match-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+        }
+
+    .match-header {
+        padding: 20px;
+        text-align: center;
+        position: relative;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .match-teams {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+
+    .team-name {
+        color: white;
+        font-weight: 600;
+        font-size: 18px;
+        text-align: center;
+        flex: 1;
+    }
+
+    .vs-badge {
+        background: var(--accent-red);
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    .match-date {
+        color: #a0aec0;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    .match-body {
+        padding: 20px;
+    }
+
+    .match-info {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .info-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .info-label {
+        color: #a0aec0;
+        font-size: 12px;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .info-value {
+        color: white;
+        font-weight: 600;
+        font-size: 16px;
+    }
+
+    .ticket-items {
+        margin: 20px 0;
+    }
+
+    .ticket-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 15px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        margin-bottom: 10px;
+        border: 1px solid var(--border-color);
+    }
+
+    .ticket-type {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .ticket-badge {
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .category-vip {
+        background: var(--vip-color);
+        color: #000;
+    }
+
+    .category-cat1 {
+        background: var(--cat1-color);
+        color: white;
+    }
+
+    .category-cat2 {
+        background: var(--cat2-color);
+        color: white;
+    }
+
+    .category-cat3 {
+        background: var(--cat3-color);
+        color: white;
+    }
+
+    .ticket-price {
+        color: var(--accent-gold);
+        font-weight: 600;
+    }
+
+    .quantity-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .quantity-btn {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid var(--border-color);
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .quantity-btn:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+    .quantity-value {
+        color: white;
+        font-weight: 600;
+        min-width: 30px;
+        text-align: center;
+    }
+
+    .remove-btn {
+        background: rgba(220, 53, 69, 0.2);
+        color: var(--accent-red);
+        border: 1px solid var(--accent-red);
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 12px;
+    }
+
+        .remove-btn:hover {
+            background: var(--accent-red);
+            color: white;
+        }
+
+    .item-total {
+        color: white;
+        font-weight: 600;
+        margin-top: 5px;
+        text-align: right;
+    }
+
+    .match-total {
+        text-align: center;
+        margin: 20px 0;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+    }
+
+    .total-label {
+        color: #a0aec0;
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+    .total-value {
+        color: var(--accent-gold);
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    .no-tickets {
+        text-align: center;
+        color: white;
+        grid-column: 1 / -1;
+        padding: 60px 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+    }
+
+        .no-tickets i {
+            font-size: 60px;
+            color: var(--accent-gray);
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .no-tickets h3 {
+            color: white;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .no-tickets p {
+            color: #a0aec0;
+            margin-bottom: 25px;
+        }
+
+    .btn-browse {
+        background: linear-gradient(135deg, var(--primary-color), #2a4bcc);
+        color: white;
+        padding: 12px 25px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        transition: all 0.3s;
+    }
+
+        .btn-browse:hover {
+            background: linear-gradient(135deg, #2a4bcc, #1e3bb8);
+            color: white;
+            text-decoration: none;
+            transform: translateY(-2px);
+        }
+
+    @@media (max-width: 768px) {
+        .matches-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .cart-header {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .match-teams {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .team-name {
+            font-size: 16px;
+        }
+
+        .match-info {
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .ticket-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .quantity-controls {
+            align-self: center;
+        }
+
+        .item-total {
+            align-self: flex-end;
+        }
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .match-card {
+        animation: fadeIn 0.6s ease-out;
+    }
+</style>
+</head>
+<section class="cart-section">
+    <div class="container">
+        <h1 class="page-title">My Cart</h1>
+
+        <div class="cart-container">
+            <div class="cart-header">
+                <div class="cart-count">
+                    <i class="fas fa-shopping-cart"></i>
+                    @Model.Count() Tickets
+                </div>
+            </div>
+
+            @if (Model == null || !Model.Any())
+            {
+                <div class="no-tickets">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h3>Empty Cart</h3>
+                    <p>You haven't added any tickets yet. Browse upcoming matches and get your tickets now!</p>
+                    <a asp-area="Customer" asp-controller="Match" asp-action="Index" class="btn-browse">
+                        <i class="fas fa-search me-2"></i>Browse Matches
+                    </a>
+                </div>
+            }
+            else
+            {
+                <div class="cart-summary">
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotal"></span>
+                    </div>
+                    <div class="summary-row">
+                        <span >Discount :</span>
+                        <span id="service-fee">0</span>
+                    </div>
+                    <div class="summary-row summary-total">
+                        <span>Total:</span>
+                        <span id="total">$475.00</span>
+                    </div>
+                    <button class="checkout-btn">
+                        <i class="fas fa-lock me-2"></i>Proceed to Checkout
+                    </button>
+                </div>
+
+                <div class="matches-grid">
+                    @Html.AntiForgeryToken()
+                    @foreach (var cart in Model)
+                    {
+                        <div class="match-card">
+                            <div class="match-header">
+                                <div class="match-teams">
+                                    <div class="team-name">@cart.Match?.HomeTeam.Name</div>
+                                    <div class="vs-badge">VS</div>
+                                    <div class="team-name">@cart.Match?.AwayTeam.Name</div>
+                                </div>
+
+                                <div class="match-date">
+                                    <i class="fas fa-calendar-alt me-2"></i>
+                                    @cart.Match?.MatchDate.ToString("MMM dd, yyyy")
+                                    <i class="fas fa-clock ms-3 me-2"></i>
+                                    @cart.Match?.MatchDate.ToString("hh:mm tt")
+                                </div>
+                            </div>
+
+                            <div class="match-body">
+                                <div class="match-info">
+                                    <div class="info-item">
+                                        <span class="info-label">Stadium</span>
+                                        <span class="info-value">@cart.Match?.Location</span>
+                                    </div>
+
+                                    <div class="info-item">
+                                        <span class="info-label">League</span>
+                                        <span class="info-value"></span>
+                                    </div>
+                                </div>
+
+                                <div class="ticket-items">
+                                    @foreach (var CartItem in cart.CartItems)
+                                    {
+                                        
+                                        var price = (cart?.Match?.TicketPrices.Where(x => x.Category == CartItem.TicketCategory).FirstOrDefault()?.Price);
+                                        
+                                        <div class="ticket-item">
+                                            <div class="ticket-type">
+                                                <span class="ticket-badge category-">@CartItem.TicketCategory</span>
+                                                <span class="ticket-price">@price</span>
+                                            </div>
+                                            <div class="quantity-controls">
+                                                <button class="quantity-btn decrease" 
+                                                    data-cart-id="@CartItem.CartId"
+                                                    data-ticket-category="@CartItem.TicketCategory"
+                                                >-</button>
+                                                <span class="quantity-value">@CartItem.Quantity</span>
+                                                <button class="quantity-btn increase"
+                                                    data-cart-id="@CartItem.CartId"
+                                                    data-ticket-category="@CartItem.TicketCategory"
+                                                >+</button>
+                                            </div>
+                                           <button class="remove-btn"
+                                                    data-cart-id="@cart.Id"
+                                                    data-ticket-category="@CartItem.TicketCategory">
+                                                <i class="mdi mdi-delete"></i>
+                                            </button>
+
+                                            <div class="item-total">
+                                                @(price * CartItem.Quantity)
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+
+                                <div class="match-total">
+                                    <div class="total-label">Match Total</div>
+                                    <div class="total-value">EG600 @* $@cartItem.Tickets.Sum(t => t.Price * t.Quantity) *@</div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    // تحديث الكارت أول ما الصفحة تفتح
+    updateCartTotals();
+
+    // زيادة الكمية
+    document.querySelectorAll('.quantity-btn.increase').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const ticketItem = this.closest('.ticket-item');
+            const cartId = this.getAttribute('data-cart-id');
+            const ticketCategory = this.getAttribute('data-ticket-category');
+
+            fetch('/Customer/Cart/UpdateItemQuantity', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: JSON.stringify({
+                    CartId: parseInt(cartId),
+                    TicketCategory: ticketCategory,
+                    Increase: true
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    const quantityElement = this.previousElementSibling;
+                    let quantity = parseInt(quantityElement.textContent);
+                    quantityElement.textContent = quantity + 1;
+
+                    updateItemTotal(ticketItem);
+                    updateCartTotals();
+                } else {
+                    alert(data.message || "Error updating quantity.");
+                }
+            })
+            .catch(err => console.error(err));
+        });
+    });
+
+    // تقليل الكمية
+    document.querySelectorAll('.quantity-btn.decrease').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const ticketItem = this.closest('.ticket-item');
+            const cartId = this.getAttribute('data-cart-id');
+            const ticketCategory = this.getAttribute('data-ticket-category');
+
+            fetch('/Customer/Cart/UpdateItemQuantity', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: JSON.stringify({
+                    CartId: parseInt(cartId),
+                    TicketCategory: ticketCategory,
+                    Increase: false
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    const quantityElement = this.nextElementSibling;
+                    let quantity = parseInt(quantityElement.textContent);
+
+                    if (quantity > 1) {
+                        quantityElement.textContent = quantity - 1;
+                        updateItemTotal(ticketItem);
+                        updateCartTotals();
+                    } else {
+                        // لو السيرفر مسحها لأن الكمية بقت <= 1
+                        ticketItem.remove();
+                        updateCartTotals();
+                    }
+                } else {
+                    alert(data.message || "Error updating quantity.");
+                }
+            })
+            .catch(err => console.error(err));
+        });
+    });
+
+    // ✅ حذف العنصر (بـ confirm + fetch)
+    document.querySelectorAll('.remove-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            if (!confirm("Are you sure you want to remove this item?")) {
+                return;
+            }
+
+            const cartId = this.getAttribute('data-cart-id');
+            const ticketCategory = this.getAttribute('data-ticket-category');
+            const ticketItem = this.closest('.ticket-item');
+            const matchCard = ticketItem.closest('.match-card');
+
+            fetch('/Customer/Cart/Remove', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: JSON.stringify({
+                    CartId: parseInt(cartId),
+                    TicketCategory: ticketCategory
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    ticketItem.remove();
+                    updateCartTotals();
+
+                    if (matchCard.querySelectorAll('.ticket-item').length === 0) {
+                        matchCard.remove();
+                    }
+                } else {
+                    alert(data.message || "Error removing item.");
+                }
+            })
+            .catch(err => console.error(err));
+        });
+    });
+
+    // تحديث المجموع للعنصر
+    function updateItemTotal(item) {
+        const price = parseFloat(item.querySelector('.ticket-price').textContent.replace('EG', ''));
+        const quantity = parseInt(item.querySelector('.quantity-value').textContent);
+        item.querySelector('.item-total').textContent = 'EG' + (price * quantity).toFixed(2);
+    }
+
+    // تحديث المجاميع الكلية
+    function updateCartTotals() {
+        let subtotal = 0;
+        document.querySelectorAll('.match-card').forEach(match => {
+            let matchTotal = 0;
+            match.querySelectorAll('.ticket-item').forEach(item => {
+                const itemTotal = parseFloat(item.querySelector('.item-total').textContent.replace('EG', '')) || 0;
+                matchTotal += itemTotal;
+            });
+            match.querySelector('.total-value').textContent = 'EG' + matchTotal.toFixed(2);
+            subtotal += matchTotal;
+        });
+
+        document.getElementById('subtotal').textContent = 'EG' + subtotal.toFixed(2);
+
+        const serviceFee = 25.00;
+        document.getElementById('service-fee').textContent = 'EG' + serviceFee.toFixed(2);
+
+        const total = subtotal + serviceFee;
+        document.getElementById('total').textContent = 'EG' + total.toFixed(2);
+    }
+});
+</script>
 }

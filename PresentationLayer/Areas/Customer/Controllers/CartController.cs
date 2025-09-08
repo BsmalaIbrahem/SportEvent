@@ -25,7 +25,6 @@ namespace PresentationLayer.Areas.Customer.Controllers
             var carts = await _unitOfWork.CartRepository.GetAllAsync(
                                         filter: x => (userId != null ? x.UserId == userId : x.SessionId == sessionId),
                                         includeChain: q => q.Include(c => c.CartItems)
-                                                            .ThenInclude(i => i.Cart)
                                                             .Include(c => c.Match)
                                                             .ThenInclude(m => m.HomeTeam)
                                                             .Include(c => c.Match)
@@ -58,7 +57,7 @@ namespace PresentationLayer.Areas.Customer.Controllers
                                        );
             if (existingCart != null)
             {
-                if (existingCart.CartItems.Sum(i => i.Quantity) >= MAX_TICKETS_PER_MATCH)
+                if (request.CartItems.Sum(i => i.Quantity) >= MAX_TICKETS_PER_MATCH)
                 {
                     return Json(new { success = false, message = $"You can only add up to {MAX_TICKETS_PER_MATCH} tickets per match." });
                 }
@@ -67,7 +66,7 @@ namespace PresentationLayer.Areas.Customer.Controllers
                     return Json(new { success = false, message = "You cannot add tickets for different teams in the same match." });
                 }
 
-                if (existingCart.CartItems.Count + request.CartItems.Count > MAX_TICKETS_PER_MATCH)
+                if (existingCart.CartItems.Sum(i => i.Quantity) + request.CartItems.Sum(i => i.Quantity) >= MAX_TICKETS_PER_MATCH)
                 {
                     return Json(new { success = false, message = $"You can only add up to {MAX_TICKETS_PER_MATCH} tickets per match." });
                 }
@@ -145,11 +144,11 @@ namespace PresentationLayer.Areas.Customer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Remove(RemoveCartItemVM request)
+        public async Task<IActionResult> Remove([FromBody] RemoveCartItemVM request)
         {
             var sessionId = GetSessionId();
             var userId = User.Identity!.IsAuthenticated ? User.Claims.First(c => c.Type == "UserId").Value : null;
-            Expression<Func<CartItem, bool>> filter =  i => i.CartId == request.CartId && i.TicketCategory == request.TicketCategory
+            Expression<Func<CartItem, bool>> filter =  i => i.CartId == request.CartId && i.TicketCategory.ToString() == request.TicketCategory
                                     && (userId != null ? i.Cart.UserId == userId : i.Cart.SessionId == sessionId);
 
             var ExistingItem = await  _unitOfWork.CartItemRepository.GetOneAsync(filter);
@@ -159,51 +158,65 @@ namespace PresentationLayer.Areas.Customer.Controllers
             }
             await _unitOfWork.CartItemRepository.DeleteAsync(filter);
             await _unitOfWork.CartItemRepository.SaveChangesAsync();
-            return View();
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Edit(int cartId, TicketCategory ticketCategory)
-        {
-            var sessionId = GetSessionId();
-            var userId = User.Identity!.IsAuthenticated ? User.Claims.First(c => c.Type == "UserId").Value : null;
-            Expression<Func<CartItem, bool>> filter = i => i.CartId == cartId && i.TicketCategory == ticketCategory
-                                    && (userId != null ? i.Cart.UserId == userId : i.Cart.SessionId == sessionId);
-
-            var ExistingItem = await _unitOfWork.CartItemRepository.GetOneAsync(filter, 
-                                                                    includeChain: x => x.Include(q => q.Cart)
-                                                                                    .ThenInclude(x => x.Match)
-                                                                                    .ThenInclude(m => m.TicketPrices)
-
-                                                            );
-            if (ExistingItem == null)
-            {
-                return NotFound();
-            }
-            var data = new EditCartItemVM
-            {
-                CartId = ExistingItem.CartId,
-                TicketCategory = ExistingItem.TicketCategory,
-                Quantity = ExistingItem.Quantity
-            };
-
-            return Json(new { success = true, data = data });
+            return Json(new { success = true, message = "Cart Item Deleted successfully." });
         }
 
         [HttpPost]
-        public IActionResult Edit(EditCartItemVM request)
+        public async Task<IActionResult> UpdateItemQuantity([FromBody] UpdateItemQuantityVM request)
         {
-            return View();
+            var sessionId = GetSessionId();
+            var userId = User.Identity!.IsAuthenticated ? User.Claims.First(c => c.Type == "UserId").Value : null;
+            Expression<Func<CartItem, bool>> filter = i => i.CartId == request.CartId && i.TicketCategory.ToString() == request.TicketCategory
+                                    && (userId != null ? i.Cart.UserId == userId : i.Cart.SessionId == sessionId);
+
+            var ExistingItem = await _unitOfWork.CartItemRepository.GetOneAsync(filter, includeChain: q => q.Include(c => c.Cart).ThenInclude(x => x.CartItems));
+            if (ExistingItem == null)
+            {
+                return Json(new { success = false, message = "Item not found." });
+            }
+
+            if (request.Increase)
+            {
+                if (ExistingItem.Cart.CartItems.Sum(i => i.Quantity) >= MAX_TICKETS_PER_MATCH)
+                {
+                    return Json(new { success = false, message = $"You can only have up to {MAX_TICKETS_PER_MATCH} tickets per match." });
+                }
+                ExistingItem.Quantity += 1;
+            }
+            else
+            {
+                if (ExistingItem.Quantity <= 1)
+                {
+                    await _unitOfWork.CartItemRepository.DeleteAsync(filter);
+                    await _unitOfWork.CartItemRepository.SaveChangesAsync();
+                    return Json(new { success = false, message = "Quantity cannot be less than 1." });
+                }
+               
+                ExistingItem.Quantity -= 1;
+            }
+
+            _unitOfWork.CartItemRepository.Update(ExistingItem);
+            await _unitOfWork.CartItemRepository.SaveChangesAsync();
+
+            return Json(new { success = true, message = "Cart Item Quantity Updated successfully." } );
+
         }
 
         private string GetSessionId()
         {
-           if(HttpContext.Session.GetString("GuestSessionId") == null)
-           {
-                var sessionId = Guid.NewGuid().ToString();
-                HttpContext.Session.SetString("GuestSessionId", sessionId);
-           }
-            return HttpContext.Session.GetString("GuestSessionId")!;
+            const string cookieName = "GuestSessionId";
+            if (!Request.Cookies.TryGetValue(cookieName, out var sessionId))
+            {
+                sessionId = Guid.NewGuid().ToString();
+                Response.Cookies.Append(cookieName, sessionId, new CookieOptions
+                {
+                    Expires = DateTimeOffset.UtcNow.AddDays(30), // يعيش 30 يوم
+                    HttpOnly = true,
+                    IsEssential = true
+                });
+            }
+            return sessionId;
         }
+
     }
 }
