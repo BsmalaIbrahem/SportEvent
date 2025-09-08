@@ -132,6 +132,19 @@ namespace PresentationLayer.Areas.Identity.Controllers
                     return View(model);
                 }
                 await _signInManager.SignInAsync(user, model.RememberMe);
+                // Merge Guest Cart with User Cart
+                var sessionId = GetSessionId();
+                var existingCarts = await _unitOfWork.CartRepository.GetAllAsync(c => c.SessionId == sessionId);
+                if (existingCarts != null) 
+                {
+                    foreach(var cart in existingCarts)
+                    {
+                        cart.UserId = user.Id;
+                        cart.SessionId = null;
+                         _unitOfWork.CartRepository.Update(cart);
+                    }
+                    await _unitOfWork.CartRepository.SaveChangesAsync();
+                }
                 var roles = await _userManager.GetRolesAsync(user);
                 if (roles.Contains("SuperAdmin") || roles.Contains("Admin"))
                 {
@@ -148,6 +161,22 @@ namespace PresentationLayer.Areas.Identity.Controllers
                 ModelState.AddModelError(string.Empty, "Password is InValid");
                 return View(model);
             }
+        }
+
+        private string GetSessionId()
+        {
+            const string cookieName = "GuestSessionId";
+            if (!Request.Cookies.TryGetValue(cookieName, out var sessionId))
+            {
+                sessionId = Guid.NewGuid().ToString();
+                Response.Cookies.Append(cookieName, sessionId, new CookieOptions
+                {
+                    Expires = DateTimeOffset.UtcNow.AddDays(30),
+                    HttpOnly = true,
+                    IsEssential = true
+                });
+            }
+            return sessionId;
         }
 
         public async Task<IActionResult> Logout()

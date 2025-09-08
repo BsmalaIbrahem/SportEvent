@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PresentationLayer.ViewModels;
 using System.Linq.Expressions;
+using System.Security.Claims;
 using System.Text;
 
 namespace PresentationLayer.Areas.Customer.Controllers
@@ -21,7 +22,7 @@ namespace PresentationLayer.Areas.Customer.Controllers
         public async Task<IActionResult> Index()
         {
             var sessionId = GetSessionId();
-            var userId = User.Identity!.IsAuthenticated ? User.Claims.First(c => c.Type == "UserId").Value : null;
+            var userId = User.Identity!.IsAuthenticated ? User.FindFirstValue(ClaimTypes.NameIdentifier) : null;
             var carts = await _unitOfWork.CartRepository.GetAllAsync(
                                         filter: x => (userId != null ? x.UserId == userId : x.SessionId == sessionId),
                                         includeChain: q => q.Include(c => c.CartItems)
@@ -49,7 +50,7 @@ namespace PresentationLayer.Areas.Customer.Controllers
             }
 
             var sessionId = GetSessionId();
-            var userId = User.Identity!.IsAuthenticated ? User.Claims.First(c => c.Type == "UserId").Value : null;
+            var userId = User.Identity!.IsAuthenticated ? User.FindFirstValue(ClaimTypes.NameIdentifier) : null;
             var existingCart = await _unitOfWork.CartRepository.GetOneAsync(
                                             x => (userId != null ? x.UserId == userId : x.SessionId == sessionId)
                                             && x.MatchId == request.MatchId,
@@ -147,7 +148,7 @@ namespace PresentationLayer.Areas.Customer.Controllers
         public async Task<IActionResult> Remove([FromBody] RemoveCartItemVM request)
         {
             var sessionId = GetSessionId();
-            var userId = User.Identity!.IsAuthenticated ? User.Claims.First(c => c.Type == "UserId").Value : null;
+            var userId = User.Identity!.IsAuthenticated ? User.FindFirstValue(ClaimTypes.NameIdentifier) : null;
             Expression<Func<CartItem, bool>> filter =  i => i.CartId == request.CartId && i.TicketCategory.ToString() == request.TicketCategory
                                     && (userId != null ? i.Cart.UserId == userId : i.Cart.SessionId == sessionId);
 
@@ -165,7 +166,7 @@ namespace PresentationLayer.Areas.Customer.Controllers
         public async Task<IActionResult> UpdateItemQuantity([FromBody] UpdateItemQuantityVM request)
         {
             var sessionId = GetSessionId();
-            var userId = User.Identity!.IsAuthenticated ? User.Claims.First(c => c.Type == "UserId").Value : null;
+            var userId = User.Identity!.IsAuthenticated ? User.FindFirstValue(ClaimTypes.NameIdentifier) : null;
             Expression<Func<CartItem, bool>> filter = i => i.CartId == request.CartId && i.TicketCategory.ToString() == request.TicketCategory
                                     && (userId != null ? i.Cart.UserId == userId : i.Cart.SessionId == sessionId);
 
@@ -210,7 +211,7 @@ namespace PresentationLayer.Areas.Customer.Controllers
                 sessionId = Guid.NewGuid().ToString();
                 Response.Cookies.Append(cookieName, sessionId, new CookieOptions
                 {
-                    Expires = DateTimeOffset.UtcNow.AddDays(30), // يعيش 30 يوم
+                    Expires = DateTimeOffset.UtcNow.AddDays(30), 
                     HttpOnly = true,
                     IsEssential = true
                 });
