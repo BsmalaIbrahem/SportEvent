@@ -1,12 +1,11 @@
-﻿using Azure.Core;
-using CoreLayer.Enums;
+﻿using CoreLayer.Enums;
 using DataAccessLayer.Models;
 using DataAccessLayer.Repositories.IRepositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PresentationLayer.ViewModels;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
+using System.Text;
 
 namespace PresentationLayer.Areas.Customer.Controllers
 {
@@ -41,58 +40,68 @@ namespace PresentationLayer.Areas.Customer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(AddCartVM request)
+        [Route("Customer/[controller]/[action]")]
+        public async Task<IActionResult> Add([FromBody] AddCartVM request)
         {
-          
-            var sessionId = GetSessionId(); 
+            var existingMatch = await _unitOfWork.MatchRepository.GetOneAsync(x => x.Id == request.MatchId);
+            if (existingMatch == null)
+            {
+                return Json(new { success = false, message = "Invalid match." });
+            }
+
+            var sessionId = GetSessionId();
             var userId = User.Identity!.IsAuthenticated ? User.Claims.First(c => c.Type == "UserId").Value : null;
             var existingCart = await _unitOfWork.CartRepository.GetOneAsync(
                                             x => (userId != null ? x.UserId == userId : x.SessionId == sessionId)
                                             && x.MatchId == request.MatchId,
-                                           includeChain : q  => q.Include(c => c.CartItems)
-                                       ); 
-            if(existingCart != null)
+                                           includeChain: q => q.Include(c => c.CartItems)
+                                       );
+            if (existingCart != null)
             {
-                if(existingCart.CartItems.Sum(i => i.Quantity) >= MAX_TICKETS_PER_MATCH)
+                if (existingCart.CartItems.Sum(i => i.Quantity) >= MAX_TICKETS_PER_MATCH)
                 {
                     return Json(new { success = false, message = $"You can only add up to {MAX_TICKETS_PER_MATCH} tickets per match." });
                 }
-                if(existingCart.TeamId != request.TeamId)
+                if (existingCart.TeamId != request.TeamId)
                 {
                     return Json(new { success = false, message = "You cannot add tickets for different teams in the same match." });
                 }
 
-                if(existingCart.CartItems.Count + request.CartItems.Count > MAX_TICKETS_PER_MATCH)
+                if (existingCart.CartItems.Count + request.CartItems.Count > MAX_TICKETS_PER_MATCH)
                 {
                     return Json(new { success = false, message = $"You can only add up to {MAX_TICKETS_PER_MATCH} tickets per match." });
                 }
-                if(userId != null && existingCart.UserId == null)
+                if (userId != null && existingCart.UserId == null)
                 {
                     existingCart.UserId = userId;
                     existingCart.SessionId = null;
-                    _unitOfWork.CartRepository.Update(existingCart);                }
+                    _unitOfWork.CartRepository.Update(existingCart);
+                }
                 else
                 {
                     existingCart.SessionId = sessionId;
                 }
                 foreach (var item in request.CartItems)
                 {
-                        var existingItem = existingCart.CartItems.FirstOrDefault(i => i.TicketCategory == item.TicketCategory);
-                        if (existingItem != null)
-                        {
-                            existingItem.Quantity += item.Quantity;
-                            _unitOfWork.CartItemRepository.Update(existingItem);
-                        }
-                        else
+                    var existingItem = existingCart.CartItems.FirstOrDefault(i => i.TicketCategory.ToString() == item.TicketCategory);
+                    if (existingItem != null)
+                    {
+                        existingItem.Quantity += item.Quantity;
+                        _unitOfWork.CartItemRepository.Update(existingItem);
+                    }
+                    else
+                    {
+                        if (Enum.TryParse<TicketCategory>(item.TicketCategory, true, out var category))
                         {
                             var newItem = new CartItem
                             {
-                                TicketCategory = item.TicketCategory,
+                                TicketCategory = category,
                                 Quantity = item.Quantity,
                                 CartId = existingCart.Id
                             };
                             await _unitOfWork.CartItemRepository.AddAsync(newItem);
                         }
+                    }
                 }
                 await _unitOfWork.CartRepository.SaveChangesAsync();
                 await _unitOfWork.CartItemRepository.SaveChangesAsync();
@@ -117,14 +126,18 @@ namespace PresentationLayer.Areas.Customer.Controllers
                 await _unitOfWork.CartRepository.SaveChangesAsync();
                 foreach (var item in request.CartItems)
                 {
-                    var newItem = new CartItem
+                    if (Enum.TryParse<TicketCategory>(item.TicketCategory, true, out var category))
                     {
-                        TicketCategory = item.TicketCategory,
-                        Quantity = item.Quantity,
-                        CartId = newCart.Id
-                    };
-                    await _unitOfWork.CartItemRepository.AddAsync(newItem);
-                    await _unitOfWork.CartItemRepository.SaveChangesAsync();
+                        var newItem = new CartItem
+                        {
+                            TicketCategory = category,
+                            Quantity = item.Quantity,
+                            CartId = newCart.Id
+                        };
+                        await _unitOfWork.CartItemRepository.AddAsync(newItem);
+                        await _unitOfWork.CartItemRepository.SaveChangesAsync();
+                    }
+                    
                 }
                 return Json(new { success = true, message = "Cart created and items added successfully." });
             }

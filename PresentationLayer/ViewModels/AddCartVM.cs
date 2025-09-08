@@ -1,15 +1,15 @@
 ﻿using CoreLayer.Enums;
+using DataAccessLayer.Models;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace PresentationLayer.ViewModels
 {
     public class AddCartVM
     {
-        [Required]
         public int MatchId { get; set; }
-        [Required]
         public int TeamId { get; set; }
-        [Required]
-        public ICollection<AddCartItemVM> CartItems { get; set; } = null!;
+        public List<AddCartItemVM> CartItems { get; set; }
     }
+
 }

@@ -587,7 +587,7 @@
                                         <div style="width:150px;  text-align:center">
                                              <img src="@Url.Content("~/assets/images/teamsLogo/" + item.HomeTeam.LogoUrl)"
                                              alt="@item.HomeTeam.Name" class="team-logo mx-3"
-                                             onclick="selectTeam('@item.Id','Home', '@item.HomeTeam.Name')">
+                                             onclick="selectTeam('@item.Id','Home', '@item.HomeTeam.Name', '@item.HomeTeam.Id')">
                                              <h5>@item.HomeTeam.Name</h5>
                                         </div>
                                          <div class="match-info" style="text-align:center">
@@ -598,7 +598,7 @@
                                        <div style="width:150px; text-align:center">
                                              <img src="@Url.Content("~/assets/images/teamsLogo/" + item.AwayTeam.LogoUrl)"
                                              alt="@item.AwayTeam.Name" class="team-logo mx-3"
-                                             onclick="selectTeam('@item.Id','Away', '@item.AwayTeam.Name')">
+                                             onclick="selectTeam('@item.Id','Away', '@item.AwayTeam.Name', '@item.AwayTeam.Id')">
                                              <h5>@item.AwayTeam.Name</h5>
                                        </div>
                                       
@@ -685,9 +685,10 @@
                                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                         <i class="bi bi-x-circle me-1"></i> Cancel
                                     </button>
-                                    <button type="button" class="btn btn-success" onclick="confirmBooking('@item.Id')">
-                                        <i class="bi bi-check-circle me-1"></i> Add To Cart 
+                                    <button type="button" class="btn btn-success" onclick="addToCart('@item.Id')">
+                                        <i class="bi bi-check-circle me-1"></i> Add To Cart
                                     </button>
+
                                 </div>
 
                             </div>
@@ -714,7 +715,7 @@ function initMatch(matchId, categories) {
         ticketData[matchId].Away[c.category] = { price: c.price, quantity: 0, max: c.awayTickets };
     });
 }
-function selectTeam(matchId, team, teamName) {
+function selectTeam(matchId, team, teamName, teamId) {
     // لو غيّر الفريق من قبل
     if (ticketData[matchId].selectedTeam && ticketData[matchId].selectedTeam !== team) {
         // reset الكميات
@@ -743,6 +744,7 @@ function selectTeam(matchId, team, teamName) {
 
     // خزّن الفريق الجديد
     ticketData[matchId].selectedTeam = team;
+    ticketData[matchId].selectedTeamId = teamId;
 
     // تحديث الواجهة (highlight على الفريق المختار)
     document.querySelectorAll(`#team-select-${matchId} .team-logo`).forEach(img => {
@@ -806,32 +808,48 @@ function updateQuantity(matchId, category, change) {
     document.getElementById(`grand-total-${matchId}`).textContent = "EGP " + total.toFixed(2);
 }
 
-function submitBooking(matchId) {
+  function addToCart(matchId) {
     let team = ticketData[matchId].selectedTeam;
+    let teamId = ticketData[matchId].selectedTeamId;
     if (!team) { alert("Please select a team first."); return; }
 
     let booking = ticketData[matchId][team];
-    let tickets = [];
+    let cartItems = [];
 
     for (let category in booking) {
         if (booking[category].quantity > 0) {
-            tickets.push({
-                category: category,
-                quantity: booking[category].quantity,
-                price: booking[category].price
+            cartItems.push({
+                TicketCategory: category,
+                Quantity: booking[category].quantity
             });
         }
     }
 
-    if (tickets.length === 0) { alert("Select at least one ticket."); return; }
+    if (cartItems.length === 0) { 
+        alert("Select at least one ticket."); 
+        return; 
+    }
 
     $.ajax({
-        url: '/Booking/Confirm',
+        url: '/Customer/Cart/Add',
         type: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify({ matchId: matchId, team: team, tickets: tickets }),
-        success: function () { alert("Booking confirmed!"); location.reload(); },
-        error: function () { alert("Error while booking."); }
+        data: JSON.stringify({
+            MatchId: parseInt(matchId),
+            TeamId: parseInt(teamId),
+            CartItems: cartItems
+        }),
+        success: function (res) {
+            if (res.success) {
+                alert(res.message);
+                location.reload();
+            } else {
+                alert(res.message);
+            }
+        },
+        error: function () {
+            alert("Error while adding to cart.");
+        }
     });
 }
 

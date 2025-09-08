@@ -1,13 +1,12 @@
 ﻿using CoreLayer.Enums;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace PresentationLayer.ViewModels
 {
     public class AddCartItemVM
     {
-        [Required]
-        public TicketCategory TicketCategory { get; set; }
-        [Required]
-        public int Quantity { get; set; } = 1;
+        public string TicketCategory { get; set; }
+        public int Quantity { get; set; }
     }
 }
