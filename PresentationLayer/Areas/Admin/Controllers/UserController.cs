@@ -41,5 +41,48 @@ namespace PresentationLayer.Areas.Admin.Controllers
             };
             return View(data);
         }
+        public async Task<IActionResult> Block(string id)
+        {
+            if (id == null) return NotFound();
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound();
+
+            user.LockoutEnd = DateTimeOffset.UtcNow.AddMonths(1);
+            await _userManager.UpdateAsync(user);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Unblock(string id)
+        {
+            if (id == null) return NotFound();
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound();
+
+            user.LockoutEnd = null;
+            await _userManager.UpdateAsync(user);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeRole(string userId, string newRole)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return NotFound();
+
+            // كل الرولز الحالية
+            var currentRoles = await _userManager.GetRolesAsync(user);
+
+            // شيل كل الرولز القديمة
+            await _userManager.RemoveFromRolesAsync(user, currentRoles);
+
+            // ضيف الرول الجديدة
+            await _userManager.AddToRoleAsync(user, newRole);
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
