@@ -15,6 +15,7 @@ namespace DataAccessLayer.Models
         public int MatchId { get; set; }
         public Match Match { get; set; } = null!;
         public TicketCategory Category { get; set; } = TicketCategory.CAT2;
+        public decimal BasePrice { get; set; }
         public decimal Price { get; set; }
         public int HomeTickets { get; set; } = 0;
         public int AwayTickets { get; set; } = 0;
