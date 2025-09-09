@@ -94,6 +94,18 @@ namespace PresentationLayer.Areas.Identity.Controllers
             if (result.Succeeded)
             {
                 TempData["SuccessMessage"] = "Confirmed successfully.";
+                var sessionId = GetSessionId();
+                var existingCarts = await _unitOfWork.CartRepository.GetAllAsync(c => c.SessionId == sessionId);
+                if (existingCarts != null)
+                {
+                    foreach (var cart in existingCarts)
+                    {
+                        cart.UserId = user.Id;
+                        cart.SessionId = null;
+                        _unitOfWork.CartRepository.Update(cart);
+                    }
+                    await _unitOfWork.CartRepository.SaveChangesAsync();
+                }
                 return RedirectToAction(nameof(Login));
             }
             else
