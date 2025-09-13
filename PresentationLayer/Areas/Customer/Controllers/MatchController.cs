@@ -138,7 +138,7 @@ namespace PresentationLayer.Areas.Customer.Controllers
         
         public async Task<IActionResult> AvailableForBooking(PageFilterVM filter)
         {
-            Expression<Func<Match, bool>>? filterExpression = m => DateOnly.FromDateTime(m.MatchDate) > DateOnly.FromDateTime(DateTime.Now)
+            Expression<Func<Match, bool>>? filterExpression = m => DateOnly.FromDateTime(m.MatchDate) >= DateOnly.FromDateTime(DateTime.Now)
                                                                     && m.IsBookable == true;
 
             var matches = await _unitOfWork.MatchRepository.GetAllAsync(

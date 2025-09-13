@@ -26,7 +26,7 @@ namespace PresentationLayer.Areas.Customer.Controllers
 
         public async Task<IActionResult> Success(string referenceId)
         {
-            var ticket = await _unitOfWork.TicketRepository.GetOneAsync(x => x.ReferenceId == referenceId);
+            var ticket = await _unitOfWork.TicketRepository.GetOneAsync(x => x.ReferenceId == referenceId, includeChain:x=>x.Include(q => q.TicketMatches));
 
             if (ticket == null)
             {
