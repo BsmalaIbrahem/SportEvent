@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using PresentationLayer.HostedServices;
+using PresentationLayer.Services;
+using PresentationLayer.Services.IServices;
 using PresentationLayer.Stripe;
 using SportEvent.Repositories;
 using Stripe;
@@ -89,6 +91,12 @@ builder.Services.AddHangfireServer();
 
 builder.Services.AddHostedService<MatchStatusService>();
 builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+builder.Services.AddScoped<IPdfService, PdfService>();
+
+builder.Services.AddHangfireServer(options =>
+{
+    options.Queues = new[] { "default", "pdf-generation" };
+});
 
 var app = builder.Build();
 
@@ -130,6 +138,7 @@ RecurringJob.AddOrUpdate<CleanupExpiredTicketsService>(
     job => job.Execute(),
     Cron.Minutely()
 );
+
 
 app.MapGet("/Admin", context =>
 {
