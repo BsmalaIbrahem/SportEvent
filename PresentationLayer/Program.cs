@@ -3,6 +3,8 @@ using DataAccessLayer.Data;
 using DataAccessLayer.DBInitilizer;
 using DataAccessLayer.Repositories;
 using DataAccessLayer.Repositories.IRepositories;
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using Hangfire;
 using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Identity;
@@ -57,7 +59,8 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<TicketPricingService>();
 
 
-builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.AddScoped<IEmailSender, CustomEmailSender>();
+builder.Services.AddScoped<ICustomEmailSender, CustomEmailSender>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -85,6 +88,7 @@ builder.Services.AddHangfire(config =>
 builder.Services.AddHangfireServer();
 
 builder.Services.AddHostedService<MatchStatusService>();
+builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
 var app = builder.Build();
 
