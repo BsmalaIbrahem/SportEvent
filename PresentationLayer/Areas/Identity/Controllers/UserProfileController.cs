@@ -154,38 +154,5 @@ namespace PresentationLayer.Areas.Identity.Controllers
             }
             return View(changePassword);
         }
-
-        [HttpGet]
-        public async Task<IActionResult> MyTicket()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user is null) 
-                return Unauthorized();
-
-            var tickets = await _unitOfWork.TicketRepository.GetAllAsync(
-                includeChain: q => q
-                    .Include(t => t.Match)
-                        .ThenInclude(m => m.HomeTeam)
-                    .Include(t => t.Match)
-                        .ThenInclude(m => m.AwayTeam)
-            );
-
-            var result = tickets
-                .Where(t => t.UserId == user.Id && t.Status == TicketStatus.Confirmed)
-                .Select(t => new UserTicketVM
-                {
-                    TicketId = t.Id,
-                    HomeTeam = t.Match.HomeTeam.Name,
-                    AwayTeam = t.Match.AwayTeam.Name,
-                    MatchDate = t.Match.MatchDate,
-                    Category = t.Category,
-                    Status = t.Status,
-                    Price = t.Price
-                })
-                .ToList();
-
-
-            return View(result);
-        }
     }
 }

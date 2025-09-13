@@ -453,6 +453,11 @@
 <section class="cart-section">
     <div class="container">
         <h1 class="page-title">My Cart</h1>
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+
 
         <div class="cart-container">
             <div class="cart-header">
@@ -488,9 +493,12 @@
                         <span>Total:</span>
                         <span id="total">$475.00</span>
                     </div>
-                    <button class="checkout-btn">
-                        <i class="fas fa-lock me-2"></i>Proceed to Checkout
-                    </button>
+                   <form asp-controller="Ticket" asp-action="Pay" method="post">
+                        <button type="submit" class="checkout-btn">
+                            <i class="fas fa-lock me-2"></i> Proceed to Checkout
+                        </button>
+                    </form>
+
                 </div>
 
                 <div class="matches-grid">

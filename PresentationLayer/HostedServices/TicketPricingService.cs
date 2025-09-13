@@ -43,10 +43,10 @@ namespace PresentationLayer.HostedServices
                         int totalTickets = ticketPrice.HomeTickets + ticketPrice.AwayTickets;
 
                         // عدد التذاكر المباعة (من جدول Ticket)
-                        var soldTickets = await _unitOfWork.TicketRepository.CountAsync(
+                        var soldTickets = await _unitOfWork.TicketMatchRepository.CountAsync(
                             t => t.MatchId == match.Id
                               && t.Category == ticketPrice.Category
-                              && t.Status == CoreLayer.Enums.TicketStatus.Confirmed
+                              && t.Ticket.Status == CoreLayer.Enums.TicketStatus.Confirmed
                         );
 
                         decimal newPrice = CalculateTicketPrice(

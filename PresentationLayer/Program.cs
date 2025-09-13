@@ -9,7 +9,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using PresentationLayer.HostedServices;
+using PresentationLayer.Stripe;
 using SportEvent.Repositories;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +52,7 @@ builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<ITicketPriceRepository, TicketPriceRepository>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<ICartItemRepository, CartItemRepository>();
+builder.Services.AddScoped<ITicketMatchRepository, TicketMatchRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<TicketPricingService>();
 
@@ -61,6 +64,9 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LoginPath = "/Identity/Account/Login";
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
 });
+
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
 builder.Services.AddHangfire(config =>
 {
@@ -113,6 +119,12 @@ RecurringJob.AddOrUpdate<TicketPricingService>(
     "update-ticket-prices",
     s => s.UpdateTicketPricesAsync(),
     Cron.Hourly()
+);
+
+RecurringJob.AddOrUpdate<CleanupExpiredTicketsService>(
+    "cleanup-expired-tickets",
+    job => job.Execute(),
+    Cron.Minutely()
 );
 
 app.MapGet("/Admin", context =>
