@@ -1,8 +1,244 @@
-﻿@using PresentationLayer.ViewModels
+﻿@using CoreLayer.Helpers
+@using PresentationLayer.ViewModels
+@using System.Globalization
 @model CustomerHomeVM
 @{
     ViewData["Title"] = "Home Page";
 }
+
+<style>
+
+    .modal-content {
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-header {
+        background: #3a5e8c;
+        color: white;
+        padding: 20px;
+    }
+
+    .match-selector {
+        text-align: center;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed #dee2e6;
+    }
+
+    .match-teams {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        margin: 20px 0;
+    }
+
+    .team-option {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+        padding: 15px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+
+        .team-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .team-option.active {
+            border-color: #3a5e8c;
+            background-color: rgba(58, 94, 140, 0.1);
+        }
+
+    .team-logo {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        border: 2px solid #3a5e8c;
+        padding: 5px;
+        margin-bottom: 10px;
+        background: white;
+        object-fit: contain;
+    }
+
+    .vs {
+        font-weight: bold;
+        font-size: 1.2rem;
+        color: #6c757d;
+    }
+
+    .match-info {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid #dee2e6;
+    }
+
+    .ticket-category {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+        .ticket-category:last-child {
+            border-bottom: none;
+        }
+
+    .category-info {
+        flex: 1;
+    }
+
+    .category-name {
+        font-weight: 600;
+        display: block;
+    }
+
+    .category-status {
+        font-size: 0.85rem;
+        display: block;
+    }
+
+    .sold-out {
+        color: #dc3545;
+    }
+
+    .available {
+        color: #28a745;
+    }
+
+    .category-price {
+        font-weight: 700;
+        color: #3a5e8c;
+        margin: 0 15px;
+    }
+
+    .quantity-controls {
+        display: flex;
+        align-items: center;
+    }
+
+    .quantity-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #3a5e8c;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.2s;
+        border: none;
+    }
+
+        .quantity-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .quantity-btn:not(:disabled):hover {
+            background: #2a4a6d;
+            transform: scale(1.1);
+        }
+
+    .quantity-value {
+        margin: 0 12px;
+        font-weight: 600;
+        min-width: 20px;
+        text-align: center;
+    }
+
+    .total-section {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 25px;
+        border: 1px solid #dee2e6;
+    }
+
+    .total-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+    }
+
+    .grand-total {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #3a5e8c;
+        border-top: 2px solid #dee2e6;
+        padding-top: 15px;
+        margin-top: 15px;
+    }
+
+    .limit-notice {
+        text-align: center;
+        background: #fff9e6;
+        padding: 10px;
+        border-radius: 8px;
+        margin: 15px 0;
+        border: 1px solid #ffeeba;
+        color: #856404;
+        font-weight: 500;
+    }
+
+    .modal-footer .btn {
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    @@media (max-width: 576px) {
+        .match-teams {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .ticket-category {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .quantity-controls {
+            align-self: flex-end;
+        }
+    }
+
+    .team-logo {
+        width: 70px;
+        height: 70px;
+        cursor: pointer;
+        border-radius: 50%;
+        transition: 0.2s ease;
+    }
+
+        .team-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .team-logo.selected-team {
+            border: 3px solid #007bff;
+            background-color: #007bff;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
+        }
+
+</style>
 
 <div class="hero overlay" style="background-image: url('Customer/images/bg_3.jpg');">
     <div class="container">
@@ -69,69 +305,34 @@
             </div>
         </div>
         <div class="row no-gutters">
-            <div class="col-md-4">
-                <div class="post-entry">
+            @foreach (var blog in Model.Blogs)
+            {
+                <div class="col-md-4">
+                    <div class="post-entry">
                     <a href="#">
-                        <img src="~/Customer/images/img_1.jpg" alt="Image" class="img-fluid">
+                        <img src="@blog.ImgPath" alt="Image" class="img-fluid" style="height:600px">
                     </a>
                     <div class="caption">
                         <div class="caption-inner">
-                            <h3 class="mb-3">Romolu to stay at Real Nadrid?</h3>
+                            <h3 class="mb-3"></h3>
                             <div class="author d-flex align-items-center">
                                 <div class="img mb-2 mr-3">
-                                    <img src="~/Customer/images/person_1.jpg" alt="">
+                                    
                                 </div>
                                 <div class="text">
-                                    <h4>Mellissa Allison</h4>
-                                    <span>May 19, 2020 &bullet; Sports</span>
+                                    <a asp-area="Customer" asp-Controller="New" asp-action="Details" asp-route-id="@blog.Id">
+                                            <h4>@blog.Title</h4>
+                                    </a>
+                                    
+                                    <span>@blog.CreatedAt.ToString("MMM dd yyy") &bullet; Sports</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="post-entry">
-                    <a href="#">
-                        <img src="~/Customer/images/img_3.jpg" alt="Image" class="img-fluid">
-                    </a>
-                    <div class="caption">
-                        <div class="caption-inner">
-                            <h3 class="mb-3">Kai Nets Double To Secure Comfortable Away Win</h3>
-                            <div class="author d-flex align-items-center">
-                                <div class="img mb-2 mr-3">
-                                    <img src="~/Customer/images/person_1.jpg" alt="">
-                                </div>
-                                <div class="text">
-                                    <h4>Mellissa Allison</h4>
-                                    <span>May 19, 2020 &bullet; Sports</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="post-entry">
-                    <a href="#">
-                        <img src="~/Customer/images/img_2.jpg" alt="Image" class="img-fluid">
-                    </a>
-                    <div class="caption">
-                        <div class="caption-inner">
-                            <h3 class="mb-3">Dogba set for Juvendu return?</h3>
-                            <div class="author d-flex align-items-center">
-                                <div class="img mb-2 mr-3">
-                                    <img src="~/Customer/images/person_1.jpg" alt="">
-                                </div>
-                                <div class="text">
-                                    <h4>Mellissa Allison</h4>
-                                    <span>May 19, 2020 &bullet; Sports</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            }
+           
         </div>
 
     </div>
@@ -149,29 +350,38 @@
                         <div class="widget-vs">
                             <div class="d-flex align-items-center justify-content-around justify-content-between w-100">
                                 <div class="team-1 text-center">
-                                    <img src="~/Customer/images/logo_1.png" alt="Image">
-                                    <h3>Football League</h3>
+                                    <img src="~/assets/images/teamsLogo/@Model?.NextMatch?.HomeTeam.LogoUrl" alt="Image">
+                                    <h3>@Model?.NextMatch?.HomeTeam.Name</h3>
                                 </div>
                                 <div>
                                     <span class="vs"><span>VS</span></span>
                                 </div>
                                 <div class="team-2 text-center">
-                                    <img src="~/Customer/images/logo_2.png" alt="Image">
-                                    <h3>Soccer</h3>
+                                    <img src="~/assets/images/teamsLogo/@Model?.NextMatch?.AwayTeam.LogoUrl" alt="Image">
+                                    <h3>@Model?.NextMatch?.AwayTeam.Name</h3>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="text-center widget-vs-contents mb-4">
-                        <h4>World Cup League</h4>
+                        <h4>Egyption League</h4>
                         <p class="mb-5">
-                            <span class="d-block">December 20th, 2020</span>
-                            <span class="d-block">9:30 AM GMT+0</span>
-                            <strong class="text-primary">New Euro Arena</strong>
+                            <span class="d-block">@Model?.NextMatch?.MatchDate.ToString("MMM dd ,yyyy")</span>
+                            <span class="d-block">@Model?.NextMatch?.MatchDate.ToString("t")</span>
+                            <strong class="text-primary">@Model?.NextMatch.Location</strong>
                         </p>
 
-                        <div id="date-countdown2" class="pb-1"></div>
+                        <p>
+                            @if (Model.NextMatch.IsAvailableForBooking)
+                            {
+                                <button data-bs-toggle="modal" data-bs-target="#ticketModalNextMatch" class="btn btn-primary  px-4" style="padding-top:10px; padding-bottom:10px">Book Ticket</button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-primary  px-4" style="padding-top:10px; padding-bottom:10px" disabled>Book Ticket</button>
+                            }
+                        </p>
                     </div>
                 </div>
             </div>
@@ -214,144 +424,479 @@
             </div>
         </div>
     </div>
+
+    @{var modalId = $"ticketModal_{Model.NextMatch.Id}";}
+
+    <div class="modal fade" id="ticketModalNextMatch" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="color:black;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-ticket-perforated me-2"></i> Add Ticket To Cart
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- اختيار الفريق -->
+                    <div id="team-select-@modalId" class="d-flex justify-content-around  my-3" style="align-items:center">
+                        <div style="width:150px;  text-align:center">
+                            <img src="@Url.Content("~/assets/images/teamsLogo/" + Model.NextMatch.HomeTeam.LogoUrl)"
+                                 alt="@Model.NextMatch.HomeTeam.Name" class="team-logo mx-3"
+                                 onclick="selectTeam('@Model.NextMatch.Id','Home', '@Model.NextMatch.HomeTeam.Name', '@Model.NextMatch.HomeTeam.Id')">
+                            <h5 style="color:black">@Model.NextMatch.HomeTeam.Name</h5>
+                        </div>
+                        <div class="match-info" style="text-align:center">
+                            <p><strong></strong> @Model.NextMatch.Location</p>
+                            <p><strong></strong> @Model.NextMatch.MatchDate.ToString("ddd dd MMM yyyy")</p>
+                            <p><strong></strong> @Model.NextMatch.MatchDate.ToString("hh:mm tt")</p>
+                        </div>
+                        <div style="width:150px; text-align:center">
+                            <img src="@Url.Content("~/assets/images/teamsLogo/" + Model.NextMatch.AwayTeam.LogoUrl)"
+                                 alt="@Model.NextMatch.AwayTeam.Name" class="team-logo mx-3"
+                                 onclick="selectTeam('@Model.NextMatch.Id','Away', '@Model.NextMatch.AwayTeam.Name', '@Model.NextMatch.AwayTeam.Id')">
+                            <h5 style="color:black">@Model.NextMatch.AwayTeam.Name</h5>
+                        </div>
+
+                    </div>
+
+                    <p id="selected-team-@Model.NextMatch.Id" class="text-center text-primary fw-bold">
+                        Please select a team
+                    </p>
+
+                    <h6 class="mb-3">Specify the number of tickets</h6>
+                    <div class="limit-notice">
+                        <i class="bi bi-info-circle"></i> You can book up to only 4 tickets per team.
+                    </div>
+
+                    <div class="ticket-options" id="tickets-@Model.NextMatch.Id">
+                        @foreach (var ticket in Model.NextMatch.TicketPrices)
+                        {
+                            <div class="ticket-category">
+                                <div class="category-info">
+                                    <span class="category-name">@ticket.Category.GetDisplayName()</span>
+
+                                    <!-- عدد المتاح لكل فريق -->
+                                    <span class="category-status available"
+                                          id="avail-@Model.NextMatch.Id-Home-@ticket.Category"
+                                          style="display:none">
+                                        @ticket.HomeTickets available
+                                    </span>
+                                    <span class="category-status available"
+                                          id="avail-@Model.NextMatch.Id-Away-@ticket.Category"
+                                          style="display:none">
+                                        @ticket.AwayTickets available
+                                    </span>
+
+                                </div>
+                                <span class="category-price">@ticket.Price.ToString("C", new CultureInfo("en-EG"))</span>
+                                <div class="quantity-controls">
+                                    <button class="quantity-btn"
+                                            onclick="updateQuantity('@Model.NextMatch.Id','@ticket.Category', -1)">
+                                        -
+                                    </button>
+
+                                    <!-- قيم لكل فريق -->
+                                    <span class="quantity-value"
+                                          id="q-@Model.NextMatch.Id-Home-@ticket.Category"
+                                          style="display:none;">0</span>
+                                    <span class="quantity-value"
+                                          id="q-@Model.NextMatch.Id-Away-@ticket.Category"
+                                          style="display:none;">0</span>
+
+                                    <button class="quantity-btn"
+                                            onclick="updateQuantity('@Model.NextMatch.Id','@ticket.Category', 1)">
+                                        +
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                        <script>
+                            (window._matchInitBuffer = window._matchInitBuffer || []).push({
+                                matchId: '@Model.NextMatch.Id',
+                                categories: [
+                                    @foreach (var ticket in Model.NextMatch.TicketPrices)
+                                    {
+                                            @: { category: "@ticket.Category", price: @ticket.Price, homeTickets: @ticket.HomeTickets, awayTickets: @ticket.AwayTickets },
+                                    }
+                                ]
+                            });
+                        </script>
+                    </div>
+
+                    <div class="total-section">
+                        <div class="total-row">
+                            <span>Total:</span>
+                            <span id="subtotal-@Model.NextMatch.Id">EGP 0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Tickets:</span>
+                            <span id="tickets-count-@Model.NextMatch.Id">0</span>
+                        </div>
+                        <div class="total-row grand-total">
+                            <span>Grand Total:</span>
+                            <span id="grand-total-@Model.NextMatch.Id">EGP 0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-1"></i> Cancel
+                    </button>
+                    <button type="button" class="btn btn-success" onclick="addToCart('@Model.NextMatch.Id')">
+                        <i class="bi bi-check-circle me-1"></i> Add To Cart
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+
+
 </div> <!-- .site-section -->
 
 <div class="site-section">
     <div class="container">
-        <div class="row">
-            <div class="col-6 title-section">
-                <h2 class="heading">Videos</h2>
-            </div>
-            <div class="col-6 text-right">
-                <div class="custom-nav">
-                    <a href="#" class="js-custom-prev-v2"><span class="icon-keyboard_arrow_left"></span></a>
-                    <span></span>
-                    <a href="#" class="js-custom-next-v2"><span class="icon-keyboard_arrow_right"></span></a>
+         <div class="row">
+                <div class="col-12 title-section">
+                    <h2 class="heading text-white section-title">Upcoming Matches</h2>
                 </div>
-            </div>
-        </div>
+                @foreach (var item in Model.UpcommingMatches)
+                {
+                    <div class="col-lg-6 col-md-6 mb-4">
+                        <div class="upcoming-match-card">
+                            <div class="card-body">
+                                <div class="widget-body">
+                                    <div class="widget-vs">
+                                        <div class="d-flex align-items-center justify-content-around justify-content-between w-100">
+                                            <div class="team-1 text-center">
+                                                <img src="@Url.Content("~/assets/images/teamsLogo/" + item.HomeTeam.LogoUrl)"
+                                                     alt="@item.HomeTeam.Name" class="img-fluid mb-2" style="max-height: 80px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5))">
+                                                <h5 >@item.HomeTeam.Name</h5>
+                                            </div>
+                                            <div>
+                                                <span class="vs-badge"><span>VS</span></span>
+                                            </div>
+                                            <div class="team-2 text-center">
+                                                <img src="@Url.Content("~/assets/images/teamsLogo/" + item.AwayTeam.LogoUrl)"
+                                                     alt="@item.AwayTeam.Name" class="img-fluid mb-2" style="max-height: 80px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5))">
+                                                <h5>@item.AwayTeam.Name</h5>
+                                            </div>
+                                           
+                                        </div>
+                                    </div>
+                                </div>
 
+                                <div class="text-center mt-4">
+                                    <h5 class="text-primary">@item.Tournament?.Title</h5>
+                                    <p class="mb-2">
+                                        <span class="d-block">@item.MatchDate.ToString("MMMM dd, yyyy")</span>
+                                        <span class="d-block">@item.MatchDate.ToString("hh:mm tt")</span>
+                                        <strong class="text-info">@item.Location</strong>
+                                    </p>
+                                </div>
+                                <div style="margin-top:20px; text-align:center">
+                                    @if (item.IsAvailableForBooking)
+                                    {
+                                        <button data-bs-toggle="modal" data-bs-target="#ticketModal_@item.Id" class="btn btn-primary  px-4" style="padding-top:10px; padding-bottom:10px">Book Ticket</button>
+                                    }
+                                    else
+                                    {
+                                        <button  class="btn btn-primary  px-4" style="padding-top:10px; padding-bottom:10px" disabled>Book Ticket</button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                     var modalId2 = $"ticketModal_{item.Id}";
+                    <div class="modal fade" id="@modalId2" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" style="color:black;">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">
+                                        <i class="bi bi-ticket-perforated me-2"></i> Add Ticket To Cart
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                              <div class="modal-body">
+                                    <!-- اختيار الفريق -->
+                                    <div id="team-select-@item.Id" class="d-flex justify-content-around  my-3" style="align-items:center">
+                                        <div style="width:150px;  text-align:center">
+                                             <img src="@Url.Content("~/assets/images/teamsLogo/" + item.HomeTeam.LogoUrl)"
+                                             alt="@item.HomeTeam.Name" class="team-logo mx-3"
+                                             onclick="selectTeam('@item.Id','Home', '@item.HomeTeam.Name', '@item.HomeTeam.Id')">
+                                             <h5 style="color:black">@item.HomeTeam.Name</h5>
+                                        </div>
+                                         <div class="match-info" style="text-align:center">
+                                            <p><strong></strong> @item.Location</p>
+                                            <p><strong></strong> @item.MatchDate.ToString("ddd dd MMM yyyy")</p>
+                                            <p><strong></strong> @item.MatchDate.ToString("hh:mm tt")</p>
+                                        </div>
+                                       <div style="width:150px; text-align:center">
+                                             <img src="@Url.Content("~/assets/images/teamsLogo/" + item.AwayTeam.LogoUrl)"
+                                             alt="@item.AwayTeam.Name" class="team-logo mx-3"
+                                             onclick="selectTeam('@item.Id','Away', '@item.AwayTeam.Name', '@item.AwayTeam.Id')">
+                                             <h5 style="color:black">@item.AwayTeam.Name</h5>
+                                       </div>
+                                      
+                                    </div>
 
-        <div class="owl-4-slider owl-carousel">
-            <div class="item">
-                <div class="video-media">
-                    <img src="~/Customer//images/img_1.jpg" alt="Image" class="img-fluid">
-                    <a href="https://vimeo.com/139714818" class="d-flex play-button align-items-center" data-fancybox>
-                        <span class="icon mr-3">
-                            <span class="icon-play"></span>
-                        </span>
-                        <div class="caption">
-                            <h3 class="m-0">Dogba set for Juvendu return?</h3>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="item">
-                <div class="video-media">
-                    <img src="~/Customer//images/img_2.jpg" alt="Image" class="img-fluid">
-                    <a href="https://vimeo.com/139714818" class="d-flex play-button align-items-center" data-fancybox>
-                        <span class="icon mr-3">
-                            <span class="icon-play"></span>
-                        </span>
-                        <div class="caption">
-                            <h3 class="m-0">Kai Nets Double To Secure Comfortable Away Win</h3>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="item">
-                <div class="video-media">
-                    <img src="~/Customer//images/img_3.jpg" alt="Image" class="img-fluid">
-                    <a href="https://vimeo.com/139714818" class="d-flex play-button align-items-center" data-fancybox>
-                        <span class="icon mr-3">
-                            <span class="icon-play"></span>
-                        </span>
-                        <div class="caption">
-                            <h3 class="m-0">Romolu to stay at Real Nadrid?</h3>
-                        </div>
-                    </a>
-                </div>
-            </div>
+                                    <p id="selected-team-@item.Id" class="text-center text-primary fw-bold">
+                                        Please select a team
+                                    </p>
 
-            <div class="item">
-                <div class="video-media">
-                    <img src="~/Customer//images/img_1.jpg" alt="Image" class="img-fluid">
-                    <a href="https://vimeo.com/139714818" class="d-flex play-button align-items-center" data-fancybox>
-                        <span class="icon mr-3">
-                            <span class="icon-play"></span>
-                        </span>
-                        <div class="caption">
-                            <h3 class="m-0">Dogba set for Juvendu return?</h3>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="item">
-                <div class="video-media">
-                    <img src="~/Customer//images/img_2.jpg" alt="Image" class="img-fluid">
-                    <a href="https://vimeo.com/139714818" class="d-flex play-button align-items-center" data-fancybox>
-                        <span class="icon mr-3">
-                            <span class="icon-play"></span>
-                        </span>
-                        <div class="caption">
-                            <h3 class="m-0">Kai Nets Double To Secure Comfortable Away Win</h3>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="item">
-                <div class="video-media">
-                    <img src="~/Customer//images/img_3.jpg" alt="Image" class="img-fluid">
-                    <a href="https://vimeo.com/139714818" class="d-flex play-button align-items-center" data-fancybox>
-                        <span class="icon mr-3">
-                            <span class="icon-play"></span>
-                        </span>
-                        <div class="caption">
-                            <h3 class="m-0">Romolu to stay at Real Nadrid?</h3>
-                        </div>
-                    </a>
-                </div>
-            </div>
+                                    <h6 class="mb-3">Specify the number of tickets</h6>
+                                    <div class="limit-notice">
+                                        <i class="bi bi-info-circle"></i> You can book up to only 4 tickets per team.
+                                    </div>
 
-        </div>
+                                    <div class="ticket-options" id="tickets-@item.Id">
+                                        @foreach (var ticket in item.TicketPrices)
+                                        {
+                                            <div class="ticket-category">
+                                                <div class="category-info">
+                                                    <span class="category-name">@ticket.Category.GetDisplayName()</span>
 
+                                                    <!-- عدد المتاح لكل فريق -->
+                                                    <span class="category-status available"
+                                                          id="avail-@item.Id-Home-@ticket.Category"
+                                                          style="display:none">
+                                                        @ticket.HomeTickets available
+                                                    </span>
+                                                    <span class="category-status available"
+                                                          id="avail-@item.Id-Away-@ticket.Category"
+                                                          style="display:none">
+                                                        @ticket.AwayTickets available
+                                                    </span>
+
+                                                </div>
+                                                <span class="category-price">@ticket.Price.ToString("C", new CultureInfo("en-EG"))</span>
+                                                <div class="quantity-controls">
+                                                    <button class="quantity-btn"
+                                                            onclick="updateQuantity('@item.Id','@ticket.Category', -1)">-</button>
+                    
+                                                    <!-- قيم لكل فريق -->
+                                                    <span class="quantity-value"
+                                                          id="q-@item.Id-Home-@ticket.Category"
+                                                          style="display:none;">0</span>
+                                                    <span class="quantity-value"
+                                                          id="q-@item.Id-Away-@ticket.Category"
+                                                          style="display:none;">0</span>
+
+                                                    <button class="quantity-btn"
+                                                            onclick="updateQuantity('@item.Id','@ticket.Category', 1)">+</button>
+                                                </div>
+                                            </div>
+                                        }
+                                        <script>
+                                            (window._matchInitBuffer = window._matchInitBuffer || []).push({
+                                                matchId: '@item.Id',
+                                                categories: [
+                                                    @foreach (var ticket in item.TicketPrices)
+                                                    {
+                                                        @: { category: "@ticket.Category", price: @ticket.Price, homeTickets: @ticket.HomeTickets, awayTickets: @ticket.AwayTickets },
+                                                    }
+                                                ]
+                                            });
+                                        </script>
+                                    </div>
+
+                                    <div class="total-section">
+                                        <div class="total-row">
+                                            <span>Total:</span>
+                                            <span id="subtotal-@item.Id">EGP 0.00</span>
+                                        </div>
+                                        <div class="total-row">
+                                            <span>Tickets:</span>
+                                            <span id="tickets-count-@item.Id">0</span>
+                                        </div>
+                                        <div class="total-row grand-total">
+                                            <span>Grand Total:</span>
+                                            <span id="grand-total-@item.Id">EGP 0.00</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                
+                                <div class="modal-footer d-flex justify-content-between">
+                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                        <i class="bi bi-x-circle me-1"></i> Cancel
+                                    </button>
+                                    <button type="button" class="btn btn-success" onclick="addToCart('@item.Id')">
+                                        <i class="bi bi-check-circle me-1"></i> Add To Cart
+                                    </button>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+     
     </div>
 </div>
 
-<div class="container site-section">
-    <div class="row">
-        <div class="col-6 title-section">
-            <h2 class="heading">Our Blog</h2>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="custom-media d-flex">
-                <div class="img mr-4">
-                    <img src="~/Customer//images/img_1.jpg" alt="Image" class="img-fluid">
-                </div>
-                <div class="text">
-                    <span class="meta">May 20, 2020</span>
-                    <h3 class="mb-4"><a href="#">Romolu to stay at Real Nadrid?</a></h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus deserunt saepe tempora dolorem.</p>
-                    <p><a href="#">Read more</a></p>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6">
-            <div class="custom-media d-flex">
-                <div class="img mr-4">
-                    <img src="~/Customer//images/img_3.jpg" alt="Image" class="img-fluid">
-                </div>
-                <div class="text">
-                    <span class="meta">May 20, 2020</span>
-                    <h3 class="mb-4"><a href="#">Romolu to stay at Real Nadrid?</a></h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus deserunt saepe tempora dolorem.</p>
-                    <p><a href="#">Read more</a></p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    let ticketData = {}; // { matchId: { Home: {cat:{}}, Away: {cat:{}}, selectedTeam } }
+
+    function initMatch(matchId, categories) {
+        ticketData[matchId] = { Home: {}, Away: {}, selectedTeam: null };
+
+        categories.forEach(c => {
+            ticketData[matchId].Home[c.category] = { price: c.price, quantity: 0, max: c.homeTickets };
+            ticketData[matchId].Away[c.category] = { price: c.price, quantity: 0, max: c.awayTickets };
+        });
+    }
+    function selectTeam(matchId, team, teamName, teamId) {
+        // لو غيّر الفريق من قبل
+        if (ticketData[matchId].selectedTeam && ticketData[matchId].selectedTeam !== team) {
+            // reset الكميات
+            Object.keys(ticketData[matchId].Home).forEach(cat => {
+                ticketData[matchId].Home[cat].quantity = 0;
+                ticketData[matchId].Away[cat].quantity = 0;
+
+                // reset UI quantities
+                let qHome = document.getElementById(`q-${matchId}-Home-${cat}`);
+                let qAway = document.getElementById(`q-${matchId}-Away-${cat}`);
+                if (qHome) qHome.innerText = "0";
+                if (qAway) qAway.innerText = "0";
+
+                // إخفاء الـ availability
+                let homeAvail = document.getElementById(`avail-${matchId}-Home-${cat}`);
+                let awayAvail = document.getElementById(`avail-${matchId}-Away-${cat}`);
+                if (homeAvail) homeAvail.style.display = "none";
+                if (awayAvail) awayAvail.style.display = "none";
+            });
+
+            // reset totals
+            document.getElementById(`subtotal-${matchId}`).innerText = "EGP 0.00";
+            document.getElementById(`grand-total-${matchId}`).innerText = "EGP 0.00";
+            document.getElementById(`tickets-count-${matchId}`).innerText = "0";
+        }
+
+        // خزّن الفريق الجديد
+        ticketData[matchId].selectedTeam = team;
+        ticketData[matchId].selectedTeamId = teamId;
+
+        // تحديث الواجهة (highlight على الفريق المختار)
+        document.querySelectorAll(`#team-select-${matchId} .team-logo`).forEach(img => {
+            img.classList.remove("selected-team");
+        });
+        document.querySelector(`#team-select-${matchId} img[onclick*="'${team}']`)
+              ?.classList.add("selected-team");
+
+        // إظهار الكاونترات والـ availability الخاصة بالفريق الحالي فقط
+        ["Home", "Away"].forEach(t => {
+            Object.keys(ticketData[matchId][t]).forEach(cat => {
+                let qEl = document.getElementById(`q-${matchId}-${t}-${cat}`);
+                let availEl = document.getElementById(`avail-${matchId}-${t}-${cat}`);
+
+                if (qEl) qEl.style.display = (t === team ? "inline" : "none");
+                if (availEl) {
+                    if (t === team) {
+                        availEl.style.display = "inline";
+                        let max = ticketData[matchId][team][cat].max;
+                        availEl.textContent = max > 0 ? "" : "Sold out";
+                    } else {
+                        availEl.style.display = "none";
+                    }
+                }
+            });
+        });
+
+        // نص الفريق الحالي
+        let label = document.getElementById(`selected-team-${matchId}`);
+        if (label) {
+            label.innerText = `Booking for ${teamName} Team`;
+        }
+    }
+
+
+
+
+    function updateQuantity(matchId, category, change) {
+        let selectedTeam = ticketData[matchId].selectedTeam;
+        if (!selectedTeam) { alert("Please select a team first."); return; }
+
+        let data = ticketData[matchId][selectedTeam][category];
+        let totalTickets = Object.values(ticketData[matchId][selectedTeam]).reduce((t, c) => t + c.quantity, 0);
+
+        if (change > 0 && totalTickets >= 4) { alert('Max 4 tickets per team.'); return; }
+        if (change > 0 && data.quantity >= data.max) { alert('No more tickets available.'); return; }
+
+        data.quantity = Math.max(0, data.quantity + change);
+
+        // update UI
+        document.getElementById(`q-${matchId}-${selectedTeam}-${category}`).textContent = data.quantity;
+
+        let total = 0, count = 0;
+        Object.values(ticketData[matchId][selectedTeam]).forEach(c => {
+            total += c.quantity * c.price;
+            count += c.quantity;
+        });
+
+        document.getElementById(`tickets-count-${matchId}`).textContent = count;
+        document.getElementById(`subtotal-${matchId}`).textContent = "EGP " + total.toFixed(2);
+        document.getElementById(`grand-total-${matchId}`).textContent = "EGP " + total.toFixed(2);
+    }
+
+      function addToCart(matchId) {
+        let team = ticketData[matchId].selectedTeam;
+        let teamId = ticketData[matchId].selectedTeamId;
+        if (!team) { alert("Please select a team first."); return; }
+
+        let booking = ticketData[matchId][team];
+        let cartItems = [];
+
+        for (let category in booking) {
+            if (booking[category].quantity > 0) {
+                cartItems.push({
+                    TicketCategory: category,
+                    Quantity: booking[category].quantity
+                });
+            }
+        }
+
+        if (cartItems.length === 0) {
+            alert("Select at least one ticket.");
+            return;
+        }
+
+        $.ajax({
+            url: '/Customer/Cart/Add',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                MatchId: parseInt(matchId),
+                TeamId: parseInt(teamId),
+                CartItems: cartItems
+            }),
+            success: function (res) {
+                if (res.success) {
+                    alert(res.message);
+                    location.reload();
+                } else {
+                    alert(res.message);
+                }
+            },
+            error: function () {
+                alert("Error while adding to cart.");
+            }
+        });
+    }
+
+    function processInitBuffer() {
+        (window._matchInitBuffer || []).forEach(x => initMatch(x.matchId, x.categories));
+        window._matchInitBuffer = [];
+    }
+    document.addEventListener('DOMContentLoaded', processInitBuffer);
+</script>
