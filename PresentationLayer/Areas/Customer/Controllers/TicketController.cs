@@ -7,8 +7,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PresentationLayer.ViewModels;
 using Stripe.Checkout;
 using Stripe.Climate;
+using System.Linq.Expressions;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -27,9 +29,63 @@ namespace PresentationLayer.Areas.Customer.Controllers
             this._userManager = _userManager;
         }
 
-        public IActionResult Index()
+        [Authorize]
+        public async Task<IActionResult> Index(PageFilterVM filter)
         {
-            return View();
+            var user = await GetUser();
+            if (user == null)
+            {
+                return NotFound();
+            }
+            Expression<Func<Ticket, bool>>? filterExpression = c => c.Status == TicketStatus.Confirmed && c.UserId == user.Id;
+            var tickets = await _unitOfWork.TicketRepository.GetAllAsync(
+                     filter: filterExpression,
+                     skip:filter.SkipNumber, 
+                     take: filter.PageSize,
+                     orderBy: x => x.OrderByDescending(q => q.CreatedAt),
+                     includeChain: Queryable => Queryable.Include(t => t.TicketMatches)
+                );
+
+            var data = new ModelsWithPaginationVM<Ticket>
+            {
+                Items = tickets,
+                Pagination = new PaginationVM
+                {
+                    PageNumber = filter.PageNumber ?? 1,
+                    PageSize = filter.PageSize ?? 5,
+                    TotalCount = await _unitOfWork.TicketRepository.CountAsync(filterExpression)
+                }
+            };
+            return View(data);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Details(string referenceId)
+        {
+            var user = await GetUser();
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var tickect = await _unitOfWork.TicketRepository.GetOneAsync(
+                                                x => x.ReferenceId == referenceId && x.Status == TicketStatus.Confirmed && x.UserId == user.Id,
+                                                includeChain : q => q.Include(t => t.TicketMatches)
+                                                                    .ThenInclude(m => m.Match)
+                                                                    .ThenInclude(ht => ht.HomeTeam)
+                                                                    .Include(t => t.TicketMatches)
+                                                                    .ThenInclude(m => m.Match)
+                                                                    .ThenInclude(at => at.AwayTeam)
+                                                                    .Include(t => t.TicketMatches)
+                                                                    .ThenInclude(tm => tm.Team)
+                                 );
+
+            if (tickect == null)
+            {
+                return NotFound();
+            }
+
+            return View(tickect);
         }
 
         [HttpPost]

@@ -1,0 +1,368 @@
+﻿@using DataAccessLayer.Models
+@using PresentationLayer.ViewModels
+@model ModelsWithPaginationVM<Ticket>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdi/7.2.96/css/materialdesignicons.min.css">
+    <style>
+        :root {
+            --primary-color: #3d5ee1;
+            --secondary-color: #2c3e50;
+            --dark-color: #1a1d20;
+            --light-color: #f8f9fa;
+            --accent-red: #dc3545;
+            --accent-green: #28a745;
+            --accent-gold: #ffd700;
+            --card-bg: #2d3748;
+            --border-color: #4a5568;
+            --vip-color: #ffd700;
+            --cat1-color: #dc3545;
+            --cat2-color: #fd7e14;
+            --cat3-color: #20c997;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), url('https://images.unsplash.com/photo-1575361204480-aadea25e6e68?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80') no-repeat center center;
+            background-size: cover;
+        }
+
+        .orders-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .page-title {
+            color: white;
+            text-align: center;
+            margin-bottom: 40px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+            .page-title::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100px;
+                height: 3px;
+                background: var(--accent-red);
+            }
+
+        .orders-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .orders-count {
+            background: linear-gradient(135deg, var(--primary-color), #2a4bcc);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+            .orders-count i {
+                margin-right: 8px;
+                font-size: 18px;
+            }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(45, 55, 72, 0.9);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+        }
+
+            .orders-table thead {
+                background: linear-gradient(135deg, var(--primary-color), #2a4bcc);
+            }
+
+            .orders-table th {
+                padding: 20px;
+                text-align: left;
+                font-weight: 600;
+                color: white;
+            }
+
+            .orders-table td {
+                padding: 18px 20px;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .orders-table tbody tr {
+                transition: all 0.3s ease;
+            }
+
+                .orders-table tbody tr:hover {
+                    background: rgba(255, 255, 255, 0.05);
+                }
+
+        .order-ref {
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        .order-amount {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        .order-date {
+            color: #a0aec0;
+        }
+
+        .order-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .status-completed {
+            background: var(--accent-green);
+            color: white;
+        }
+
+        .status-pending {
+            background: var(--accent-gold);
+            color: black;
+        }
+
+        .status-cancelled {
+            background: var(--accent-red);
+            color: white;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 0 auto;
+        }
+
+            .action-btn:hover {
+                background: var(--primary-color);
+                transform: scale(1.1);
+            }
+
+        .no-orders {
+            text-align: center;
+            color: white;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+            .no-orders i {
+                font-size: 60px;
+                color: #a0aec0;
+                margin-bottom: 20px;
+                opacity: 0.5;
+            }
+
+            .no-orders h3 {
+                color: white;
+                margin-bottom: 15px;
+                font-weight: 600;
+            }
+
+            .no-orders p {
+                color: #a0aec0;
+                margin-bottom: 25px;
+            }
+
+        .btn-browse {
+            background: linear-gradient(135deg, var(--primary-color), #2a4bcc);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+            .btn-browse:hover {
+                background: linear-gradient(135deg, #2a4bcc, #1e3bb8);
+                color: white;
+                text-decoration: none;
+                transform: translateY(-2px);
+            }
+
+        @@media (max-width: 768px) {
+            .orders-table
+
+        {
+            display: block;
+            overflow-x: auto;
+        }
+
+        .orders-table thead {
+            display: none;
+        }
+
+        .orders-table tbody, .orders-table tr, .orders-table td {
+            display: block;
+            width: 100%;
+        }
+
+        .orders-table tr {
+            margin-bottom: 20px;
+            background: rgba(45, 55, 72, 0.9);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .orders-table td {
+            text-align: right;
+            padding: 12px 15px;
+            position: relative;
+            padding-left: 50%;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+            .orders-table td:before {
+                content: attr(data-label);
+                position: absolute;
+                left: 15px;
+                font-weight: 600;
+                color: var(--accent-gold);
+            }
+
+        .action-btn {
+            margin: 0;
+        }
+
+        }
+
+        @@keyframes fadeIn {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        .orders-table tbody tr {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .filter-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+            .filter-btn.active {
+                background: var(--primary-color);
+                border-color: var(--primary-color);
+            }
+
+            .filter-btn:hover {
+                background: var(--primary-color);
+            }
+    </style>
+</head>
+<body>
+    <div class="orders-container">
+        <h1 class="page-title">My Orders</h1>
+
+        <div class="orders-header">
+            <div class="orders-count">
+                <i class="fas fa-shopping-bag"></i>
+                @Model.Pagination.TotalCount Tickets
+            </div>
+
+        </div>
+
+        <table class="orders-table">
+            <thead>
+                <tr>
+                    <th>Reference ID</th>
+                    <th>Total</th>
+                    <th>Quantity</th>
+                    <th>Date</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ticket in Model.Items)
+                {
+                    <tr>
+                        <td data-label="Reference ID"><span class="order-ref">@ticket.ReferenceId</span></td>
+                        <td data-label="Amount"><span class="order-amount">EGP @(ticket.SubTotal - ticket.Discount)</span></td>
+                        <td data-label="Quantity"><span class="order-amount">@ticket.Quantity Tickets</span></td>
+                        <td data-label="Date"><span class="order-date">@ticket.CreatedAt.ToString("MMM dd yyyy")</span></td>
+                        <td data-label="Details">
+                            <a class="action-btn" asp-action="Details" asp-route-referenceId="@ticket.ReferenceId">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="card-footer d-flex justify-content-center">
+            <partial name="~/Views/Shared/_AdminPagination.cshtml" model="Model.Pagination" />
+        </div>
+    </div>
+   
+</body>
+</html>
