@@ -24,8 +24,8 @@ namespace PresentationLayer.ViewModels
         public int HomeScore { get; set; } = 0;
         [Range(0, int.MaxValue, ErrorMessage = "Available Tickets must be a non-negative number.")]
         public int AwayScore { get; set; } = 0;
-        [Range(0, int.MaxValue, ErrorMessage = "Available Tickets must be a non-negative number.")]
-        public int AvailableTickets { get; set; } = 0;
-        public decimal TicketPrice { get; set; } = 0;
+        public bool IsBookable { get; set; }
+        public List<MatchTicketsVM> TicketPrices { get; set; } = new List<MatchTicketsVM>();
+
     }
 }
