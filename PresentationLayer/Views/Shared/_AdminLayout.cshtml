@@ -1,8 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using DataAccessLayer.Data   // namespace بتاع ApplicationUser
-@inject UserManager<ApplicationUser> UserManager
-
-@{
+﻿@{
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
 }
@@ -21,7 +17,6 @@
 =========================================================
  -->
 <!-- beautify ignore:start -->
-
 <html lang="en"
       class="light-style layout-menu-fixed"
       dir="ltr"
@@ -108,10 +103,9 @@
                                 <span>Gold Member</span>
                             </div>
                         </div>
-                        <a  id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
+                        <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
                         <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
-                            <a <a asp-area="Identity" asp-controller="UserProfile" asp-action="Index"
-                                class="dropdown-item preview-item">
+                            <a href="#" class="dropdown-item preview-item">
                                 <div class="preview-thumbnail">
                                     <div class="preview-icon bg-dark rounded-circle">
                                         <i class="mdi mdi-settings text-primary"></i>
@@ -122,8 +116,7 @@
                                 </div>
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a asp-area="Identity" asp-controller="UserProfile" asp-action="ChangePassword"
-                            class="dropdown-item preview-item">
+                            <a href="#" class="dropdown-item preview-item">
                                 <div class="preview-thumbnail">
                                     <div class="preview-icon bg-dark rounded-circle">
                                         <i class="mdi mdi-onepassword  text-info"></i>
@@ -131,6 +124,17 @@
                                 </div>
                                 <div class="preview-item-content">
                                     <p class="preview-subject ellipsis mb-1 text-small">Change Password</p>
+                                </div>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item preview-item">
+                                <div class="preview-thumbnail">
+                                    <div class="preview-icon bg-dark rounded-circle">
+                                        <i class="mdi mdi-calendar-today text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="preview-item-content">
+                                    <p class="preview-subject ellipsis mb-1 text-small">To-do list</p>
                                 </div>
                             </a>
                         </div>
@@ -259,8 +263,19 @@
                                     </div>
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a asp-area="Admin" asp-controller="User" asp-action="Index"
-                                    class="dropdown-item preview-item">
+                                <a class="dropdown-item preview-item">
+                                    <div class="preview-thumbnail">
+                                        <div class="preview-icon bg-dark rounded-circle">
+                                            <i class="mdi mdi-settings text-danger"></i>
+                                        </div>
+                                    </div>
+                                    <div class="preview-item-content">
+                                        <p class="preview-subject mb-1">Settings</p>
+                                        <p class="text-muted ellipsis mb-0"> Update dashboard </p>
+                                    </div>
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item preview-item">
                                     <div class="preview-thumbnail">
                                         <div class="preview-icon bg-dark rounded-circle">
                                             <i class="mdi mdi-link-variant text-warning"></i>
@@ -275,16 +290,10 @@
                                 <p class="p-3 mb-0 text-center">See all notifications</p>
                             </div>
                         </li>
-                        @{
-                            var currentUser = await UserManager.GetUserAsync(User);
-                            var profileImg = string.IsNullOrEmpty(currentUser?.ProfilePictureUrl)
-                            ? Url.Content("~/assets/images/profiles/default.png")   // صورة افتراضية
-                            : Url.Content("~/assets/images/profiles/" + currentUser.ProfilePictureUrl);
-                        }
                         <li class="nav-item dropdown">
                             <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
                                 <div class="navbar-profile">
-                                    <img class="img-xs rounded-circle" src="@profileImg" alt="">
+                                    <img class="img-xs rounded-circle" src="~/assets/Admin/images/faces/face15.jpg" alt="">
                                     <p class="mb-0 d-none d-sm-block navbar-profile-name">@User.Identity.Name</p>
                                     <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                                 </div>
@@ -292,8 +301,7 @@
                             <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
                                 <h6 class="p-3 mb-0">Profile</h6>
                                 <div class="dropdown-divider"></div>
-                                <a <a asp-area="Identity" asp-controller="UserProfile" asp-action="Index"
-                                    class="dropdown-item preview-item">
+                                <a class="dropdown-item preview-item">
                                     <div class="preview-thumbnail">
                                         <div class="preview-icon bg-dark rounded-circle">
                                             <i class="mdi mdi-settings text-success"></i>
