@@ -18,14 +18,14 @@ namespace PresentationLayer.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index(TicketFilterVM filter)
         {
-            Expression<Func<Ticket, bool>>? filterExpression = null;
+            Expression<Func<TicketMatch, bool>>? filterExpression = null;
 
             if (filter?.Status != null)
             {
-                filterExpression = c => c.Status == filter.Status;
+                filterExpression = c => c.Ticket.Status == filter.Status;
             }
 
-            var tickets = await _unitOfWork.TicketRepository.GetAllAsync(
+            var tickets = await _unitOfWork.TicketMatchRepository.GetAllAsync(
                 filter: filterExpression,
                 skip: filter?.PageFilter?.SkipNumber ?? 0,
                 take: filter?.PageFilter?.PageSize ?? 10,
@@ -34,17 +34,17 @@ namespace PresentationLayer.Areas.Admin.Controllers
                                     .ThenInclude(t => t.HomeTeam)
                                     .Include(c => c.Match)
                                     .ThenInclude(t => t.AwayTeam)
-                                    .Include(c => c.User)
+                                    .Include(c => c.Ticket.User)
             );
 
-            var data = new ModelsWithPaginationVM<Ticket>
+            var data = new ModelsWithPaginationVM<TicketMatch>
             {
                 Items = tickets,
                 Pagination = new PaginationVM
                 {
                     PageNumber = filter.PageFilter.PageNumber ?? 1,
                     PageSize = filter.PageFilter.PageSize ?? 5,
-                    TotalCount = await _unitOfWork.TicketRepository.CountAsync(filterExpression)
+                    TotalCount = await _unitOfWork.TicketMatchRepository.CountAsync(filterExpression)
                 }
 
             };

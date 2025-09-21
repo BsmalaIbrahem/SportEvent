@@ -13,8 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matches Page</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         :root {
             --primary-color: #3d5ee1;
@@ -534,7 +533,7 @@
                                             <div class="team-1 text-center">
                                                 <img src="@Url.Content("~/assets/images/teamsLogo/" + item.HomeTeam.LogoUrl)"
                                                      alt="@item.HomeTeam.Name" class="img-fluid mb-2" style="max-height: 80px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5))">
-                                                <h5>@item.HomeTeam.Name</h5>
+                                                <h5 >@item.HomeTeam.Name</h5>
                                             </div>
                                             <div>
                                                 <span class="vs-badge"><span>VS</span></span>
@@ -588,7 +587,7 @@
                                              <img src="@Url.Content("~/assets/images/teamsLogo/" + item.HomeTeam.LogoUrl)"
                                              alt="@item.HomeTeam.Name" class="team-logo mx-3"
                                              onclick="selectTeam('@item.Id','Home', '@item.HomeTeam.Name', '@item.HomeTeam.Id')">
-                                             <h5>@item.HomeTeam.Name</h5>
+                                             <h5 style="color:black">@item.HomeTeam.Name</h5>
                                         </div>
                                          <div class="match-info" style="text-align:center">
                                             <p><strong></strong> @item.Location</p>
@@ -599,7 +598,7 @@
                                              <img src="@Url.Content("~/assets/images/teamsLogo/" + item.AwayTeam.LogoUrl)"
                                              alt="@item.AwayTeam.Name" class="team-logo mx-3"
                                              onclick="selectTeam('@item.Id','Away', '@item.AwayTeam.Name', '@item.AwayTeam.Id')">
-                                             <h5>@item.AwayTeam.Name</h5>
+                                             <h5 style="color:black">@item.AwayTeam.Name</h5>
                                        </div>
                                       
                                     </div>
@@ -702,7 +701,6 @@
   
     <!-- Bootstrap & jQuery JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
  <script>
 let ticketData = {}; // { matchId: { Home: {cat:{}}, Away: {cat:{}}, selectedTeam } }

@@ -1,4 +1,5 @@
-﻿using SportEvent.Repositories;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using SportEvent.Repositories;
 
 namespace DataAccessLayer.Repositories.IRepositories
 {
@@ -19,6 +20,9 @@ namespace DataAccessLayer.Repositories.IRepositories
         ICartRepository CartRepository { get; }
         ICartItemRepository CartItemRepository { get; }
         ITicketPriceRepository TicketPriceRepository { get; }
+        ITicketMatchRepository TicketMatchRepository { get; }
+        IPointSystemRepository PointSystemRepository { get; }
         Task SaveChangesAsync();
+        Task<IDbContextTransaction> BeginTransactionAsync();
     }
 }

@@ -84,15 +84,62 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label" for="Price">Ticket Price</label>
-                            <input type="number" min="0" class="form-control" id="Price"  placeholder="0" asp-for="TicketPrice" />
-                            <span class="text-danger" asp-validation-for="TicketPrice"></span>
+                            <label class="form-check-label" for="IsBookable">Is Bookable?</label>
+                            <input type="checkbox" class="form-check-input" asp-for="IsBookable" id="IsBookable" />
+                            <span class="text-danger" asp-validation-for="IsBookable"></span>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label" for="AvailableTickets">Available Tickets</label>
-                            <input type="number" min="0" class="form-control" id="AvailableTickets" placeholder="0." asp-for="AvailableTickets" />
-                            <span class="text-danger" asp-validation-for="AvailableTickets"></span>
+                        <div id="ticketPricesSection" style="display:@(Model.IsBookable ? "block" : "none")">
+                            <h5>Ticket Prices</h5>
+                            <table class="table table-bordered" id="ticketPricesTable">
+                                <thead>
+                                    <tr>
+                                        <th>Category</th>
+                                        <th>Price</th>
+                                        <th>Home Tickets</th>
+                                        <th>Away Tickets</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < Model.TicketPrices.Count; i++)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <select name="TicketPrices[@i].Category" class="form-control category-select">
+                                                    @foreach (var cat in Enum.GetNames(typeof(TicketCategory)))
+                                                    {
+                                                        if(Model.TicketPrices[i].Category.ToString() == cat)
+                                                                                                    {
+                                                            <option value="@cat" selected>@cat</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@cat">@cat</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="number" name="TicketPrices[@i].Price" class="form-control"
+                                                       min="0" value="@Model.TicketPrices[i].Price" />
+                                            </td>
+                                            <td>
+                                                <input type="number" name="TicketPrices[@i].HomeTickets" class="form-control"
+                                                       min="0" value="@Model.TicketPrices[i].HomeTickets" />
+                                            </td>
+                                            <td>
+                                                <input type="number" name="TicketPrices[@i].AwayTickets" class="form-control"
+                                                       min="0" value="@Model.TicketPrices[i].AwayTickets" />
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger btn-sm removeRow">X</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <button type="button" class="btn btn-success" id="addTicketRow">+ Add Ticket</button>
                         </div>
 
 
@@ -106,3 +153,58 @@
 
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const isBookableCheckbox = document.getElementById("IsBookable");
+        const ticketPricesSection = document.getElementById("ticketPricesSection");
+        const ticketTableBody = document.querySelector("#ticketPricesTable tbody");
+        const addTicketRowBtn = document.getElementById("addTicketRow");
+
+        const categories = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+                        Enum.GetNames(typeof(TicketCategory)).ToList()
+                ));
+
+        // toggle ticket section
+        isBookableCheckbox.addEventListener("change", function () {
+            ticketPricesSection.style.display = this.checked ? "block" : "none";
+        });
+
+        // add row
+        addTicketRowBtn.addEventListener("click", function () {
+            const selectedCats = [...ticketTableBody.querySelectorAll("select")].map(s => s.value);
+            let availableCats = categories.filter(c => !selectedCats.includes(c));
+
+            if (availableCats.length === 0) {
+                alert("All categories already selected.");
+                return;
+            }
+
+            let rowIndex = ticketTableBody.querySelectorAll("tr").length;
+
+            let row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>
+                    <select name="TicketPrices[${rowIndex}].Category" class="form-control category-select">
+                        ${availableCats.map(c => `<option value="${c}">${c}</option>`).join("")}
+                    </select>
+                </td>
+                <td><input type="number" name="TicketPrices[${rowIndex}].Price" class="form-control" min="0" value="0" /></td>
+                <td><input type="number" name="TicketPrices[${rowIndex}].HomeTickets" class="form-control" min="0" value="0" /></td>
+                <td><input type="number" name="TicketPrices[${rowIndex}].AwayTickets" class="form-control" min="0" value="0" /></td>
+                <td><button type="button" class="btn btn-danger btn-sm removeRow">X</button></td>
+            `;
+
+            ticketTableBody.appendChild(row);
+        });
+
+        // remove row
+        ticketTableBody.addEventListener("click", function (e) {
+            if (e.target.classList.contains("removeRow")) {
+                e.target.closest("tr").remove();
+            }
+        });
+    });
+</script>
+

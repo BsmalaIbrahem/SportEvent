@@ -1,7 +1,10 @@
 ﻿using CoreLayer.Enums;
+using DataAccessLayer.Models;
 using DataAccessLayer.Repositories.IRepositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PresentationLayer.ViewModels;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace PresentationLayer.Areas.Customer.Controllers
@@ -77,9 +80,67 @@ namespace PresentationLayer.Areas.Customer.Controllers
                 });
             }
 
+
+            IEnumerable<Match>? lastMatches = new List<Match>();
+            var lastMatch = new Match();
+            var nextMatch = await _unitOfWork.MatchRepository.GetOneAsync(
+                m => m.Status == MatchStatus.Scheduled && m.MatchDate > DateTime.UtcNow,
+                includeChain: q => q.Include(m => m.HomeTeam)
+                                    .Include(m => m.AwayTeam)
+                                    .Include(t => t.Tournament)
+                                    .Include(m => m.TicketPrices)
+                                    ,
+                                    
+                orderBy: q => q.OrderBy(m => m.MatchDate)
+            );
+
+            if(nextMatch == null)
+            {
+                lastMatch = await _unitOfWork.MatchRepository.GetOneAsync(
+                        includeChain: q => q.Include(m => m.HomeTeam)
+                                            .Include(m => m.AwayTeam)
+                                            .Include(t => t.Tournament)
+                                            .Include(m => m.TicketPrices)
+                                            ,
+
+                        orderBy: q => q.OrderByDescending(m => m.MatchDate)
+                    );
+            }
+
+            var blogs = await _unitOfWork.NewRepository.GetAllAsync(take: 3, skip:0, orderBy: x => x.OrderByDescending(n => n.CreatedAt));
+
+            Expression<Func<Match, bool>>? filterExpression = m => DateOnly.FromDateTime(m.MatchDate) >= DateOnly.FromDateTime(DateTime.Now)
+                                                                    && m.IsBookable == true;
+            var upcommingMatches = await _unitOfWork.MatchRepository.GetAllAsync(
+                                                     filter: filterExpression,
+                                                     includeChain: q => q.Include(m => m.HomeTeam)
+                                                                        .Include(m => m.AwayTeam)
+                                                                        .Include(t => t.Tournament)
+                                                                        .Include(t => t.TicketPrices),
+                                                    skip: 0, take: 2,
+                                                    orderBy: q => q.OrderBy(m => m.MatchDate)
+                                       );
+
+            if(upcommingMatches == null || upcommingMatches.Count() == 0)
+            {
+                lastMatches = await _unitOfWork.MatchRepository.GetAllAsync(
+                                                     includeChain: q => q.Include(m => m.HomeTeam)
+                                                                        .Include(m => m.AwayTeam)
+                                                                        .Include(t => t.Tournament)
+                                                                        .Include(t => t.TicketPrices),
+                                                    skip: 0, take: 2,
+                                                    orderBy: q => q.OrderByDescending(m => m.MatchDate)
+                                       );
+            }
+
             var data = new CustomerHomeVM
             {
                 LeagueStandings = leagueStandings.OrderByDescending(x => x.Points).ThenByDescending(x => x.GoalDifference).ThenByDescending(x => x.GoalsFor).ThenByDescending(x => x.MatchesPlayed).ToList(),
+                NextMatch = nextMatch,
+                LastMatch = lastMatch,
+                Blogs = blogs,
+                UpcommingMatches = upcommingMatches,
+                LastMatches = lastMatches
             };
 
 

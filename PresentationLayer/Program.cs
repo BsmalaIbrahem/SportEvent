@@ -3,13 +3,19 @@ using DataAccessLayer.Data;
 using DataAccessLayer.DBInitilizer;
 using DataAccessLayer.Repositories;
 using DataAccessLayer.Repositories.IRepositories;
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using Hangfire;
 using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using PresentationLayer.HostedServices;
+using PresentationLayer.Services;
+using PresentationLayer.Services.IServices;
+using PresentationLayer.Stripe;
 using SportEvent.Repositories;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,17 +56,23 @@ builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<ITicketPriceRepository, TicketPriceRepository>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<ICartItemRepository, CartItemRepository>();
+builder.Services.AddScoped<ITicketMatchRepository, TicketMatchRepository>();
+builder.Services.AddScoped<IPointSystemRepository, PointSystemRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<TicketPricingService>();
 
 
-builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.AddScoped<IEmailSender, CustomEmailSender>();
+builder.Services.AddScoped<ICustomEmailSender, CustomEmailSender>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Identity/Account/Login";
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
 });
+
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
 builder.Services.AddHangfire(config =>
 {
@@ -79,6 +91,13 @@ builder.Services.AddHangfire(config =>
 builder.Services.AddHangfireServer();
 
 builder.Services.AddHostedService<MatchStatusService>();
+builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+builder.Services.AddScoped<IPdfService, PdfService>();
+
+builder.Services.AddHangfireServer(options =>
+{
+    options.Queues = new[] { "default", "pdf-generation" };
+});
 
 var app = builder.Build();
 
@@ -114,6 +133,13 @@ RecurringJob.AddOrUpdate<TicketPricingService>(
     s => s.UpdateTicketPricesAsync(),
     Cron.Hourly()
 );
+
+RecurringJob.AddOrUpdate<CleanupExpiredTicketsService>(
+    "cleanup-expired-tickets",
+    job => job.Execute(),
+    Cron.Minutely()
+);
+
 
 app.MapGet("/Admin", context =>
 {

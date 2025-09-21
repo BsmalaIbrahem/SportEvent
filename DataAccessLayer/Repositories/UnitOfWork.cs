@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Data;
 using DataAccessLayer.Repositories.IRepositories;
+using Microsoft.EntityFrameworkCore.Storage;
 using SportEvent.Repositories;
 
 namespace DataAccessLayer.Repositories
@@ -13,7 +14,8 @@ namespace DataAccessLayer.Repositories
             IMatchRepository matchRepository,IMatchStatisticRepository matchStatisticRepository,
             INewRepository newRepository,IPlayerRepository playerRepository,ITeamRepository teamRepository
             ,ITeamPlayerRepository teamPlayerRepository,ITournamentRepository tournamentRepository, ITicketRepository ticketRepository,ITicketPriceRepository ticketPriceRepository,
-            ICartRepository cartRepository, ICartItemRepository cartItemRepository,
+            ICartRepository cartRepository, ICartItemRepository cartItemRepository, ITicketMatchRepository ticketMatchRepository,
+            IPointSystemRepository PointSystemRepository,
             ApplicationDbContext context)
         {
             CoachRepository = coachRepository;
@@ -30,6 +32,8 @@ namespace DataAccessLayer.Repositories
             TicketPriceRepository = ticketPriceRepository;
             CartRepository = cartRepository;
             CartItemRepository = cartItemRepository;
+            TicketMatchRepository = ticketMatchRepository;
+            this.PointSystemRepository = PointSystemRepository;
             _context = context;
         }
         public ICoachRepository CoachRepository { get; }
@@ -49,6 +53,13 @@ namespace DataAccessLayer.Repositories
         public ITicketPriceRepository TicketPriceRepository { get; }
         public ICartRepository CartRepository { get; }
         public ICartItemRepository CartItemRepository { get; }
+        public ITicketMatchRepository TicketMatchRepository { get; }
+        public IPointSystemRepository PointSystemRepository { get; }
+
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            return await _context.Database.BeginTransactionAsync();
+        }
 
         public async Task SaveChangesAsync()
         {

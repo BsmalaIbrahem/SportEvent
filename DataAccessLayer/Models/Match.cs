@@ -32,7 +32,7 @@ namespace DataAccessLayer.Models
         public bool IsBookable { get; set; } = false;
         public bool isBigMatch { get; set; } = false;
         [NotMapped]
-        public bool IsAvailableForBooking => DateOnly.FromDateTime(MatchDate) > DateOnly.FromDateTime(DateTime.Now)
+        public bool IsAvailableForBooking => DateOnly.FromDateTime(MatchDate) >= DateOnly.FromDateTime(DateTime.Now)
                                            && IsBookable == true && AvailableTickets > 0;
     }
 }

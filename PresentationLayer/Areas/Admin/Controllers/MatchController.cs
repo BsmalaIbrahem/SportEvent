@@ -35,7 +35,7 @@ namespace PresentationLayer.Areas.Admin.Controllers
                 skip: filter.IsToday == true  ? null : filter.SkipNumber,
                 take: filter.IsToday == true ? null : filter.PageSize,
                 orderBy: q => q.OrderByDescending(c => c.Id),
-                includeChain: q => q.Include(c => c.Tournament).Include(c => c.AwayTeam).Include(c => c.HomeTeam)
+                includeChain: q => q.Include(c => c.Tournament).Include(c => c.AwayTeam).Include(c => c.HomeTeam).Include(c => c.TicketPrices)
             );
             var data = new ModelsWithPaginationVM<Match>
             {
@@ -57,7 +57,7 @@ namespace PresentationLayer.Areas.Admin.Controllers
         public async Task<IActionResult> Create()
         {
             await SetViewBag();
-            return View();
+            return View(new CreateMatchVM());
         }
 
         [HttpPost]
@@ -90,6 +90,13 @@ namespace PresentationLayer.Areas.Admin.Controllers
                 return View(request);
             }
 
+            if(request.IsBookable == true && request.TicketPrices.Count <= 0)
+            {
+                ModelState.AddModelError("", "Ticket Prices must be greater than zero if the match is bookable.");
+                await SetViewBag(request.HomeTeamId);
+                return View(request);
+            }
+
             var match = new Match
             {
                 HomeTeamId = request.HomeTeamId,
@@ -100,8 +107,15 @@ namespace PresentationLayer.Areas.Admin.Controllers
                 Status = request.MatchStatus,
                 HomeScore = request.HomeScore,
                 AwayScore = request.AwayScore,
-                //AvailableTickets = request.AvailableTickets,
-                TicketPrice = request.TicketPrice,
+                IsBookable = request.IsBookable,
+                TicketPrices = request.TicketPrices.Select(tp => new TicketPrice
+                {
+                    Category = tp.Category,
+                    Price = tp.Price,
+                    BasePrice = tp.Price,
+                    HomeTickets = tp.HomeTickets,
+                    AwayTickets = tp.AwayTickets
+                }).ToList(),
 
             };
 
@@ -130,8 +144,14 @@ namespace PresentationLayer.Areas.Admin.Controllers
                 MatchStatus = match.Status,
                 HomeScore = match.HomeScore,
                 AwayScore = match.AwayScore,
-                AvailableTickets = match.AvailableTickets,
-                TicketPrice = match.TicketPrice
+                IsBookable = match.IsBookable,
+                TicketPrices = match.TicketPrices.Select(tp => new MatchTicketsVM
+                {
+                    Category = tp.Category,
+                    Price = tp.Price,
+                    HomeTickets = tp.HomeTickets,
+                    AwayTickets = tp.AwayTickets
+                }).ToList()
             };
 
             await SetViewBag();
@@ -165,7 +185,7 @@ namespace PresentationLayer.Areas.Admin.Controllers
                 await SetViewBag(request.HomeTeamId, request.TournamentId);
                 return View(request);
             }
-            var match = await _unitOfWork.MatchRepository.GetOneAsync(x => x.Id == request.Id, asNoTracking: true);
+            var match = await _unitOfWork.MatchRepository.GetOneAsync(x => x.Id == request.Id, asNoTracking: true, includeChain:x=>x.Include(q => q.TicketPrices));
             if (match == null)
             {
                 return NotFound();
@@ -178,8 +198,35 @@ namespace PresentationLayer.Areas.Admin.Controllers
             match.Status = request.MatchStatus;
             match.HomeScore = request.HomeScore;
             match.AwayScore = request.AwayScore;
-           // match.AvailableTickets = request.AvailableTickets;
-            match.TicketPrice = request.TicketPrice;
+            match.IsBookable = request.IsBookable;
+
+            foreach (var tp in request.TicketPrices)
+            {
+                var existing = await _unitOfWork.TicketPriceRepository.GetOneAsync(t => t.MatchId == match.Id && t.Category == tp.Category);
+                if (existing != null)
+                {
+                    existing.Price = tp.Price;
+                    existing.BasePrice = tp.Price;
+                    existing.HomeTickets = tp.HomeTickets;
+                    existing.AwayTickets = tp.AwayTickets;
+                }
+                else
+                {
+                    var newTicketPrice = new TicketPrice
+                    {
+                        Category = tp.Category,
+                        Price = tp.Price,
+                        BasePrice = tp.Price,
+                        HomeTickets = tp.HomeTickets,
+                        AwayTickets = tp.AwayTickets,
+                        MatchId = match.Id
+                    };
+                    await _unitOfWork.TicketPriceRepository.AddAsync(newTicketPrice);
+                    
+                }
+            }
+            await _unitOfWork.TicketPriceRepository.SaveChangesAsync();
+
             _unitOfWork.MatchRepository.Update(match);
             await _unitOfWork.MatchRepository.SaveChangesAsync();
             TempData["SuccessMessage"] = "Match Edited successfully.";

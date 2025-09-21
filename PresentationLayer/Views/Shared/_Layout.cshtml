@@ -32,6 +32,8 @@
     <link rel="stylesheet" href="~/Customer/css/aos.css">
 
     <link rel="stylesheet" href="~/Customer/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdi/7.2.96/css/materialdesignicons.min.css">
 </head>
 <body>
     <div class="site-wrap">
@@ -50,32 +52,32 @@
             <div class="container">
                 <div class="d-flex align-items-center">
                     <div class="site-logo">
-                        <a class="sidebar-brand brand-logo" asp-controller="Home" asp-action="Index" style="color:white;font-size:25px;font-family: sans-serif;">⚽Matchy</a>
+                        <a class="sidebar-brand brand-logo" asp-area="Customer" asp-controller="Home" asp-action="Index" style="color:white;font-size:25px;font-family: sans-serif;">⚽Matchy</a>
                     </div>
                     <div class="ml-auto">
                         <nav class="site-navigation position-relative text-right" role="navigation">
                             <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
-                                <li class="@(currentController == "Home" && currentAction == "Index" ? "active" : "")"><a asp-controller="Home" asp-action="Index" class="nav-link">Home</a></li>
+                                <li class="@(currentController == "Home" && currentAction == "Index" ? "active" : "")"><a asp-area="Customer" asp-controller="Home" asp-action="Index" class="nav-link">Home</a></li>
                                 <li class="@(currentController == "Match" && currentAction == "Index" ? "active" : "")">
-                                    <a asp-controller="Match" asp-action="Index" class="nav-link">Matches</a>
+                                    <a asp-area="Customer" asp-controller="Match" asp-action="Index" class="nav-link">Matches</a>
                                 </li>
                                 <li class="@(currentController == "Match" && currentAction == "AvailableForBooking" ? "active" : "")">
-                                    <a asp-controller="Match" asp-action="AvailableForBooking" class="nav-link">Book Tickets</a>
+                                    <a asp-area="Customer" asp-controller="Match" asp-action="AvailableForBooking" class="nav-link">Book Tickets</a>
                                 </li>
                                 <li class="@(currentController == "Team" && currentAction == "Index" ? "active" : "")">
-                                    <a asp-controller="Team" asp-action="Index" class="nav-link">Teams</a>
+                                    <a asp-area="Customer" asp-controller="Team" asp-action="Index" class="nav-link">Teams</a>
                                 </li>
                                 <li class="@(currentController == "New" && currentAction == "Index" ? "active" : "")">
-                                    <a asp-controller="New" asp-action="Index" class="nav-link">Blog</a>
+                                    <a asp-area="Customer" asp-controller="New" asp-action="Index" class="nav-link">Blog</a>
                                 </li>
                                 <li class="@(currentController == "Contact" && currentAction == "Index" ? "active" : "")">
-                                    <a asp-controller="Contact" asp-action="Index" class="nav-link">Contact</a>
+                                    <a asp-area="Customer" asp-controller="Contact" asp-action="Index" class="nav-link">Contact</a>
                                 </li>
                                 @if (User is not null && User.Identity.IsAuthenticated)
                                 {
                                     <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle btn btn-outline-primary px-3 mx-1 rounded-pill" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            My Profile
+                                        <a class="nav-link dropdown-toggle btn btn-primary px-3 mx-1 rounded-pill" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fas fa-user"></i>
                                         </a>
                                         <ul class="dropdown-menu" aria-labelledby="profileDropdown">
                                             <li>
@@ -88,6 +90,11 @@
                                                     Edit Profile
                                                 </a>
                                             </li>
+                                            <li>
+                                                <a class="dropdown-item" asp-area="Customer" asp-controller="Ticket" asp-action="Index">
+                                                    My Tickets
+                                                </a>
+                                            </li>
                                             <li><hr class="dropdown-divider" /></li>
                                             <li>
                                                 <a class="dropdown-item text-danger" asp-area="Identity" asp-controller="Account" asp-action="Logout">
@@ -95,11 +102,6 @@
                                                 </a>
                                             </li>
                                         </ul>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="btn btn-success px-3 mx-1 rounded-pill" asp-area="Identity" asp-controller="UserProfile" asp-action="MyTicket">
-                                            My Tickets
-                                        </a>
                                     </li>
                                 }
                                 else
@@ -109,12 +111,12 @@
                                             Login
                                         </a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="btn btn-warning px-3 mx-1 rounded-pill" asp-area="Identity" asp-controller="Account" asp-action="Register">
-                                            Register
-                                        </a>
-                                    </li>
                                 }
+                                <li class="nav-item">
+                                    <a class="btn btn-success px-3 mx-1 rounded-pill" asp-area="Customer" asp-controller="Cart" asp-action="Index">
+                                        <i class="fas fa-shopping-cart"></i>
+                                    </a>
+                                </li>
                             </ul>
                         </nav>
 
