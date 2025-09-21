@@ -36,6 +36,7 @@ namespace DataAccessLayer.Data
         public DbSet<Cart> Cart { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<TicketMatch> TicketMatches { get; set; }
+        public DbSet<PointSystem> PointSystems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -59,6 +60,11 @@ namespace DataAccessLayer.Data
                 .HasForeignKey(m => m.TournamentId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<PointSystem>().HasData(
+                new PointSystem { Id = 1, ActionType=PointActionType.TicketBooking},
+                new PointSystem { Id = 2, ActionType=PointActionType.ExactResult},
+                new PointSystem { Id = 3, ActionType=PointActionType.CorrectPrediction}
+            );
 
             #region Coach Data
             modelBuilder.Entity<Coach>().HasData(

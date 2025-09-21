@@ -1,0 +1,44 @@
+﻿@using CoreLayer.Helpers
+@model EditPointSystemVM
+
+@{
+    ViewData["Title"] = "Edit Point System";
+}
+
+<div class="container-xxl container-p-y">
+    <h2 class="mb-4">Edit @Model.ActionType.GetDisplayName()</h2>
+
+</div>
+
+<form asp-action="Edit" method="post">
+    <div class="form-group mb-3">
+        <label asp-for="ActionType" class="form-label"></label>
+        <input value="@Model.ActionType.GetDisplayName()" class="form-control" disabled style="background-color:#2A3038" />
+        <span asp-validation-for="ActionType" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="FixedPoints" class="form-label"></label>
+        <input type="number" min="0" asp-for="FixedPoints" class="form-control">
+        <span asp-validation-for="FixedPoints" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="UnitValue" class="form-label"></label>
+        <input type="number" min="0" asp-for="UnitValue" class="form-control">
+        <span asp-validation-for="UnitValue" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="PointsPerUnit" class="form-label"></label>
+        <input type="number" min="0" asp-for="PointsPerUnit" class="form-control">
+        <span asp-validation-for="PointsPerUnit" class="text-danger"></span>
+    </div>
+
+  
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>
+
+

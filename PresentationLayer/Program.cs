@@ -57,6 +57,7 @@ builder.Services.AddScoped<ITicketPriceRepository, TicketPriceRepository>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<ICartItemRepository, CartItemRepository>();
 builder.Services.AddScoped<ITicketMatchRepository, TicketMatchRepository>();
+builder.Services.AddScoped<IPointSystemRepository, PointSystemRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<TicketPricingService>();
 
