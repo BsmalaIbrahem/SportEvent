@@ -7,6 +7,7 @@ using PresentationLayer.ViewModels;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PresentationLayer.Areas.Customer.Controllers
 {
@@ -153,12 +154,16 @@ namespace PresentationLayer.Areas.Customer.Controllers
                                     && (userId != null ? i.Cart.UserId == userId : i.Cart.SessionId == sessionId);
 
             var ExistingItem = await  _unitOfWork.CartItemRepository.GetOneAsync(filter);
-            if(ExistingItem == null)
+            
+            if (ExistingItem == null)
             {
                 return Json(new { success = false, message = "Item not found." });
             }
+            var cart = ExistingItem.CartId;
             await _unitOfWork.CartItemRepository.DeleteAsync(filter);
+            await DeleteCartIfEmpty(cart);
             await _unitOfWork.CartItemRepository.SaveChangesAsync();
+            
             return Json(new { success = true, message = "Cart Item Deleted successfully." });
         }
 
@@ -175,7 +180,7 @@ namespace PresentationLayer.Areas.Customer.Controllers
             {
                 return Json(new { success = false, message = "Item not found." });
             }
-
+            var cart = ExistingItem.CartId;
             if (request.Increase)
             {
                 if (ExistingItem.Cart.CartItems.Sum(i => i.Quantity) >= MAX_TICKETS_PER_MATCH)
@@ -190,9 +195,12 @@ namespace PresentationLayer.Areas.Customer.Controllers
                 {
                     await _unitOfWork.CartItemRepository.DeleteAsync(filter);
                     await _unitOfWork.CartItemRepository.SaveChangesAsync();
-                    return Json(new { success = false, message = "Quantity cannot be less than 1." });
+                    await DeleteCartIfEmpty(cart);
+                    if (ExistingItem.Quantity != 1)
+                        return Json(new { success = false, message = "Quantity cannot be less than 1." });
+                    return Json(new { success = true, message = "Cart Item Quantity Updated successfully." });
                 }
-               
+
                 ExistingItem.Quantity -= 1;
             }
 
@@ -201,6 +209,16 @@ namespace PresentationLayer.Areas.Customer.Controllers
 
             return Json(new { success = true, message = "Cart Item Quantity Updated successfully." } );
 
+        }
+
+        private async Task DeleteCartIfEmpty(int cartId)
+        {
+            var cart = await _unitOfWork.CartRepository.GetOneAsync(x => x.Id == cartId, includeChain: q => q.Include(c => c.CartItems));
+            if (cart.CartItems == null || !cart.CartItems.Any())
+            {
+               await _unitOfWork.CartRepository.DeleteAsync(x => x.Id == cart.Id);
+               await _unitOfWork.CartRepository.SaveChangesAsync();
+            }
         }
 
         private string GetSessionId()

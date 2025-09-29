@@ -629,6 +629,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.quantity-btn.decrease').forEach(btn => {
         btn.addEventListener('click', function () {
             const ticketItem = this.closest('.ticket-item');
+             const matchCard = ticketItem.closest('.match-card');
             const cartId = this.getAttribute('data-cart-id');
             const ticketCategory = this.getAttribute('data-ticket-category');
 
@@ -658,6 +659,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         // لو السيرفر مسحها لأن الكمية بقت <= 1
                         ticketItem.remove();
                         updateCartTotals();
+                    }
+                    if (matchCard.querySelectorAll('.ticket-item').length === 0) {
+                        matchCard.remove();
                     }
                 } else {
                     alert(data.message || "Error updating quantity.");
