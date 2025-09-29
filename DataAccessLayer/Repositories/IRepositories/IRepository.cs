@@ -20,7 +20,7 @@ namespace DataAccessLayer.Repositories.IRepositories
             Func<IQueryable<T>, IIncludableQueryable<T, object>>? includeChain = null,
             bool asNoTracking = false, int? skip = null, int? take = null,
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, bool IsDeleted = false);
-        Task<int> CountAsync(Expression<Func<T, bool>>? expression = null);
+        Task<int> CountAsync(Expression<Func<T, bool>>? expression = null, Func<IQueryable<T>, IIncludableQueryable<T, object>>? includeChain = null);
         Task AddAsync(T entity);
         void Update(T entity);
         Task DeleteAsync(Expression<Func<T, bool>> expression);

@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PresentationLayer.Services;
 using PresentationLayer.Services.IServices;
 using Stripe;
 using Stripe.Checkout;
+using System.ComponentModel;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -25,13 +27,15 @@ namespace PresentationLayer.Areas.Customer.Controllers
         private readonly ICustomEmailSender _customEmailSender;
         private readonly ILogger<CheckoutController> _logger;
         private readonly IConverter _converter;
-        public CheckoutController(IUnitOfWork unitOfWork, IConfiguration configuration, ICustomEmailSender _customEmailSender, ILogger<CheckoutController> _logger, IConverter converter)
+        private readonly PointSystemService _pointSystemService;
+        public CheckoutController(IUnitOfWork unitOfWork, IConfiguration configuration, ICustomEmailSender _customEmailSender, ILogger<CheckoutController> _logger, IConverter converter, PointSystemService pointSystemService)
         {
             _unitOfWork = unitOfWork;
             _configuration = configuration;
             this._logger = _logger;
             this._customEmailSender = _customEmailSender;
             _converter = converter;
+            _pointSystemService = pointSystemService;
         }
 
         public async Task<IActionResult> Success(string referenceId)
@@ -173,6 +177,15 @@ namespace PresentationLayer.Areas.Customer.Controllers
                                 }
                                 await _unitOfWork.CartItemRepository.SaveChangesAsync();
                                 await _unitOfWork.CartRepository.SaveChangesAsync();
+
+                                var points = await _pointSystemService.CalculatePoints(PointActionType.TicketBooking, Convert.ToInt32(ticket.SubTotal - ticket.Discount));
+
+                                var user = ticket.User;
+                                if(user != null && points > 0)
+                                {
+                                    user.Points += points;
+                                    await _unitOfWork.SaveChangesAsync();
+                                }
 
                                 BackgroundJob.Enqueue<IPdfService>(x => x.GenerateAndSendPdfsInBackground(ticket.Id, JobCancellationToken.Null));
 

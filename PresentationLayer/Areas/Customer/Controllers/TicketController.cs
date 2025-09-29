@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PresentationLayer.Services;
 using PresentationLayer.ViewModels;
 using Stripe.Checkout;
 using Stripe.Climate;
@@ -23,10 +24,12 @@ namespace PresentationLayer.Areas.Customer.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<ApplicationUser> _userManager;
-        public TicketController(IUnitOfWork unitOfWork, UserManager<ApplicationUser> _userManager)
+        private readonly TicketService _service;
+        public TicketController(IUnitOfWork unitOfWork, UserManager<ApplicationUser> _userManager, TicketService service)
         {
             _unitOfWork = unitOfWork;
             this._userManager = _userManager;
+            _service = service;
         }
 
         [Authorize]
@@ -143,6 +146,13 @@ namespace PresentationLayer.Areas.Customer.Controllers
                     }
 
                     if (cart?.CartItems?.Sum(i => i.Quantity) > 4)
+                    {
+                        throw new Exception("You can not buy more than 4 tickets for the same match.");
+                    }
+
+                    var lastTotalTickets = await _service.GetTotalTicketsForMatch(cart!.MatchId, user.Id);
+
+                    if (lastTotalTickets + cart?.CartItems?.Sum(i => i.Quantity) > 4)
                     {
                         throw new Exception("You can not buy more than 4 tickets for the same match.");
                     }

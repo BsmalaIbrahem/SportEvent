@@ -72,13 +72,17 @@ namespace DataAccessLayer.Repositories
         }
 
 
-        public async Task<int> CountAsync(Expression<Func<T, bool>>? expression = null)
+        public async Task<int> CountAsync(Expression<Func<T, bool>>? expression = null, Func<IQueryable<T>, IIncludableQueryable<T, object>>? includeChain = null)
         {
             var query = _context.Set<T>().AsQueryable();
             if (expression != null)
             {
                 query = query.Where(expression);
             }
+
+            if (includeChain != null)
+                query = includeChain(query);
+
             return await query.CountAsync();
         }
 

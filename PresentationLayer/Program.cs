@@ -60,6 +60,8 @@ builder.Services.AddScoped<ITicketMatchRepository, TicketMatchRepository>();
 builder.Services.AddScoped<IPointSystemRepository, PointSystemRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<TicketPricingService>();
+builder.Services.AddScoped<PointSystemService>();
+builder.Services.AddScoped<TicketService>();
 
 
 builder.Services.AddScoped<IEmailSender, CustomEmailSender>();
