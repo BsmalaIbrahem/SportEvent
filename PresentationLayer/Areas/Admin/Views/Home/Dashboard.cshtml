@@ -221,14 +221,14 @@
             <div class="col-sm-4 grid-margin">
                 <div class="card">
                     <div class="card-body">
-                        <h5>Revenue</h5>
+                        <h5>Tickets Sold</h5>
                         <div class="row">
                             <div class="col-8 col-sm-12 col-xl-8 my-auto">
                                 <div class="d-flex d-sm-block d-md-flex align-items-center">
-                                    <h2 class="mb-0">$32123</h2>
-                                    <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p>
+                                    <h2 class="mb-0">@Model.TotalTicketsSold</h2>
+                                    <p class="text-success ml-2 mb-0 font-weight-medium"></p>
                                 </div>
-                                <h6 class="text-muted font-weight-normal">11.38% Since last month</h6>
+                                <h6 class="text-muted font-weight-normal"></h6>
                             </div>
                             <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
                                 <i class="icon-lg mdi mdi-codepen text-primary ml-auto"></i>
@@ -240,14 +240,14 @@
             <div class="col-sm-4 grid-margin">
                 <div class="card">
                     <div class="card-body">
-                        <h5>Sales</h5>
+                        <h5>Revenue</h5>
                         <div class="row">
                             <div class="col-8 col-sm-12 col-xl-8 my-auto">
                                 <div class="d-flex d-sm-block d-md-flex align-items-center">
-                                    <h2 class="mb-0">$45850</h2>
-                                    <p class="text-success ml-2 mb-0 font-weight-medium">+8.3%</p>
+                                    <h2 class="mb-0">EG @Model.TotalRevenue.ToString("N2")</h2>
+                                    <p class="text-success ml-2 mb-0 font-weight-medium"></p>
                                 </div>
-                                <h6 class="text-muted font-weight-normal"> 9.61% Since last month</h6>
+                                <h6 class="text-muted font-weight-normal"></h6>
                             </div>
                             <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
                                 <i class="icon-lg mdi mdi-wallet-travel text-danger ml-auto"></i>
@@ -259,22 +259,50 @@
             <div class="col-sm-4 grid-margin">
                 <div class="card">
                     <div class="card-body">
-                        <h5>Purchase</h5>
+                        <h5>Users</h5>
                         <div class="row">
                             <div class="col-8 col-sm-12 col-xl-8 my-auto">
                                 <div class="d-flex d-sm-block d-md-flex align-items-center">
-                                    <h2 class="mb-0">$2039</h2>
-                                    <p class="text-danger ml-2 mb-0 font-weight-medium">-2.1% </p>
+                                    <!-- Active Users -->
+                                    <h2 class="mb-0">@Model.ActiveUsers</h2>
+                                    <!-- نسبة النشاط -->
+                                    <p class="text-success ml-2 mb-0 font-weight-medium">@((Convert.ToDecimal(Model.ActiveUsers) / Convert.ToDecimal(Model.TotalUsers)) * 100)% Active</p>
                                 </div>
-                                <h6 class="text-muted font-weight-normal">2.27% Since last month</h6>
+                                <!-- Total Users -->
+                                <h6 class="text-muted font-weight-normal">Total Users: @Model.TotalUsers</h6>
                             </div>
                             <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                                <i class="icon-lg mdi mdi-monitor text-success ml-auto"></i>
+                                <!-- أيقونة مستخدمين -->
+                                <i class="icon-lg mdi mdi-account-multiple text-primary ml-auto"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+        </div>
+    
+        <div class="row mt-4">
+            <div class="col-md-8">
+                <div class="card shadow-sm border-0 rounded-3">
+                    <div class="card-body">
+                        <h4 class="card-title text-center mb-4 fw-bold text-uppercase">
+                            Tickets Sold per Team
+                        </h4>
+                        <canvas id="ticketsByTeamChart" height="120"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Ticket Types Distribution</h5>
+                        <canvas id="ticketTypesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -302,5 +330,103 @@
           }
         }
       }
+    });
+</script>
+
+<script>
+    var ctxTeams = document.getElementById("ticketsByTeamChart").getContext("2d");
+    new Chart(ctxTeams, {
+        type: "bar",
+        data: {
+            labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TeamsWithTickets.Select(t => t.TeamName))),
+            datasets: [{
+                label: "Tickets Sold",
+                data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TeamsWithTickets.Select(t => t.TicketsSold))),
+                backgroundColor: "#4caf50"
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                x: { ticks: { color: "#333" } },
+                y: { ticks: { color: "#333", beginAtZero: true } }
+            }
+        }
+    });
+</script>
+
+<script>
+    // labels = أسماء الأنواع
+    var ticketLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                Model.TicketsWithTypes.Select(x => x.TicketType)
+        ));
+
+    // data = عدد التذاكر المباعة لكل نوع
+    var ticketData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                Model.TicketsWithTypes.Select(x => x.TicketsSold)
+        ));
+
+    // باليت ألوان متناسقة مع الخلفية الداكنة
+    const palette = [
+        "#3B9960",  // أخضر طبيعي
+        "#2E86AB",  // أزرق محترف
+        "#A23B72",  // بنفسجي أنيق
+        "#F18F01",  // برتقالي دافئ
+        "#C73E1D",  // أحمر ترابي
+        
+        "#5B4B8A",  // بنفسجي غامق
+        "#E6AF2E",  // ذهبي
+        "#1C1C1C"   // أسود/رمادي
+    ];
+
+
+
+
+    // دالة لتوزيع الألوان حسب عدد الأنواع
+    function getColors(count) {
+        const colors = [];
+        for (let i = 0; i < count; i++) {
+            colors.push(palette[i % palette.length]);
+        }
+        return colors;
+    }
+
+    const ctx2 = document.getElementById('ticketTypesChart').getContext('2d');
+    new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+            labels: ticketLabels,
+            datasets: [{
+                data: ticketData,
+                backgroundColor: getColors(ticketLabels.length),
+                borderWidth: 2,
+                borderColor: "#121212" // نفس لون الخلفية الداكنة
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: "#ddd", // لون النص للـ Dark Mode
+                        font: { size: 14 }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let total = context.chart._metasets[0].total;
+                            let value = context.raw;
+                            let percentage = ((value / total) * 100).toFixed(1);
+                            return `${context.label}: ${value} (${percentage}%)`;
+                        }
+                    }
+                }
+            }
+        }
     });
 </script>

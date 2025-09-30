@@ -1,6 +1,9 @@
 ﻿using CoreLayer.Enums;
+using DataAccessLayer.Data;
+using DataAccessLayer.Models;
 using DataAccessLayer.Repositories.IRepositories;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PresentationLayer.ViewModels;
@@ -13,9 +16,11 @@ namespace PresentationLayer.Areas.Admin.Controllers
     public class HomeController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public HomeController(IUnitOfWork unitOfWork)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public HomeController(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
         {
             _unitOfWork = unitOfWork;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Dashboard(DashboardFilterVM filter)
@@ -86,6 +91,17 @@ namespace PresentationLayer.Areas.Admin.Controllers
                 });
             }
 
+
+            var soldTickets = await _unitOfWork.TicketRepository.GetAllAsync(
+                t => t.Status == TicketStatus.Confirmed ,
+                includeChain: q => q.Include(t => t.TicketMatches).Include(t => t.User),
+                orderBy: x => x.OrderByDescending(x => x.Id)
+              );
+
+            var expectUsers = await _userManager.GetUsersInRoleAsync("SuperAdmin");
+            var users = await _userManager.Users.Where(x => !expectUsers.Select(e => e.Id).Contains(x.Id)).CountAsync();
+           
+
             var data = new DashboardVM
             {
                 TotalMatches = totalMaches,
@@ -95,9 +111,59 @@ namespace PresentationLayer.Areas.Admin.Controllers
                 LeagueStandings = leagueStandings.OrderByDescending(x => x.Points).ThenByDescending(x => x.GoalDifference).ThenByDescending(x => x.GoalsFor).ThenByDescending(x => x.MatchesPlayed).ToList(),
                 DrawsCount = leagueStandings.Sum(x => x.Draws) / 2,
                 WinsCount = leagueStandings.Sum(x => x.Wins),
+                TotalTicketsSold = soldTickets.SelectMany(t => t.TicketMatches).Sum(tm => tm.Quantity),
+                TotalRevenue = soldTickets.Sum(t => t.SubTotal - t.Discount),
+                TotalUsers = users,
+                ActiveUsers = soldTickets.Select(t => t.UserId).Distinct().Count(),
+                TeamsWithTickets = await TeamsWithTickets(Tournment.Id),
+                TicketsWithTypes = await TicketsWithTypes()
             };
             
             return View(data);
         }
+
+        private async Task<List<TeamsWithTicketsVM>> TeamsWithTickets(int tournmentId)
+        {
+            var matches = await _unitOfWork.MatchRepository.GetAllAsync(m => m.TournamentId == tournmentId,
+                                                                            includeChain: q=>q.Include(m => m.HomeTeam)
+                                                                                                .Include(m => m.AwayTeam)
+                                                                   );
+            var teams = matches.SelectMany(m => new[] { m.HomeTeam, m.AwayTeam }).Distinct().ToList();
+            var teamWithTickets = new List<TeamsWithTicketsVM>();
+            foreach (var team in teams) 
+            {
+                var soldTickets = await _unitOfWork.TicketMatchRepository.GetAllAsync(x => x.TeamId == team.Id && x.Ticket.Status == TicketStatus.Confirmed, includeChain: q=>q.Include(m => m.Ticket));
+                teamWithTickets.Add(new TeamsWithTicketsVM
+                {
+                    TeamId = team.Id,
+                    TeamName = team.Name,
+                    TeamLogoUrl = team.LogoUrl,
+                    TicketsSold = soldTickets.Sum(x => x.Quantity)
+                });
+            }
+
+            teamWithTickets = teamWithTickets.OrderByDescending(t => t.TicketsSold).ToList();
+            return teamWithTickets;
+
+        }
+    
+        
+        private async Task<List<TicketsWithTypesVM>> TicketsWithTypes()
+        {
+            var ticketsWihTypes = new List<TicketsWithTypesVM>();
+            foreach(var type in Enum.GetNames(typeof(TicketCategory)))
+            {
+                var tickets = await _unitOfWork.TicketMatchRepository.GetAllAsync(t => t.Ticket.Status == TicketStatus.Confirmed && t.Category.ToString() == type, includeChain: q => q.Include(t => t.Ticket));
+                ticketsWihTypes.Add(new TicketsWithTypesVM
+                {
+                    TicketType = type,
+                    TicketsSold = tickets.Sum(t => t.Quantity)
+                });
+
+            }
+            
+            return ticketsWihTypes;
+        }
+
     }
 }
