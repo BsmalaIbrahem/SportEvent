@@ -1,5 +1,6 @@
 ﻿using CoreLayer.Enums;
 using CoreLayer.Helpers;
+using CoreLayer.Utility;
 using DataAccessLayer.Data;
 using DataAccessLayer.Models;
 using DataAccessLayer.Repositories.IRepositories;
@@ -67,14 +68,32 @@ namespace PresentationLayer.Areas.Identity.Controllers
                 Points = user.Points,
                 ProfilePictureUrl = user.ProfilePictureUrl
             };
+
+            var role = await _userManager.GetRolesAsync(user);
+            if(role.Contains(SD.SuperAdmin) || role.Contains(SD.Admin))
+            {
+                return View("~/Areas/Admin/Views/Profile/Edit.cshtml", model);
+            }
+
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(UserProfileVM userProfile)
         {
-            if(!ModelState.IsValid)
-                return NotFound(userProfile);
+            var authUser = await _userManager.GetUserAsync(User);
+            var role = await _userManager.GetRolesAsync(authUser);
+
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("CurrentPassword", "InVaild Password");
+
+                if (role.Contains(SD.SuperAdmin) || role.Contains(SD.Admin))
+                {
+                    return View("~/Areas/Admin/Views/Profile/Edit.cshtml", userProfile);
+                }
+                return View(userProfile);
+            }
 
             var user = await _userManager.FindByIdAsync(userProfile.Id);
             if(user is null)
@@ -93,6 +112,11 @@ namespace PresentationLayer.Areas.Identity.Controllers
             else
             {
                 ModelState.AddModelError("CurrentPassword", "InVaild Password");
+                
+                if (role.Contains(SD.SuperAdmin) || role.Contains(SD.Admin))
+                {
+                    return View("~/Areas/Admin/Views/Profile/Edit.cshtml", userProfile);
+                }
                 return View(userProfile);
             }
 
@@ -119,15 +143,25 @@ namespace PresentationLayer.Areas.Identity.Controllers
                 user.ProfilePictureUrl = fileName;
             }
 
-            await _userManager.UpdateAsync(user);
+            await _userManager.UpdateAsync(authUser);
             TempData["SuccessMessage"] = "Profile updated successfully!";
+            if (role.Contains(SD.SuperAdmin) || role.Contains(SD.Admin))
+            {
+                return View("~/Areas/Admin/Views/Profile/Edit.cshtml", userProfile);
+            }
             return RedirectToAction("Index");
         }
 
 
         [HttpGet]
-        public IActionResult ChangePassword()
+        public async Task<IActionResult> ChangePassword()
         {
+            var user = await _userManager.GetUserAsync(User);
+            var role =  await _userManager.GetRolesAsync(user);
+            if (role.Contains(SD.SuperAdmin) || role.Contains(SD.Admin))
+            {
+                return View("~/Areas/Admin/Views/Profile/ChangePassword.cshtml");
+            }
             return View();
         }
 
@@ -135,7 +169,8 @@ namespace PresentationLayer.Areas.Identity.Controllers
         public async Task<IActionResult> ChangePassword(ChangePasswordVM changePassword)
         {
             var user = await _userManager.GetUserAsync(User);
-            if(user is null)
+            var role = await _userManager.GetRolesAsync(user);
+            if (user is null)
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -145,12 +180,21 @@ namespace PresentationLayer.Areas.Identity.Controllers
             if (result.Succeeded)
             {
                 TempData["SuccessMessage"] = "Password changed successfully!";
+                if (role.Contains(SD.SuperAdmin) || role.Contains(SD.Admin))
+                {
+                    return View("~/Areas/Admin/Views/Profile/ChangePassword.cshtml");
+                }
                 return RedirectToAction("Index");
             }
 
             foreach(var error in result.Errors)
             {
                 ModelState.AddModelError("", error.Description);
+            }
+
+            if (role.Contains(SD.SuperAdmin) || role.Contains(SD.Admin))
+            {
+                return View("~/Areas/Admin/Views/Profile/ChangePassword.cshtml");
             }
             return View(changePassword);
         }

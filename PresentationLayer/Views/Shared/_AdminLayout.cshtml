@@ -87,8 +87,8 @@
         <!-- partial:partials/_sidebar.html -->
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
             <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-                <a class="sidebar-brand brand-logo" asp-controller="Home" asp-action="Dashboard" style="color:white;font-size:25px;letter-spacing: 10px;font-family: serif;">⚽Matchy</a>
-                <a class="sidebar-brand brand-logo-mini" asp-controller="Home" asp-action="Dashboard">⚽</a>
+                <a asp-area="Admin" class="sidebar-brand brand-logo" asp-controller="Home" asp-action="Dashboard" style="color:white;font-size:25px;letter-spacing: 10px;font-family: serif;">⚽Matchy</a>
+                <a asp-area="Admin" class="sidebar-brand brand-logo-mini" asp-controller="Home" asp-action="Dashboard">⚽</a>
             </div>
             <ul class="nav">
                 <li class="nav-item profile">
@@ -105,18 +105,18 @@
                         </div>
                         <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
                         <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
-                            <a href="#" class="dropdown-item preview-item">
+                            <a asp-action="Edit" asp-controller="UserProfile" asp-area="Identity" class="dropdown-item preview-item">
                                 <div class="preview-thumbnail">
                                     <div class="preview-icon bg-dark rounded-circle">
                                         <i class="mdi mdi-settings text-primary"></i>
                                     </div>
                                 </div>
                                 <div class="preview-item-content">
-                                    <p class="preview-subject ellipsis mb-1 text-small">Account settings</p>
+                                   <p class="preview-subject ellipsis mb-1 text-small">Update Profile</p>
                                 </div>
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item preview-item">
+                            <a asp-action="ChangePassword" asp-controller="UserProfile" asp-area="Identity" class="dropdown-item preview-item">
                                 <div class="preview-thumbnail">
                                     <div class="preview-icon bg-dark rounded-circle">
                                         <i class="mdi mdi-onepassword  text-info"></i>
@@ -144,7 +144,7 @@
                     <span class="nav-link">Navigation</span>
                 </li>
                 <li class="nav-item menu-items">
-                    <a class="nav-link" asp-controller="Home" asp-action="Dashboard">
+                    <a asp-area="Admin" class="nav-link" asp-controller="Home" asp-action="Dashboard">
                         <span class="menu-icon">
                             <i class="mdi mdi-speedometer"></i>
                         </span>
@@ -162,9 +162,9 @@
                     <div class="collapse" id="ui-basic-matches">
                         <ul class="nav flex-column sub-menu">
                            
-                            <li class="nav-item"> <a class="nav-link" asp-controller="Coach" asp-action="Index">Coaches</a></li>
-                            <li class="nav-item"> <a class="nav-link" asp-controller="Player" asp-action="Index">Players</a></li>
-                            <li class="nav-item"> <a class="nav-link" asp-controller="Team" asp-action="Index">Teams</a></li>
+                            <li class="nav-item"> <a asp-area="Admin" class="nav-link" asp-controller="Coach" asp-action="Index">Coaches</a></li>
+                            <li class="nav-item"> <a asp-area="Admin" class="nav-link" asp-controller="Player" asp-action="Index">Players</a></li>
+                            <li class="nav-item"> <a asp-area="Admin" class="nav-link" asp-controller="Team" asp-action="Index">Teams</a></li>
                             
                         </ul>
                     </div>
@@ -180,17 +180,17 @@
                     </a>
                     <div class="collapse" id="ui-basic">
                         <ul class="nav flex-column sub-menu">
-                            <li class="nav-item"> <a class="nav-link" asp-controller="Match" asp-action="Index">Matches</a></li>
+                            <li class="nav-item"> <a asp-area="Admin" class="nav-link" asp-controller="Match" asp-action="Index">Matches</a></li>
                            
-                            <li class="nav-item"> <a class="nav-link" asp-controller="Tournament" asp-action="Index">Tournament</a></li>
-                            <li class="nav-item"> <a class="nav-link" asp-controller="Ticket" asp-action="Index">Tickets</a></li>
+                            <li class="nav-item"> <a asp-area="Admin" class="nav-link" asp-controller="Tournament" asp-action="Index">Tournament</a></li>
+                            <li class="nav-item"> <a asp-area="Admin" class="nav-link" asp-controller="Ticket" asp-action="Index">Tickets</a></li>
                             
                         </ul>
                     </div>
                 </li>
 
                 <li class="nav-item menu-items">
-                    <a class="nav-link" asp-controller="News" asp-action="Index">
+                    <a class="nav-link asp-area="Admin"" asp-controller="News" asp-action="Index">
                         <span class="menu-icon">
                             <i class="mdi mdi-file-document-box"></i>
                         </span>
@@ -199,7 +199,7 @@
                 </li>
 
                  <li class="nav-item menu-items">
-                    <a class="nav-link" asp-controller="User" asp-action="Index">
+                    <a class="nav-link" asp-area="Admin" asp-controller="User" asp-action="Index">
                         <span class="menu-icon">
                             <i class="mdi mdi-account-multiple-outline"></i>
                         </span>
@@ -208,7 +208,7 @@
                 </li>
 
                 <li class="nav-item menu-items">
-                    <a class="nav-link" asp-controller="PointSystem" asp-action="Index">
+                    <a class="nav-link" asp-area="Admin" asp-controller="PointSystem" asp-action="Index">
                         <span class="menu-icon">
                             <i class="mdi mdi-trophy-outline"></i>
                         </span>
@@ -246,7 +246,7 @@
                             </a>
                         </li>
                         <li class="nav-item dropdown border-left">
-                            <a class="nav-link count-indicator " asp-controller="Contact" asp-action="Index">
+                            <a class="nav-link count-indicator " asp-area="Admin" asp-controller="Contact" asp-action="Index">
                                 <i class="mdi mdi-email"></i>
                                 <span class="count bg-success"></span>
                             </a>
@@ -310,14 +310,14 @@
                             <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
                                 <h6 class="p-3 mb-0">Profile</h6>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item preview-item">
+                                <a asp-action="Edit" asp-controller="UserProfile" asp-area="Identity"  class="dropdown-item preview-item">
                                     <div class="preview-thumbnail">
                                         <div class="preview-icon bg-dark rounded-circle">
                                             <i class="mdi mdi-settings text-success"></i>
                                         </div>
                                     </div>
                                     <div class="preview-item-content">
-                                        <p class="preview-subject mb-1">Settings</p>
+                                        <p class="preview-subject mb-1">Profile</p>
                                     </div>
                                 </a>
                                 <div class="dropdown-divider"></div>
