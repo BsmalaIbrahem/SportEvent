@@ -38,7 +38,6 @@ namespace PresentationLayer.Areas.Identity.Controllers
 
             var model = new UserProfileVM
             {
-                Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email!,
@@ -59,7 +58,6 @@ namespace PresentationLayer.Areas.Identity.Controllers
 
             var model = new UserProfileVM
             {
-                Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email!,
@@ -86,7 +84,6 @@ namespace PresentationLayer.Areas.Identity.Controllers
 
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("CurrentPassword", "InVaild Password");
 
                 if (role.Contains(SD.SuperAdmin) || role.Contains(SD.Admin))
                 {
@@ -95,7 +92,7 @@ namespace PresentationLayer.Areas.Identity.Controllers
                 return View(userProfile);
             }
 
-            var user = await _userManager.FindByIdAsync(userProfile.Id);
+            var user = await _userManager.FindByIdAsync(authUser.Id);
             if(user is null)
                 return NotFound();
 
@@ -143,7 +140,7 @@ namespace PresentationLayer.Areas.Identity.Controllers
                 user.ProfilePictureUrl = fileName;
             }
 
-            await _userManager.UpdateAsync(authUser);
+            await _userManager.UpdateAsync(user);
             TempData["SuccessMessage"] = "Profile updated successfully!";
             if (role.Contains(SD.SuperAdmin) || role.Contains(SD.Admin))
             {

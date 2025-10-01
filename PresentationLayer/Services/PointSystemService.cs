@@ -37,8 +37,12 @@ namespace PresentationLayer.Services
             var point = await GetPointsForAction(actionType);
             
             int totalPoints = point.FixedPoints;
-            int units = quantity / point.UnitValue;
-            totalPoints += units * point.PointsPerUnit;
+            if(point.UnitValue > 0 && quantity > 0)
+            {
+                int units = quantity / point.UnitValue;
+                totalPoints += units * point.PointsPerUnit;
+            }
+            
             
             return totalPoints;
         }

@@ -40,17 +40,13 @@ namespace PresentationLayer.Areas.Customer.Controllers
 
         public async Task<IActionResult> Success(string referenceId)
         {
-            var ticket = await _unitOfWork.TicketRepository.GetOneAsync(x => x.ReferenceId == referenceId, includeChain: x => x.Include(q => q.TicketMatches));
+            var ticket = await _unitOfWork.TicketRepository.GetOneAsync(
+                x => x.ReferenceId == referenceId,
+                includeChain: x => x.Include(q => q.TicketMatches));
 
             if (ticket == null)
             {
                 return NotFound();
-            }
-
-            if (ticket.Status != TicketStatus.Confirmed)
-            {
-                TempData["Error"] = "The ticket is either expired.";
-                return View();
             }
 
             var sessionService = new SessionService();
@@ -63,19 +59,18 @@ namespace PresentationLayer.Areas.Customer.Controllers
                 {
                     ticket.Status = TicketStatus.Confirmed;
                     _unitOfWork.TicketRepository.Update(ticket);
-                    await _unitOfWork.TicketRepository.SaveChangesAsync();
 
                     var carts = await _unitOfWork.CartRepository.GetAllAsync(c => c.UserId == ticket.UserId);
                     foreach (var cart in carts)
                     {
                         await _unitOfWork.CartItemRepository.DeleteAsync(ci => ci.CartId == cart.Id);
                         await _unitOfWork.CartRepository.DeleteAsync(c => c.Id == cart.Id);
-
                     }
-                    await _unitOfWork.CartItemRepository.SaveChangesAsync();
-                    await _unitOfWork.CartRepository.SaveChangesAsync();
+
+                    await _unitOfWork.SaveChangesAsync();
 
                     await transaction.CommitAsync();
+
                     TempData["Success"] = "Your payment was successful! Your tickets have been booked.";
                     return View(ticket);
                 }
@@ -90,6 +85,7 @@ namespace PresentationLayer.Areas.Customer.Controllers
             TempData["Error"] = "The ticket is either expired or not available. Please try again.";
             return View("Expired");
         }
+
 
         public async Task<IActionResult> Cancel(string referenceId)
         {
@@ -166,7 +162,6 @@ namespace PresentationLayer.Areas.Customer.Controllers
                                 ticket.Status = TicketStatus.Confirmed;
                                 _unitOfWork.TicketRepository.Update(ticket);
                                 await _unitOfWork.TicketRepository.SaveChangesAsync();
-                                await transaction.CommitAsync();
                                 _logger.LogInformation($"Ticket {ticket.Id} set to Confirmed.");
 
                                 var carts = await _unitOfWork.CartRepository.GetAllAsync(c => c.UserId == ticket.UserId);
@@ -186,7 +181,7 @@ namespace PresentationLayer.Areas.Customer.Controllers
                                     user.Points += points;
                                     await _unitOfWork.SaveChangesAsync();
                                 }
-
+                                await transaction.CommitAsync();
                                 BackgroundJob.Enqueue<IPdfService>(x => x.GenerateAndSendPdfsInBackground(ticket.Id, JobCancellationToken.Null));
 
                                 _logger.LogInformation("PDF generation and email sending enqueued for ticket {ticket_id}", ticket.Id);

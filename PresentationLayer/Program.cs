@@ -1,4 +1,4 @@
-using CoreLayer.Utility;
+﻿using CoreLayer.Utility;
 using DataAccessLayer.Data;
 using DataAccessLayer.DBInitilizer;
 using DataAccessLayer.Repositories;
@@ -16,6 +16,8 @@ using PresentationLayer.Services.IServices;
 using PresentationLayer.Stripe;
 using SportEvent.Repositories;
 using Stripe;
+using Microsoft.Extensions.FileProviders;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -117,6 +119,8 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapStaticAssets();
+
+app.UseStaticFiles(); // دا للـ wwwroot
 
 app.MapControllerRoute(
     name: "default",

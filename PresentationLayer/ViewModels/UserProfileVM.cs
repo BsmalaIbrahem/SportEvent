@@ -5,7 +5,6 @@ namespace PresentationLayer.ViewModels
 {
     public class UserProfileVM
     {
-        public string Id { get; set; } = null!;
         [Required]
         public string FirstName { get; set; } = null!;
         [Required]

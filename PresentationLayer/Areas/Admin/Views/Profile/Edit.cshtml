@@ -284,7 +284,7 @@
                 <div class="edit-body">
                     <form asp-action="Edit" asp-controller="UserProfile" asp-area="Identity" method="post" enctype="multipart/form-data">
                         <div class="form-grid">
-
+                            <div asp-validation-summary="All" class="text-danger"></div>
                             <div class="profile-picture-section">
                                 <img id="profile-preview" src="@Url.Content("~/assets/images/profiles/" + Model.ProfilePictureUrl)"
                                      alt="Profile Preview" class="profile-preview"
