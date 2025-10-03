@@ -143,6 +143,11 @@ namespace PresentationLayer.Areas.Identity.Controllers
                     ModelState.AddModelError(string.Empty, "Email is not confirmed. Please check your email for confirmation link.");
                     return View(model);
                 }
+                if(user.LockoutEnabled&& user.LockoutEnd > DateTimeOffset.UtcNow)
+                {
+                    ModelState.AddModelError(string.Empty, "Your account is locked. Please contact support.");
+                    return View(model);
+                }
                 await _signInManager.SignInAsync(user, model.RememberMe);
                 // Merge Guest Cart with User Cart
                 var sessionId = GetSessionId();

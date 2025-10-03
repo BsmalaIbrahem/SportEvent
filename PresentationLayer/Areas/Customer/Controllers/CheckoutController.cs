@@ -28,7 +28,8 @@ namespace PresentationLayer.Areas.Customer.Controllers
         private readonly ILogger<CheckoutController> _logger;
         private readonly IConverter _converter;
         private readonly PointSystemService _pointSystemService;
-        public CheckoutController(IUnitOfWork unitOfWork, IConfiguration configuration, ICustomEmailSender _customEmailSender, ILogger<CheckoutController> _logger, IConverter converter, PointSystemService pointSystemService)
+        private readonly IPdfService _pdfService;
+        public CheckoutController(IUnitOfWork unitOfWork, IConfiguration configuration, ICustomEmailSender _customEmailSender, ILogger<CheckoutController> _logger, IConverter converter, PointSystemService pointSystemService, IPdfService pdfService)
         {
             _unitOfWork = unitOfWork;
             _configuration = configuration;
@@ -36,6 +37,7 @@ namespace PresentationLayer.Areas.Customer.Controllers
             this._customEmailSender = _customEmailSender;
             _converter = converter;
             _pointSystemService = pointSystemService;
+            _pdfService = pdfService;
         }
 
         public async Task<IActionResult> Success(string referenceId)
@@ -70,6 +72,8 @@ namespace PresentationLayer.Areas.Customer.Controllers
                     await _unitOfWork.SaveChangesAsync();
 
                     await transaction.CommitAsync();
+                    //BackgroundJob.Enqueue<IPdfService>(x => x.GenerateAndSendPdfsInBackground(ticket.Id, JobCancellationToken.Null));
+                    await _pdfService.GenerateAndSendPdfsInBackground(ticket.Id, null);
 
                     TempData["Success"] = "Your payment was successful! Your tickets have been booked.";
                     return View(ticket);
@@ -182,7 +186,7 @@ namespace PresentationLayer.Areas.Customer.Controllers
                                     await _unitOfWork.SaveChangesAsync();
                                 }
                                 await transaction.CommitAsync();
-                                BackgroundJob.Enqueue<IPdfService>(x => x.GenerateAndSendPdfsInBackground(ticket.Id, JobCancellationToken.Null));
+                              // BackgroundJob.Enqueue<IPdfService>(x => x.GenerateAndSendPdfsInBackground(ticket.Id, JobCancellationToken.Null));
 
                                 _logger.LogInformation("PDF generation and email sending enqueued for ticket {ticket_id}", ticket.Id);
                             }

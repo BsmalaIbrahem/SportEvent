@@ -65,7 +65,6 @@ builder.Services.AddScoped<TicketPricingService>();
 builder.Services.AddScoped<PointSystemService>();
 builder.Services.AddScoped<TicketService>();
 
-
 builder.Services.AddScoped<IEmailSender, CustomEmailSender>();
 builder.Services.AddScoped<ICustomEmailSender, CustomEmailSender>();
 
@@ -92,10 +91,20 @@ builder.Services.AddHangfire(config =>
               DisableGlobalLocks = true
           });
 });
-builder.Services.AddHangfireServer();
+//builder.Services.AddHangfireServer();
 
 builder.Services.AddHostedService<MatchStatusService>();
+
+var arch = Environment.Is64BitProcess ? "x64" : "x86";
+var dllPath = Path.Combine(Directory.GetCurrentDirectory(), "libs", arch, "libwkhtmltox.dll");
+
+var context = new CustomAssemblyLoadContext();
+context.LoadUnmanagedLibrary(dllPath);
+
+
+// 🟢 إضافة DinkToPdf Converter
 builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+
 builder.Services.AddScoped<IPdfService, PdfService>();
 
 builder.Services.AddHangfireServer(options =>
@@ -112,6 +121,11 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    Authorization = new[] { new HangfireCustomAuthorizationFilter() }
+});
 
 app.UseHttpsRedirection();
 app.UseRouting();
@@ -145,7 +159,6 @@ RecurringJob.AddOrUpdate<CleanupExpiredTicketsService>(
     job => job.Execute(),
     Cron.Minutely()
 );
-
 
 app.MapGet("/Admin", context =>
 {

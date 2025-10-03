@@ -16,5 +16,14 @@ namespace PresentationLayer.Services
             var totalTickets = await _unitOfWork.TicketMatchRepository.CountAsync(t => t.MatchId == matchId && t.Ticket.UserId == userId, includeChain: x=>x.Include(q=>q.Ticket));
             return totalTickets;
         }
+
+        public async Task<bool> IsSameMatchTeam(int matchId, string userId, int teamId)
+        {
+            var ticket = await _unitOfWork.TicketMatchRepository.GetOneAsync(t => t.MatchId == matchId && t.Ticket.UserId == userId, includeChain: x => x.Include(q => q.Ticket));
+            if(ticket!=null && ticket.TeamId != teamId)
+                return false;
+            return true;
+
+        }
     }
 }

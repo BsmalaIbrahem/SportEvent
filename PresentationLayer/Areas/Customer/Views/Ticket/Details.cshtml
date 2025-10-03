@@ -526,7 +526,12 @@
 
                                 <div class="match-total">
                                     <div class="total-label">Match Total</div>
-                            <div class="total-value">EGP @(item?.Price * item?.Quantity) </div>
+                                    <div class="total-value">EGP @(item?.Price * item?.Quantity) </div>
+                                    <div class="action-buttons" style="text-align:right;">
+                                        <a asp-area="Customer" asp-controller="Ticket" asp-action="Download" asp-route-ticketMatchId="@item.Id" class="btn-download">
+                                            <i class="mdi mdi-download me-2"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

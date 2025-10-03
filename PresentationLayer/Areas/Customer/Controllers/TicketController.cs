@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PresentationLayer.Services;
+using PresentationLayer.Services.IServices;
 using PresentationLayer.ViewModels;
 using Stripe.Checkout;
 using Stripe.Climate;
@@ -25,11 +26,13 @@ namespace PresentationLayer.Areas.Customer.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly TicketService _service;
-        public TicketController(IUnitOfWork unitOfWork, UserManager<ApplicationUser> _userManager, TicketService service)
+        private readonly IPdfService _pdfService;
+        public TicketController(IUnitOfWork unitOfWork, UserManager<ApplicationUser> _userManager, TicketService service, IPdfService pdfService)
         {
             _unitOfWork = unitOfWork;
             this._userManager = _userManager;
             _service = service;
+            _pdfService = pdfService;
         }
 
         [Authorize]
@@ -157,6 +160,12 @@ namespace PresentationLayer.Areas.Customer.Controllers
                         throw new Exception("You can not buy more than 4 tickets for the same match.");
                     }
 
+                    var isSameMatchTeam = await _service.IsSameMatchTeam(cart.MatchId, user.Id, cart.TeamId);
+                    if (!isSameMatchTeam && lastTotalTickets > 0)
+                    {
+                        throw new Exception("You can not buy tickets for different teams in the same match.");
+                    }
+
                     foreach (var cartItem in cart?.CartItems)
                     {
                         if (cartItem.Quantity <= 0)
@@ -258,6 +267,37 @@ namespace PresentationLayer.Areas.Customer.Controllers
 
         }
 
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Download(int ticketMatchId)
+        {
+            var user = await GetUser();
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var ticketMatch = await _unitOfWork.TicketMatchRepository.GetOneAsync(
+                                                x => x.Id == ticketMatchId && x.Ticket.UserId == user.Id,
+                                                includeChain: q => q.Include(t => t.Ticket)
+                                                                    .Include(t => t.Match)
+                                                                    .ThenInclude(ht => ht.HomeTeam)
+                                                                    .Include(t => t.Match)
+                                                                    .ThenInclude(at => at.AwayTeam)
+                                                                    .Include(t => t.Team)
+                                 );
+            
+            if (ticketMatch == null)
+            {
+                return NotFound();
+            }
+            var pdfBytes =  _pdfService.GeneratePdf(ticketMatch);
+
+            if (pdfBytes == null || pdfBytes.Length == 0)
+                return NotFound();
+
+            return File(pdfBytes, "application/pdf", $"Ticket_{ticketMatchId}.pdf");
+
+        }
         private async Task<ApplicationUser?> GetUser()
         {
             return await _userManager.GetUserAsync(User);

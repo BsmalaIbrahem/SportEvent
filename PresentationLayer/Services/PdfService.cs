@@ -7,6 +7,10 @@ using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using PresentationLayer.Areas.Customer.Controllers;
 using PresentationLayer.Services.IServices;
+using System.Globalization;
+using System.Net;
+using System.Net.Mail;
+using System.Net.Sockets;
 
 namespace PresentationLayer.Services
 {
@@ -29,9 +33,9 @@ namespace PresentationLayer.Services
 
         [Queue("pdf-generation")]
         [AutomaticRetry(Attempts = 3)]
-        public async Task GenerateAndSendPdfsInBackground(int ticketId, IJobCancellationToken cancellationToken)
+        public async Task GenerateAndSendPdfsInBackground(int ticketId, IJobCancellationToken token)
         {
-            _logger.LogInformation("Starting PDF generation and email sending for ticket {TicketId}", ticketId);
+            _logger.LogInformation("🔥 Starting PDF job for ticket {TicketId}", ticketId);
 
             var ticket = await _unitOfWork.TicketRepository.GetOneAsync(
                 t => t.Id == ticketId,
@@ -45,64 +49,64 @@ namespace PresentationLayer.Services
 
             if (ticket == null)
             {
-                _logger.LogWarning("Ticket {TicketId} not found", ticketId);
+                _logger.LogWarning("No ticket found with ID {TicketId}", ticketId);
                 return;
             }
-            _logger.LogInformation("Ticket {TicketId} retrieved successfully", ticket.Id);
 
             var pdfBytesList = new List<byte[]>();
             var attachmentNames = new List<string>();
 
-            var tasks = ticket.TicketMatches.Select(ticketMatch =>
+            foreach (var ticketMatch in ticket.TicketMatches)
             {
-                _logger.LogInformation("Preparing PDF generation for match {MatchId} in ticket {TicketId}", ticketMatch.Id, ticket.Id);
-                return Task.Run(() =>
+                try
                 {
-                    using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10)))
+                    var doc = new HtmlToPdfDocument
                     {
-                        try
-                        {
-                            var doc = new HtmlToPdfDocument()
-                            {
-                                GlobalSettings = {
-                                ColorMode = ColorMode.Color,
-                                Orientation = Orientation.Portrait,
-                                PaperSize = PaperKind.A4,
-                                Margins = new MarginSettings { Top = 10, Bottom = 10, Left = 10, Right = 10 }
-                            },
-                                Objects = {
-                                new ObjectSettings {
-                                    HtmlContent = GenerateHtmlContent(ticket, ticketMatch),
-                                    WebSettings = { DefaultEncoding = "utf-8", UserStyleSheet = "" },
-                                    PagesCount = true
-                                }
-                            }
-                            };
-                            var pdfBytes = _converter.Convert(doc);
-                            _logger.LogInformation("PDF generated successfully for match {MatchId} in ticket {TicketId}", ticketMatch.Id, ticket.Id);
-                            return pdfBytes;
-                        }
-                        catch (Exception ex)
-                        {
-                            _logger.LogError(ex, "Conversion failed for match {MatchId} in ticket {TicketId}", ticketMatch.Id, ticket.Id);
-                            return new byte[0];
-                        }
+                        GlobalSettings = {
+                    ColorMode = ColorMode.Color,
+                    Orientation = Orientation.Portrait,
+                    PaperSize = PaperKind.A4,
+                    Margins = new MarginSettings { Top = 10, Bottom = 10, Left = 10, Right = 10 }
+                },
+                        Objects = {
+                    new ObjectSettings {
+                        HtmlContent = GenerateHtmlContent(ticket, ticketMatch),
+                        WebSettings = { DefaultEncoding = "utf-8" },
+                        PagesCount = true
                     }
-                });
-            }).ToArray();
+                }
+                    };
 
-            _logger.LogInformation("Waiting for {TaskCount} PDF generation tasks to complete", tasks.Length);
-            var pdfResults = await Task.WhenAll(tasks);
-            _logger.LogInformation("All PDF generation tasks completed for ticket {TicketId}", ticket.Id);
+                    var pdfBytes = _converter.Convert(doc);
 
-            for (int i = 0; i < ticket.TicketMatches.Count; i++)
-            {
-                pdfBytesList.Add(pdfResults[i]);
-                attachmentNames.Add($"ticket_{ticket.TicketMatches.ToArray()[i].Id}.pdf");
-                _logger.LogInformation("Added PDF for match {MatchId} to email attachments", ticket.TicketMatches.ToArray()[i].Id);
+                    if (pdfBytes != null && pdfBytes.Length > 0)
+                    {
+                        _logger.LogInformation("PDF generated for match {MatchId}, size = {Size} bytes",
+                            ticketMatch.Id, pdfBytes.Length);
+
+                        pdfBytesList.Add(pdfBytes);
+                        attachmentNames.Add($"ticket_{ticketMatch.Id}.pdf");
+
+                        // ممكن تحتفظي بنسخة محلية للديبج (اختياري)
+                        //File.WriteAllBytes($"ticket_{ticketMatch.Id}.pdf", pdfBytes);
+                    }
+                    else
+                    {
+                        _logger.LogWarning("Generated PDF for match {MatchId} is empty!", ticketMatch.Id);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error generating PDF for match {MatchId}", ticketMatch.Id);
+                }
             }
 
-            _logger.LogInformation("Attempting to send email for ticket {TicketId} to {Email}", ticket.Id, ticket.User.Email);
+            if (pdfBytesList.Count == 0)
+            {
+                _logger.LogWarning("No PDFs generated for ticket {TicketId}, skipping email sending.", ticket.Id);
+                return;
+            }
+
             try
             {
                 await _customEmailSender.SendEmailAsync(
@@ -112,13 +116,59 @@ namespace PresentationLayer.Services
                     pdfBytesList,
                     attachmentNames
                 );
-                _logger.LogInformation("Email sent successfully for ticket {TicketId}", ticket.Id);
+
+                _logger.LogInformation("✅ Email with {Count} PDFs sent to {Email}", pdfBytesList.Count, ticket.User.Email);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to send email for ticket {TicketId}", ticket.Id);
-                throw; // هيخلي Hangfire تعمل retry
+                _logger.LogError(ex, "❌ Error sending email for ticket {TicketId}", ticket.Id);
             }
+        }
+
+        public  byte[] GeneratePdf(TicketMatch? ticketMatch)
+        {
+            if (ticketMatch == null)
+            {
+                return Array.Empty<byte>();
+            }
+
+            try
+            {
+                var doc = new HtmlToPdfDocument
+                {
+                    GlobalSettings = {
+                    ColorMode = ColorMode.Color,
+                    Orientation = Orientation.Portrait,
+                    PaperSize = PaperKind.A4,
+                    Margins = new MarginSettings { Top = 10, Bottom = 10, Left = 10, Right = 10 }
+                },
+                    Objects = {
+                    new ObjectSettings {
+                        HtmlContent = GenerateHtmlContent(ticketMatch.Ticket, ticketMatch),
+                        WebSettings = { DefaultEncoding = "utf-8" },
+                        PagesCount = true
+                    }
+                }
+                };
+
+                var pdfBytes = _converter.Convert(doc);
+
+                if (pdfBytes != null && pdfBytes.Length > 0)
+                {
+                    _logger.LogInformation("PDF generated for match {MatchId}, size = {Size} bytes",
+                        ticketMatch.Id, pdfBytes.Length);
+                }
+                else
+                {
+                    _logger.LogWarning("Generated PDF for match {MatchId} is empty!", ticketMatch.Id);
+                }
+                return pdfBytes;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error generating PDF for match {MatchId}", ticketMatch.Id);
+            }
+            return Array.Empty<byte>();
         }
 
         private string GenerateHtmlContent(Ticket ticket, TicketMatch ticketMatch)
@@ -131,7 +181,7 @@ namespace PresentationLayer.Services
             var teamName = ticketMatch.Match?.HomeTeam?.Name ?? "Unknown Team";
             var ticketCategory = ticketMatch.Category.ToString() ?? "General";
             var ticketQuantity = ticketMatch.Quantity.ToString() ?? "1";
-            var ticketPrice = (ticketMatch.Price * ticketMatch.Quantity).ToString("C") ?? "EGP 0.00";
+            var ticketPrice = (ticketMatch.Price * ticketMatch.Quantity).ToString("C", new CultureInfo("en-EG")) ?? "EGP 0.00";
             var ticketId = ticket.Id.ToString();
 
             var htmlContent = $@"

@@ -32,4 +32,15 @@
 	  <Folder Include="wwwroot\assets\images\profiles\" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<None Update="libs\x86\libwkhtmltox.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</None>
+		<None Update="libs\x64\libwkhtmltox.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</None>
+	</ItemGroup>
+	
 </Project>
